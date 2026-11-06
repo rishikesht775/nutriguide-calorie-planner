@@ -1,0 +1,15 @@
+import { getChatGPTUser, chatGPTSignInPath, chatGPTSignOutPath } from "../../chatgpt-auth";
+
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  const user = await getChatGPTUser();
+  return Response.json({
+    authenticated: Boolean(user),
+    user: user
+      ? { id: user.userId, email: user.email, name: user.displayName }
+      : null,
+    signInUrl: chatGPTSignInPath("/legacy.html"),
+    signOutUrl: chatGPTSignOutPath("/legacy.html"),
+  });
+}
