@@ -32,6 +32,8 @@
     .ng-exercise-plan{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.ng-exercise-plan article{border-radius:18px;background:#fff;border:1px solid var(--line);padding:14px}.ng-exercise-plan span{font-size:30px}.ng-exercise-plan b{display:block;margin-top:5px}.ng-exercise-plan small{color:var(--muted)}
     .ng-check{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:13px}.ng-check input{width:auto}.ng-checklist{display:grid;gap:2px}
     .ng-story-badge{display:flex;align-items:center;gap:10px;padding:13px;border-radius:17px;background:#fff5dc;border:1px solid #ead8a9}.ng-story-badge strong{display:block}.ng-story-badge small{color:var(--muted)}
+    .ng-preference-note{display:flex;align-items:flex-start;gap:10px;margin-top:12px;padding:12px 14px;border-radius:16px;background:#effaf3;border:1px solid #cfe6d7;color:#245c42;font-size:12px;line-height:1.45}.ng-preference-note span{font-size:22px}
+    .ng-allergy-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.ng-allergy{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px}.ng-allergy input{width:auto;margin:0}
     .ng-status{font-size:12px;color:var(--muted);margin-top:8px}.ng-offline{background:#fff1dd!important;color:#72501c!important}
     .ng-dark{--ink:#ecfff4;--muted:#b7cec1;--mint:#1e4936;--cream:#1e3029;--line:#315444;background:#10241c}.ng-dark .card,.ng-dark .ng-card,.ng-dark .stat,.ng-dark .ng-metric,.ng-dark .ng-device,.ng-dark .ng-swap,.ng-dark .ng-exercise-plan article{background:#173329;color:var(--ink)}.ng-dark input,.ng-dark select,.ng-dark textarea{background:#10241c;color:var(--ink);border-color:#315444}.ng-dark .hero{background:linear-gradient(90deg,#173329ee,#173329aa),url('mascot-buddies.jpg') center/cover}
     .ng-large{font-size:18px}.ng-large .ng-card,.ng-large .card{padding:25px}.ng-large button{min-height:48px}
@@ -60,6 +62,24 @@
       <div class="ng-next-icon" id="ngNextIcon">🌱</div>
       <div style="flex:1"><div class="eyebrow" style="color:#b4f2cd">YOUR NEXT BEST STEP</div><h2 id="ngNextTitle">Choose one small win</h2><p id="ngNextText">Your guide will suggest the next action from your activity.</p></div>
       <button type="button" id="ngNextButton" onclick="ngOpenNext()">Open</button>
+    </section>
+
+    <section class="ng-card ng-tab-section ng-home-section" data-ng-tab="home" id="ngDietPreferences">
+      <div class="eyebrow">PERSONALISE YOUR PLAN</div><h2>Set your food preferences</h2>
+      <p class="ng-sub">These choices shape meal suggestions across your journey. You can change them anytime.</p>
+      <div class="ng-form">
+        <label>Food style<select id="ngDietStyle"><option value="balanced">Balanced</option><option value="high-protein">High-protein vegetarian</option><option value="vegan">Vegan</option><option value="jain">Jain-friendly</option><option value="eggetarian">Eggetarian</option><option value="non-vegetarian">Non-vegetarian</option><option value="low-carb">Low-carb / keto</option></select></label>
+        <label>Regional focus<select id="ngDietRegion"><option value="any">Any Indian region</option><option value="north">North Indian</option><option value="south">South Indian</option><option value="bengali">Bengali</option><option value="maharashtrian">Maharashtrian</option><option value="gujarati">Gujarati</option><option value="punjabi">Punjabi</option></select></label>
+        <label>Weekly budget<select id="ngDietBudget"><option value="low">Budget-friendly</option><option value="medium" selected>Balanced budget</option><option value="flexible">Flexible</option></select></label>
+        <button type="button" onclick="ngSaveDietPrefs()">Save preferences</button>
+      </div>
+      <div class="ng-allergy-list" aria-label="Food exclusions">
+        <label class="ng-allergy"><input id="ngAvoidDairy" type="checkbox"> Avoid dairy</label>
+        <label class="ng-allergy"><input id="ngAvoidNuts" type="checkbox"> Avoid nuts</label>
+        <label class="ng-allergy"><input id="ngAvoidGluten" type="checkbox"> Avoid gluten</label>
+        <label class="ng-allergy"><input id="ngAvoidSoy" type="checkbox"> Avoid soy</label>
+      </div>
+      <div class="ng-preference-note"><span>🥗</span><div><b id="ngDietPreferenceTitle">Balanced Indian meals</b><br><span id="ngDietPreferenceText">Save your preferences and your guide will use them when suggesting meals and swaps.</span></div></div>
     </section>
 
     <section class="ng-card ng-tab-section ng-home-section" data-ng-tab="home" id="ngRecovery">
@@ -198,6 +218,39 @@
   }
   window.ngOpenNext = function () { if (window.ngNextTab && typeof window.setTab === 'function') window.setTab(window.ngNextTab); };
 
+  function dietPreferences() {
+    return read('ngDietPrefs', { style: 'balanced', region: 'any', budget: 'medium', dairy: false, nuts: false, gluten: false, soy: false });
+  }
+  const dietLabels = {
+    balanced: 'Balanced Indian meals', 'high-protein': 'High-protein vegetarian meals', vegan: 'Plant-based meals', jain: 'Jain-friendly meals',
+    eggetarian: 'Eggetarian meals', 'non-vegetarian': 'Balanced meals with non-vegetarian options', 'low-carb': 'Lower-carb meals'
+  };
+  const regionLabels = { any: 'any Indian region', north: 'North Indian flavours', south: 'South Indian flavours', bengali: 'Bengali flavours', maharashtrian: 'Maharashtrian flavours', gujarati: 'Gujarati flavours', punjabi: 'Punjabi flavours' };
+  function renderDietPrefs() {
+    const prefs = dietPreferences();
+    ['ngDietStyle', 'ngDietRegion', 'ngDietBudget'].forEach((id) => { if (get(id) && prefs[id.replace('ngDiet', '').toLowerCase()]) get(id).value = prefs[id.replace('ngDiet', '').toLowerCase()]; });
+    if (get('ngDietStyle')) get('ngDietStyle').value = prefs.style || 'balanced';
+    if (get('ngDietRegion')) get('ngDietRegion').value = prefs.region || 'any';
+    if (get('ngDietBudget')) get('ngDietBudget').value = prefs.budget || 'medium';
+    if (get('ngAvoidDairy')) get('ngAvoidDairy').checked = Boolean(prefs.dairy);
+    if (get('ngAvoidNuts')) get('ngAvoidNuts').checked = Boolean(prefs.nuts);
+    if (get('ngAvoidGluten')) get('ngAvoidGluten').checked = Boolean(prefs.gluten);
+    if (get('ngAvoidSoy')) get('ngAvoidSoy').checked = Boolean(prefs.soy);
+    const exclusions = [['dairy', 'dairy'], ['nuts', 'nuts'], ['gluten', 'gluten'], ['soy', 'soy']].filter(([key]) => prefs[key]).map(([, label]) => label);
+    const title = dietLabels[prefs.style] || dietLabels.balanced;
+    const detail = `${regionLabels[prefs.region] || regionLabels.any} • ${prefs.budget === 'low' ? 'budget-aware' : prefs.budget === 'flexible' ? 'flexible budget' : 'balanced budget'}${exclusions.length ? ` • avoids ${exclusions.join(', ')}` : ''}.`;
+    if (get('ngDietPreferenceTitle')) get('ngDietPreferenceTitle').textContent = title;
+    if (get('ngDietPreferenceText')) get('ngDietPreferenceText').textContent = detail;
+  }
+  window.ngSaveDietPrefs = function () {
+    const prefs = {
+      style: get('ngDietStyle')?.value || 'balanced', region: get('ngDietRegion')?.value || 'any', budget: get('ngDietBudget')?.value || 'medium',
+      dairy: Boolean(get('ngAvoidDairy')?.checked), nuts: Boolean(get('ngAvoidNuts')?.checked), gluten: Boolean(get('ngAvoidGluten')?.checked), soy: Boolean(get('ngAvoidSoy')?.checked)
+    };
+    write('ngDietPrefs', prefs); renderDietPrefs(); renderNextAction(); notify('Food preferences saved');
+    if (get('ngTodayStatus')) get('ngTodayStatus').textContent = `${dietLabels[prefs.style] || 'Your plan'} will guide your next meal suggestions.`;
+  };
+
   window.ngSaveRecovery = function () {
     write('ngRecovery', { date: today(), sleep: get('ngSleep').value, energy: get('ngEnergy').value, soreness: get('ngSoreness').value, stress: get('ngStress').value });
     if (get('ngRecoveryStatus')) get('ngRecoveryStatus').textContent = `Saved today • ${get('ngSleep').value || '—'} hours sleep • ${get('ngEnergy').value} energy`;
@@ -281,7 +334,7 @@
   window.ngSetLanguage = function (value) { localStorage.setItem('ngLanguage', value); document.documentElement.lang = value === 'hi' ? 'hi' : 'en'; if (get('ngControlStatus')) get('ngControlStatus').textContent = value === 'hi' ? 'भाषा हिन्दी पर सेट है।' : 'Your preferences are saved on this device.'; notify(value === 'hi' ? 'हिन्दी चुनी गई' : 'English selected'); };
   window.ngExportData = function () { const data = {}; for (let i = 0; i < localStorage.length; i++) { const key = localStorage.key(i); if (key && (key.startsWith('ng') || ['nutritionLog','proteinItems','weights','journal','reminders','grocery'].includes(key))) data[key] = read(key, localStorage.getItem(key)); } const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })); a.download = 'nutriguide-data.json'; a.click(); notify('Your data download started'); };
 
-  function applyPreferences() { ngSetTheme(localStorage.getItem('ngTheme') || 'light'); ngSetTextSize(localStorage.getItem('ngTextSize') || 'normal'); if (get('ngTheme')) get('ngTheme').value = localStorage.getItem('ngTheme') || 'light'; if (get('ngTextSize')) get('ngTextSize').value = localStorage.getItem('ngTextSize') || 'normal'; if (get('ngLanguage')) get('ngLanguage').value = localStorage.getItem('ngLanguage') || 'en'; const connected = read('ngDevices', []); if (connected.length && get('ngDeviceStatus')) get('ngDeviceStatus').textContent = `Selected: ${connected.join(', ')}. Authorization can be connected later.`; }
+  function applyPreferences() { ngSetTheme(localStorage.getItem('ngTheme') || 'light'); ngSetTextSize(localStorage.getItem('ngTextSize') || 'normal'); if (get('ngTheme')) get('ngTheme').value = localStorage.getItem('ngTheme') || 'light'; if (get('ngTextSize')) get('ngTextSize').value = localStorage.getItem('ngTextSize') || 'normal'; if (get('ngLanguage')) get('ngLanguage').value = localStorage.getItem('ngLanguage') || 'en'; const connected = read('ngDevices', []); if (connected.length && get('ngDeviceStatus')) get('ngDeviceStatus').textContent = `Selected: ${connected.join(', ')}. Authorization can be connected later.`; renderDietPrefs(); }
 
   function storeProfile() { if (!get('age')?.value) return; write('ngProfile', { age: get('age').value, sex: get('sex').value, height: get('height').value, weight: get('weight').value, goal: get('goal').value, activity: get('activity').value }); }
   get('form')?.addEventListener('submit', () => setTimeout(() => { storeProfile(); document.body.classList.remove('needs-profile'); document.body.classList.add('post-profile'); renderToday(); renderExerciseCoach(); renderJourneyBadge(); }, 60));
