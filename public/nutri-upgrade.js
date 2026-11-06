@@ -242,12 +242,39 @@
     if (get('ngDietPreferenceTitle')) get('ngDietPreferenceTitle').textContent = title;
     if (get('ngDietPreferenceText')) get('ngDietPreferenceText').textContent = detail;
   }
+  function foodMatchesPreferences(food, prefs) {
+    const text = `${food[1] || ''} ${food[2] || ''}`.toLowerCase();
+    const contains = (words) => words.some((word) => text.includes(word));
+    if (prefs.dairy && contains(['paneer', 'curd', 'yoghurt', 'cheese', 'whey', 'milk', 'butter', 'ghee'])) return false;
+    if (prefs.nuts && contains(['almond', 'peanut', 'cashew', 'pistachio', 'walnut', 'nut'])) return false;
+    if (prefs.gluten && contains(['roti', 'paratha', 'naan', 'wheat', 'bread', 'wrap', 'pasta'])) return false;
+    if (prefs.soy && contains(['tofu', 'soy', 'soya', 'edamame'])) return false;
+    if (prefs.style === 'vegan' && contains(['paneer', 'curd', 'cheese', 'whey', 'milk', 'butter', 'ghee', 'egg', 'chicken', 'fish', 'mutton'])) return false;
+    if (prefs.style === 'jain' && contains(['onion', 'garlic', 'potato', 'root vegetable'])) return false;
+    if (prefs.style === 'low-carb' && Number(food[5] || 0) > 35) return false;
+    return true;
+  }
+  function installFoodPreferenceFilter() {
+    if (typeof window.showFoods !== 'function' || typeof foodSets === 'undefined' || typeof foodCard !== 'function') return;
+    const originalShowFoods = window.showFoods;
+    window.showFoods = function (type) {
+      window.ngCurrentFoodCategory = type;
+      const prefs = dietPreferences();
+      const list = foodSets[type] || foodSets.balanced;
+      const filtered = list.map((food, index) => ({ food, index })).filter(({ food }) => foodMatchesPreferences(food, prefs));
+      const grid = get('foodGrid');
+      if (grid) grid.innerHTML = filtered.length ? filtered.map(({ food, index }) => foodCard(type, index, food)).join('') : '<p class="ng-status">No foods match these exclusions. Try changing your preferences.</p>';
+      const label = get('foodCategoryLabel');
+      if (label) label.textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} ideas${filtered.length < list.length ? ` • ${filtered.length} shown for your preferences` : ''}`;
+    };
+    window.showFoods(window.ngCurrentFoodCategory || 'balanced');
+  }
   window.ngSaveDietPrefs = function () {
     const prefs = {
       style: get('ngDietStyle')?.value || 'balanced', region: get('ngDietRegion')?.value || 'any', budget: get('ngDietBudget')?.value || 'medium',
       dairy: Boolean(get('ngAvoidDairy')?.checked), nuts: Boolean(get('ngAvoidNuts')?.checked), gluten: Boolean(get('ngAvoidGluten')?.checked), soy: Boolean(get('ngAvoidSoy')?.checked)
     };
-    write('ngDietPrefs', prefs); renderDietPrefs(); renderNextAction(); notify('Food preferences saved');
+    write('ngDietPrefs', prefs); renderDietPrefs(); renderNextAction(); installFoodPreferenceFilter(); notify('Food preferences saved');
     if (get('ngTodayStatus')) get('ngTodayStatus').textContent = `${dietLabels[prefs.style] || 'Your plan'} will guide your next meal suggestions.`;
   };
 
@@ -344,6 +371,7 @@
   window.addEventListener('offline', () => { if (get('ngDeviceStatus')) { get('ngDeviceStatus').textContent = 'You are offline. Manual logs still work and will remain on this device.'; get('ngDeviceStatus').classList.add('ng-offline'); } });
 
   applyPreferences();
+  installFoodPreferenceFilter();
   renderToday(); renderQuickStatus(); renderGroceries(); renderExerciseCoach(); renderJourneyBadge();
   if (typeof window.setTab === 'function') window.setTab(document.querySelector('.app-nav button.active')?.dataset.tab || 'home');
 })();
