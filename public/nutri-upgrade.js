@@ -137,7 +137,7 @@
     .diwali-street .ng-theme-courtyard,.diwali-street .ng-theme-bazaar,.diwali-street .ng-theme-palace{border:3px solid transparent;background-clip:padding-box;box-shadow:0 0 0 2px #ffd75b,0 0 0 6px #ef5b6b,0 0 0 9px #2bc3c0,0 18px 42px #7d164e38}
     .diwali-street .ng-theme-courtyard:before,.diwali-street .ng-theme-bazaar:before,.diwali-street .ng-theme-palace:before{content:'🌼  🪔  🌼  🪔  🌼  🪔  🌼  🪔  🌼';position:absolute;left:10px;right:10px;top:4px;height:28px;z-index:5;text-align:center;color:#ffd75b;font-size:19px;letter-spacing:4px;text-shadow:0 2px 5px #5a174c;pointer-events:none;white-space:nowrap}
     .diwali-street .ng-theme-courtyard:after,.diwali-street .ng-theme-bazaar:after,.diwali-street .ng-theme-palace:after{content:'';position:absolute;left:10px;right:10px;bottom:7px;height:4px;z-index:5;border-radius:99px;background:linear-gradient(90deg,#ffcf4a,#f14e87,#4dd9dc,#ffe579,#f14e87,#4dd9dc,#ffcf4a);box-shadow:0 0 10px #ffe16b;animation:ngLedBorder 2.8s linear infinite;pointer-events:none}
-    .ng-firework-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:1!important;display:block;pointer-events:none;mix-blend-mode:screen;opacity:.98}
+    .ng-firework-canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:1!important;display:block;pointer-events:none;mix-blend-mode:screen;opacity:.98;contain:strict}
     .ng-festive-garland{position:absolute!important;left:0;right:0;top:29px;height:27px;z-index:4!important;display:flex;justify-content:space-around;align-items:flex-start;pointer-events:none;overflow:hidden}.ng-festive-garland span{font-size:22px;filter:drop-shadow(0 4px 4px #55133d);animation:ngMarigoldSway 2.6s ease-in-out infinite}.ng-festive-garland i{width:9px;height:9px;margin-top:7px;border-radius:50%;background:#ffe66b;box-shadow:0 0 12px 4px #ffe66b;animation:ngLedBlink 1.1s ease-in-out infinite}.ng-festive-garland i:nth-of-type(2n){background:#ff5e88;box-shadow:0 0 12px 4px #ff5e88;animation-delay:.3s}.ng-festive-garland i:nth-of-type(3n){background:#43e5e2;box-shadow:0 0 12px 4px #43e5e2;animation-delay:.6s}
     .diwali-street .ng-theme-bazaar .ng-food-card,.diwali-street .ng-theme-bazaar .food-card,.diwali-street .ng-theme-bazaar .ng-food-guide{border:2px solid #f2bf4c;box-shadow:0 0 0 2px #ff7995,0 10px 25px #7d164e2b;background:linear-gradient(145deg,#fffbd8,#ffd7c8 52%,#bde9e4)}
     .diwali-street .ng-theme-bazaar .ng-food-card:before,.diwali-street .ng-theme-bazaar .food-card:before,.diwali-street .ng-theme-bazaar .ng-food-guide:before{content:'🪔🌼';position:absolute;top:7px;right:10px;font-size:17px;filter:drop-shadow(0 2px 3px #7d164e55);pointer-events:none}
@@ -282,6 +282,7 @@
     if (tab === 'move') renderExerciseCoach();
     if (tab === 'journey') renderJourneyBadge();
     if (tab === 'plan') renderShareStatus();
+    requestAnimationFrame(() => window.ngResumeFireworks?.());
   };
 
   function profile() {
@@ -446,6 +447,7 @@
     renderDiwaliStreetMessage();
   }
   const diwaliFireworkTypes = ['Anaar', 'Rocket', 'Skyshot', 'Fuljadi', 'Chakri', 'Popup', 'Ladi'];
+  const fireworksControllers = [];
   function mount3DFireworks(section) {
     if (!section || section.querySelector('.ng-firework-canvas')) return;
     const garland = document.createElement('div'); garland.className = 'ng-festive-garland'; garland.setAttribute('aria-hidden','true');
@@ -453,23 +455,36 @@
     section.appendChild(garland);
     const canvas = document.createElement('canvas'); canvas.className = 'ng-firework-canvas'; canvas.setAttribute('aria-hidden','true'); section.prepend(canvas);
     const ctx = canvas.getContext('2d'); if (!ctx) return;
-    let width = 1, height = 1, dpr = 1, last = 0, nextLaunch = 0, raf = 0;
+    let width = 1, height = 1, dpr = 1, last = 0, nextLaunch = 0, raf = 0, inViewport = false, pageVisible = !document.hidden;
     const palette = ['#ffe66b','#ff5b8e','#4de1df','#9ef06f','#ff9f43','#d79cff','#ffffff'];
     const particles = [];
     function resize(){ const rect=section.getBoundingClientRect(); width=Math.max(1,rect.width);height=Math.max(1,rect.height);dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=width*dpr;canvas.height=height*dpr;canvas.style.width=width+'px';canvas.style.height=height+'px';ctx.setTransform(dpr,0,0,dpr,0,0); }
     function burst(type, x, y){
-      const color=palette[Math.floor(Math.random()*palette.length)], count=type==='Popup'?54:type==='Chakri'?30:type==='Ladi'?18:42;
+      const color=palette[Math.floor(Math.random()*palette.length)], count=type==='Popup'?34:type==='Chakri'?22:type==='Ladi'?14:28;
       if(type==='Ladi'){ for(let n=0;n<7;n++) setTimeout(()=>burst('Popup',Math.max(35,Math.min(width-35,x-180+n*60)),Math.max(45,y-80-Math.random()*70)),n*110); return; }
       for(let i=0;i<count;i++){ const a=(Math.PI*2*i/count)+(type==='Chakri'?Date.now()/500:0), speed=(type==='Anaar'?1.2+Math.random()*2.2:2+Math.random()*3.8); particles.push({x,y,z:Math.random()*70,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,vz:(Math.random()-.5)*2,life:1,decay:.012+Math.random()*.014,color,type,trail:[]}); }
+      if (particles.length > 260) particles.splice(0, particles.length - 260);
     }
     function launch(){ const type=diwaliFireworkTypes[Math.floor(Math.random()*diwaliFireworkTypes.length)]; const x=40+Math.random()*(width-80); const y=height*.2+Math.random()*height*.35; if(type==='Fuljadi'){ for(let i=0;i<18;i++) particles.push({x:width*.25+Math.random()*width*.5,y:height*.7+Math.random()*height*.2,z:Math.random()*35,vx:(Math.random()-.5)*1.2,vy:-1.2-Math.random()*2.5,vz:(Math.random()-.5)*1.5,life:1,decay:.018+Math.random()*.018,color:'#ffe66b',type,trail:[]}); } else if(type==='Rocket'||type==='Skyshot'){ burst(type,x,y); } else burst(type,x,type==='Anaar'?height*.68:y); }
     function project(p){ const scale=280/(280+p.z); return {x:width/2+(p.x-width/2)*scale,y:height/2+(p.y-height/2)*scale,scale}; }
     function draw(t){
-      if(!last) last=t; const dt=Math.min(32,t-last); last=t; if(t>nextLaunch){launch();nextLaunch=t+850+Math.random()*900;} ctx.clearRect(0,0,width,height);
+      if (!pageVisible || !inViewport || section.offsetParent === null) { raf = 0; return; }
+      if(!last) last=t; const dt=Math.min(32,t-last); last=t; if(t>nextLaunch){launch();nextLaunch=t+1400+Math.random()*1200;} ctx.clearRect(0,0,width,height);
       for(let i=particles.length-1;i>=0;i--){ const p=particles[i]; p.x+=p.vx*dt/16;p.y+=p.vy*dt/16;p.z+=p.vz*dt/16;p.vy+=p.type==='Anaar'?0.018:0.035;p.vx*=.995;p.vy*=.995;p.life-=p.decay*dt/16; const q=project(p); if(p.life<=0||q.y<-80||q.y>height+80){particles.splice(i,1);continue;} const r=Math.max(.8,3.8*q.scale);ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.shadowBlur=13*q.scale;ctx.shadowColor=p.color;ctx.beginPath();ctx.arc(q.x,q.y,r,0,Math.PI*2);ctx.fill(); if(p.trail.length){const old=p.trail[p.trail.length-1];ctx.globalAlpha*=.45;ctx.strokeStyle=p.color;ctx.lineWidth=1.4*q.scale;ctx.beginPath();ctx.moveTo(old.x,old.y);ctx.lineTo(q.x,q.y);ctx.stroke();} p.trail.push(q);if(p.trail.length>3)p.trail.shift(); }
       ctx.globalAlpha=1;ctx.shadowBlur=0;raf=requestAnimationFrame(draw);
     }
-    resize(); window.addEventListener('resize',resize,{passive:true}); raf=requestAnimationFrame(draw);
+    const start = () => { if (!raf && pageVisible && inViewport && section.offsetParent !== null) { last = 0; raf = requestAnimationFrame(draw); } };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
+    const viewportObserver = new IntersectionObserver((entries) => { inViewport = Boolean(entries[0]?.isIntersecting); if (inViewport) start(); else stop(); }, { threshold: 0.01 });
+    viewportObserver.observe(section);
+    const visibilityHandler = () => { pageVisible = !document.hidden; if (pageVisible) start(); else stop(); };
+    document.addEventListener('visibilitychange', visibilityHandler, { passive: true });
+    const displayObserver = new MutationObserver(start);
+    displayObserver.observe(section, { attributes: true, attributeFilter: ['style', 'class'] });
+    window.addEventListener('resize',resize,{passive:true});
+    fireworksControllers.push({ start, stop });
+    window.ngResumeFireworks = () => fireworksControllers.forEach((controller) => controller.start());
+    resize();
   }
   function install3DFireworks(){ document.querySelectorAll('.ng-theme-courtyard,.ng-theme-bazaar,.ng-theme-palace').forEach(mount3DFireworks); }
 
