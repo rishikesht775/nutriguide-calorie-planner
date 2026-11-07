@@ -34,6 +34,8 @@
     .ng-story-badge{display:flex;align-items:center;gap:10px;padding:13px;border-radius:17px;background:#fff5dc;border:1px solid #ead8a9}.ng-story-badge strong{display:block}.ng-story-badge small{color:var(--muted)}
     .ng-preference-note{display:flex;align-items:flex-start;gap:10px;margin-top:12px;padding:12px 14px;border-radius:16px;background:#effaf3;border:1px solid #cfe6d7;color:#245c42;font-size:12px;line-height:1.45}.ng-preference-note span{font-size:22px}
     .ng-allergy-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.ng-allergy{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px}.ng-allergy input{width:auto;margin:0}
+    .diwali-mode{background:radial-gradient(circle at 12% 10%,#fff2b8 0,transparent 24%),radial-gradient(circle at 88% 8%,#ffe0a3 0,transparent 22%),linear-gradient(135deg,#fffaf0,#fff6e3 45%,#fffaf1)}
+    .diwali-mode .card,.diwali-mode .ng-card{border-color:#e9bd62;box-shadow:0 14px 34px #bd731d18}.diwali-mode .card,.diwali-mode .ng-card{position:relative;overflow:hidden}.diwali-mode .card::after,.diwali-mode .ng-card::after{content:'✨';position:absolute;right:14px;top:10px;font-size:18px;opacity:.72;pointer-events:none}.diwali-mode .hero{box-shadow:0 18px 45px #bd731d22}.ng-diwali-lights{position:fixed;inset:0;pointer-events:none;z-index:10}.ng-diwali-lights span{position:absolute;font-size:22px;filter:drop-shadow(0 4px 8px #c2791d44);animation:ngDiwaliFloat 3.4s ease-in-out infinite}.ng-diwali-lights span:nth-child(1){top:88px;left:18px}.ng-diwali-lights span:nth-child(2){top:120px;right:20px;animation-delay:.6s}.ng-diwali-lights span:nth-child(3){bottom:22px;left:20px;animation-delay:1.1s}.ng-diwali-lights span:nth-child(4){bottom:28px;right:22px;animation-delay:1.7s}.ng-diwali-badge{display:flex;align-items:center;gap:8px;margin:-4px 0 14px;padding:8px 11px;border-radius:999px;background:linear-gradient(90deg,#fff1b7,#ffe2a1);border:1px solid #e8bf62;color:#7b4b16;font-size:11px;font-weight:800;letter-spacing:.2px}.ng-diwali-badge span{margin-left:auto}.ng-diwali-food-banner{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:16px 18px;border-radius:20px;color:#fff7df;background:linear-gradient(110deg,#6b1e27,#b55729 50%,#7d351d);box-shadow:0 12px 24px #7d351d2b}.ng-diwali-food-banner strong{display:block;font-size:18px}.ng-diwali-food-banner small{display:block;margin-top:3px;color:#ffeec0}.ng-diwali-food-banner .ng-diwali-food-icon{font-size:34px;white-space:nowrap}@keyframes ngDiwaliFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-7px) rotate(3deg)}}
     .ng-status{font-size:12px;color:var(--muted);margin-top:8px}.ng-offline{background:#fff1dd!important;color:#72501c!important}
     .ng-dark{--ink:#ecfff4;--muted:#b7cec1;--mint:#1e4936;--cream:#1e3029;--line:#315444;background:#10241c}.ng-dark .card,.ng-dark .ng-card,.ng-dark .stat,.ng-dark .ng-metric,.ng-dark .ng-device,.ng-dark .ng-swap,.ng-dark .ng-exercise-plan article{background:#173329;color:var(--ink)}.ng-dark input,.ng-dark select,.ng-dark textarea{background:#10241c;color:var(--ink);border-color:#315444}.ng-dark .hero{background:linear-gradient(90deg,#173329ee,#173329aa),url('mascot-buddies.jpg') center/cover}
     .ng-large{font-size:18px}.ng-large .ng-card,.ng-large .card{padding:25px}.ng-large button{min-height:48px}
@@ -64,7 +66,7 @@
       <button type="button" id="ngNextButton" onclick="ngOpenNext()">Open</button>
     </section>
 
-    <section class="ng-card ng-tab-section ng-home-section" data-ng-tab="home" id="ngDietPreferences">
+    <section class="ng-card ng-tab-section ng-food-section" data-ng-tab="food" id="ngDietPreferences">
       <div class="eyebrow">PERSONALISE YOUR PLAN</div><h2>Set your food preferences</h2>
       <p class="ng-sub">These choices shape meal suggestions across your journey. You can change them anytime.</p>
       <div class="ng-form">
@@ -82,7 +84,7 @@
       <div class="ng-preference-note"><span>🥗</span><div><b id="ngDietPreferenceTitle">Balanced Indian meals</b><br><span id="ngDietPreferenceText">Save your preferences and your guide will use them when suggesting meals and swaps.</span></div></div>
     </section>
 
-    <section class="ng-card ng-tab-section ng-home-section" data-ng-tab="home" id="ngRecovery">
+    <section class="ng-card ng-tab-section ng-plan-section" data-ng-tab="plan" id="ngRecovery">
       <div class="eyebrow">RECOVERY CHECK-IN</div><h2>How are you feeling today?</h2><p class="ng-sub">Your answers help adjust the plan. They stay on this device.</p>
       <div class="ng-form">
         <label>Sleep hours<input id="ngSleep" type="number" min="0" max="24" step="0.5" placeholder="e.g. 7"></label>
@@ -94,7 +96,7 @@
       <p class="ng-status" id="ngRecoveryStatus">No check-in saved today.</p>
     </section>
 
-    <section class="ng-card ng-tab-section ng-home-section" data-ng-tab="home" id="ngWearables">
+    <section class="ng-card ng-tab-section ng-plan-section" data-ng-tab="plan" id="ngWearables">
       <div class="eyebrow">CONNECTED ACTIVITY</div><h2>Android wearable hub</h2><p class="ng-sub">Connect a provider when you are ready. You can keep using manual logging without a device.</p>
       <div class="ng-grid-2">
         <div class="ng-device"><span class="ng-device-icon">⌚</span><div><b>Google Health Connect</b><small>Steps, workouts, sleep</small></div><button type="button" onclick="ngConnectDevice('Health Connect')">Connect</button></div>
@@ -217,6 +219,40 @@
     window.ngNextTab = next[3];
   }
   window.ngOpenNext = function () { if (window.ngNextTab && typeof window.setTab === 'function') window.setTab(window.ngNextTab); };
+
+  const diwaliFoods = [
+    ['🪔', 'Makhana kheer', 'Roasted fox nuts simmered in milk with cardamom; keep sugar light.', 180, 7, 24, 6, 3],
+    ['🍬', 'Anjeer date ladoo', 'Naturally sweet dried-fruit ladoo with a small celebration portion.', 145, 3, 24, 5, 4],
+    ['🥥', 'Ragi coconut ladoo', 'Ragi, coconut and dates for a fibre-rich festive bite.', 135, 3, 21, 5, 3],
+    ['🥜', 'Peanut sesame chikki', 'Roasted peanut and sesame brittle; enjoy one small piece.', 155, 5, 16, 8, 3],
+    ['🥟', 'Baked gujiya', 'A lighter baked version filled with coconut and khoya.', 210, 6, 30, 8, 2],
+    ['🍿', 'Diwali masala makhana', 'Roasted fox nuts with chilli, cumin and a little ghee.', 150, 5, 22, 5, 4],
+    ['🌾', 'Roasted chana chivda', 'Crispy chana, poha and curry leaves with less oil.', 190, 8, 29, 5, 6],
+    ['🍎', 'Festive fruit chaat', 'Apple, guava, orange and pomegranate with lime and chaat masala.', 120, 2, 28, 1, 6],
+    ['🥣', 'Steamed dhokla bites', 'Soft besan dhokla with coriander and a light tempering.', 165, 7, 25, 4, 3],
+    ['🍛', 'Light festive thali', 'Dal, seasonal sabzi, salad and one small roti for balance.', 420, 18, 55, 14, 12],
+    ['🥗', 'Sprouts festive chaat', 'Moong sprouts, pomegranate, cucumber and mint.', 210, 13, 31, 4, 9],
+    ['🥛', 'Kesar almond milk', 'Warm saffron milk; use a small portion and unsweetened milk.', 130, 6, 10, 7, 2]
+  ];
+  function installDiwaliExperience() {
+    document.body.classList.add('diwali-mode');
+    if (!document.querySelector('.ng-diwali-lights')) document.body.insertAdjacentHTML('beforeend', '<div class="ng-diwali-lights" aria-hidden="true"><span>🪔</span><span>🎇</span><span>✨</span><span>🎆</span></div>');
+    if (typeof foodSets !== 'undefined') foodSets.diwali = diwaliFoods;
+    if (typeof nutritionDatabase !== 'undefined') Object.assign(nutritionDatabase, {
+      makhanakheer:{label:'Makhana kheer',emoji:'🪔',cal:180,p:7,c:24,fat:6,f:3}, anjeerdateladoo:{label:'Anjeer date ladoo',emoji:'🍬',cal:145,p:3,c:24,fat:5,f:4}, ragicoconutladoo:{label:'Ragi coconut ladoo',emoji:'🥥',cal:135,p:3,c:21,fat:5,f:3},
+      peanutseasamechikki:{label:'Peanut sesame chikki',emoji:'🥜',cal:155,p:5,c:16,fat:8,f:3}, bakedgujiya:{label:'Baked gujiya',emoji:'🥟',cal:210,p:6,c:30,fat:8,f:2}, diwalimakhanamasala:{label:'Diwali masala makhana',emoji:'🍿',cal:150,p:5,c:22,fat:5,f:4},
+      roastedchanachivda:{label:'Roasted chana chivda',emoji:'🌾',cal:190,p:8,c:29,fat:5,f:6}, festivefruitchaat:{label:'Festive fruit chaat',emoji:'🍎',cal:120,p:2,c:28,fat:1,f:6}, steamedhoklaybites:{label:'Steamed dhokla bites',emoji:'🥣',cal:165,p:7,c:25,fat:4,f:3},
+      lightfestivethali:{label:'Light festive thali',emoji:'🍛',cal:420,p:18,c:55,fat:14,f:12}, sproutsfestivechaat:{label:'Sprouts festive chaat',emoji:'🥗',cal:210,p:13,c:31,fat:4,f:9}, kesaralmondmilk:{label:'Kesar almond milk',emoji:'🥛',cal:130,p:6,c:10,fat:7,f:2}
+    });
+    const tabs = document.querySelector('.food-tabs');
+    if (tabs && !tabs.querySelector('[data-diwali-foods]')) {
+      const button = document.createElement('button'); button.type = 'button'; button.dataset.diwaliFoods = 'true'; button.textContent = '🪔 Diwali treats'; button.addEventListener('click', () => window.showFoods?.('diwali')); tabs.appendChild(button);
+    }
+    const foodStudio = document.querySelector('.food-studio');
+    if (foodStudio && !foodStudio.querySelector('.ng-diwali-food-banner')) foodStudio.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-food-banner"><span class="ng-diwali-food-icon">🪔✨</span><div><strong>Diwali, with balance</strong><small>Enjoy traditional flavours, smaller portions, and lighter homemade festive choices.</small></div></div>');
+    const messages = {home:'A little light, a little movement, and a calm celebration.',food:'Enjoy your Diwali favourites with colourful plates and mindful portions.',move:'Bring firework energy to your movement, one safe step at a time.',journey:'Light one healthy habit and carry it into the next chapter.',plan:'Your festive week can be joyful, social, and still supportive of your goals.'};
+    document.querySelectorAll('.ng-tab-section').forEach((section) => { if (!section.querySelector('.ng-diwali-badge')) { const tab = section.dataset.ngTab || 'home'; section.insertAdjacentHTML('afterbegin', `<div class="ng-diwali-badge">🪔 Diwali wellness <span>${messages[tab] || messages.home} ✨</span></div>`); } });
+  }
 
   function dietPreferences() {
     return read('ngDietPrefs', { style: 'balanced', region: 'any', budget: 'medium', dairy: false, nuts: false, gluten: false, soy: false });
@@ -371,6 +407,7 @@
   window.addEventListener('offline', () => { if (get('ngDeviceStatus')) { get('ngDeviceStatus').textContent = 'You are offline. Manual logs still work and will remain on this device.'; get('ngDeviceStatus').classList.add('ng-offline'); } });
 
   applyPreferences();
+  installDiwaliExperience();
   installFoodPreferenceFilter();
   renderToday(); renderQuickStatus(); renderGroceries(); renderExerciseCoach(); renderJourneyBadge();
   if (typeof window.setTab === 'function') window.setTab(document.querySelector('.app-nav button.active')?.dataset.tab || 'home');
