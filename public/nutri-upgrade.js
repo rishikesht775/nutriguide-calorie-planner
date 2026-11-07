@@ -268,6 +268,12 @@
   const originalSetTab = window.setTab;
   window.setTab = function (tab) {
     if (typeof originalSetTab === 'function') originalSetTab(tab);
+    else {
+      const groups = { home: ['.guide-picker','.mascot-gallery','.motivation','.dashboard-summary','.grid'], food: ['.protein-tracker','.food-nutrition','.food-library','.food-studio','.market-banner','.stories','.all-foods'], move: ['.inspiration','.exercise-library'], journey: ['.journey'], plan: ['.reminders','.weekly-report'] };
+      document.querySelectorAll('.app-nav button').forEach((button) => button.classList.toggle('active', button.dataset.tab === tab));
+      new Set(Object.values(groups).flat()).forEach((selector) => document.querySelectorAll(selector).forEach((element) => element.style.setProperty('display','none','important')));
+      (groups[tab] || groups.home).forEach((selector) => document.querySelectorAll(selector).forEach((element) => element.style.setProperty('display', selector === '.grid' ? 'grid' : 'block','important')));
+    }
     document.querySelectorAll('.ng-tab-section').forEach((section) => {
       section.style.display = section.dataset.ngTab === tab ? 'block' : 'none';
     });
@@ -467,8 +473,29 @@
   }
   function install3DFireworks(){ document.querySelectorAll('.ng-theme-courtyard,.ng-theme-bazaar,.ng-theme-palace').forEach(mount3DFireworks); }
 
+  function installFallbackTabRouter() {
+    if (typeof window.setTab === 'function') return;
+    const groups = {
+      home: ['.ng-home-section','.guide-picker','.mascot-gallery','.motivation','.dashboard-summary','.grid'],
+      food: ['.ng-food-section','.protein-tracker','.food-nutrition','.food-library','.food-studio','.market-banner','.stories','.all-foods'],
+      move: ['.ng-move-section','.inspiration','.exercise-library'],
+      journey: ['.ng-journey-section','.journey'],
+      plan: ['.ng-plan-section','.reminders','.weekly-report']
+    };
+    window.setTab = function(tab) {
+      document.querySelectorAll('.app-nav button').forEach((button) => button.classList.toggle('active', button.dataset.tab === tab));
+      const all = new Set(Object.values(groups).flat());
+      all.forEach((selector) => document.querySelectorAll(selector).forEach((element) => element.style.setProperty('display','none','important')));
+      (groups[tab] || groups.home).forEach((selector) => document.querySelectorAll(selector).forEach((element) => element.style.setProperty('display', selector === '.grid' ? 'grid' : 'block','important')));
+      document.querySelectorAll(`[data-ng-tab="${tab}"]`).forEach((element) => element.style.setProperty('display','block','important'));
+      const coach = document.getElementById('coachText'); if (coach) coach.textContent = ({home:'Let’s start with one small win today.',food:'Build a colourful plate and add your protein foods.',move:'Train with control. I’ll stay beside you for every rep.',journey:'Choose a story mode and make this journey yours.',plan:'Your plan is ready. Keep the next step simple.'})[tab] || '';
+    };
+    document.querySelectorAll('.app-nav button').forEach((button) => button.addEventListener('click', () => window.setTab(button.dataset.tab)));
+  }
+
   function installDiwaliExperience() {
     document.body.classList.add('diwali-mode', 'diwali-premium', 'diwali-street');
+    installFallbackTabRouter();
     if (!document.querySelector('.ng-diwali-decor')) document.body.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-decor" aria-hidden="true"><div class="ng-decor-fireworks"><span>🎇</span><span>🎆</span><span>🌀</span><span>🌋</span></div><div class="ng-toran-line">🌼 🍃 🌼 🍃 🌼 🍃 🌼 🍃 🌼<span class="leaves">🍃 🍃 🍃 🍃 🍃 🍃 🍃 🍃</span></div><div class="ng-light-string"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="ng-decor-diya left">🪔</span><span class="ng-decor-diya right">🪔</span></div>');
     if (!document.querySelector('.ng-diwali-street-effects')) document.body.insertAdjacentHTML('beforeend', '<div class="ng-diwali-street-effects" aria-hidden="true"><span class="petal">🌼</span><span class="petal">🌸</span><span class="petal">🌼</span><span class="petal">🌸</span><i class="spark"></i><i class="spark"></i><i class="spark"></i></div><div class="ng-diwali-rangoli" aria-hidden="true"></div>');
     if (!root.querySelector('.ng-diwali-live-ticker')) root.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-live-ticker"><b>🪔 LIVE DIWALI STREET</b><span id="ngDiwaliLiveMessage">The celebration is glowing.</span></div>');
