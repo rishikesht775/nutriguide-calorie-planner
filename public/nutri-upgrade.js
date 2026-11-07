@@ -108,6 +108,22 @@
     @keyframes ngRangoliSpin{to{transform:translateX(-50%) rotate(360deg)}}@keyframes ngRangoliSpinReverse{to{transform:rotate(-360deg)}}
     @keyframes ngFirework{0%,100%{transform:scale(.4);opacity:.3}35%{transform:scale(1.8);opacity:1}65%{transform:scale(.9);opacity:.75}}
     @media(max-width:760px){.diwali-street .app-nav:before{font-size:11px;letter-spacing:4px;top:-13px}.ng-diwali-live-ticker{border-radius:18px;align-items:flex-start}.ng-diwali-rangoli{width:145px;height:145px;bottom:-52px}.ng-diwali-rangoli:after{inset:24px;font-size:35px}.diwali-street .ng-diwali-welcome{min-height:190px}}
+
+    /* Grand Indian decor: keep the celebration in dedicated spaces so it never covers controls */
+    .diwali-street .ng-diwali-lights{display:none}
+    .ng-diwali-decor{position:relative;z-index:1;height:126px;margin:0 0 8px;overflow:hidden;border-bottom:2px solid #f2c45b;background:linear-gradient(180deg,#27104d 0%,#5b154d 52%,#d24b3d 100%);box-shadow:0 14px 28px #54134244}
+    .ng-diwali-decor:before{content:'✦  ✧  ✦  ✧  ✦  ✧  ✦';position:absolute;left:0;right:0;top:12px;text-align:center;color:#ffd95d;font-size:14px;letter-spacing:12px;opacity:.9}
+    .ng-toran-line{position:absolute;left:0;right:0;top:34px;text-align:center;color:#ffe486;font-size:26px;letter-spacing:8px;white-space:nowrap;filter:drop-shadow(0 4px 4px #17082e88)}
+    .ng-toran-line .leaves{display:block;margin-top:-7px;color:#4db66b;font-size:21px;letter-spacing:7px}
+    .ng-light-string{position:absolute;left:5%;right:5%;bottom:25px;height:30px;border-top:2px solid #ffd45d;border-radius:50% 50% 0 0;display:flex;justify-content:space-around;align-items:flex-start}
+    .ng-light-string i{display:block;width:10px;height:15px;margin-top:-2px;border-radius:50% 50% 45% 45%;background:#ffd84d;box-shadow:0 0 13px 5px #ffd84d99;animation:ngLightBlink 1.7s ease-in-out infinite}.ng-light-string i:nth-child(2n){background:#42e0e3;box-shadow:0 0 13px 5px #42e0e399;animation-delay:.4s}.ng-light-string i:nth-child(3n){background:#ff6c9a;box-shadow:0 0 13px 5px #ff6c9a99;animation-delay:.8s}.ng-light-string i:nth-child(4n){background:#a9f06a;box-shadow:0 0 13px 5px #a9f06a99;animation-delay:1.2s}
+    .ng-decor-fireworks{position:absolute;inset:0;pointer-events:none}.ng-decor-fireworks span{position:absolute;font-size:24px;filter:drop-shadow(0 0 9px #ffe98a);animation:ngStreetSpark 2.8s ease-in-out infinite}.ng-decor-fireworks span:nth-child(1){left:11%;top:16%}.ng-decor-fireworks span:nth-child(2){right:13%;top:18%;animation-delay:.7s}.ng-decor-fireworks span:nth-child(3){right:28%;top:48%;animation-delay:1.4s}.ng-decor-fireworks span:nth-child(4){left:29%;top:48%;animation-delay:2s}
+    .ng-decor-diya{position:absolute;bottom:12px;font-size:28px;filter:drop-shadow(0 0 10px #ffcb4d);animation:ngDiyaGlow 2.4s ease-in-out infinite}.ng-decor-diya.left{left:18px}.ng-decor-diya.right{right:18px;animation-delay:1.2s}
+    .ng-diwali-celebration-strip{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 2px}.ng-diwali-celebration-strip span{padding:7px 9px;border-radius:999px;background:#fff5b52e;border:1px solid #ffeaa2;color:#fff8dc;font-size:10px;font-weight:800;box-shadow:0 4px 10px #58133b25}
+    .ng-diwali-rangoli{position:fixed;left:50%;bottom:-30px;transform:translateX(-50%);width:230px;height:88px;border-radius:50% 50% 0 0;background:radial-gradient(ellipse at center,#ffe26b 0 16%,#e64d62 17% 34%,#2bb6b2 35% 51%,#7b2b87 52% 69%,#ff9d35 70% 100%);box-shadow:0 0 0 6px #fff2b5,0 0 0 10px #d5445488,0 0 28px 8px #ffcd4c77;opacity:.82;z-index:8;animation:ngRangoliGlow 3.8s ease-in-out infinite;pointer-events:none}.ng-diwali-rangoli:after{content:'✦  🪔  ✦';position:absolute;inset:16px;border-radius:50%;background:radial-gradient(circle,#fff4a9 0 24%,#f08c27 25% 42%,#7d164e 43% 60%,#20a7aa 61% 100%);display:grid;place-items:center;font-size:28px;animation:none}
+    @keyframes ngLightBlink{0%,100%{opacity:.55;transform:scale(.86)}50%{opacity:1;transform:scale(1.14)}}@keyframes ngDiyaGlow{0%,100%{transform:translateY(0);filter:drop-shadow(0 0 6px #ffcb4d)}50%{transform:translateY(-4px);filter:drop-shadow(0 0 16px #fff2a0)}}@keyframes ngRangoliGlow{0%,100%{filter:saturate(1);opacity:.68}50%{filter:saturate(1.35);opacity:.9}}
+    .diwali-street .ng-diwali-welcome{min-height:208px}.diwali-street .ng-diwali-welcome .ng-diwali-art{font-size:54px}.diwali-street .ng-diwali-welcome .ng-diwali-fireworks{z-index:0}.diwali-street .ng-diwali-welcome>div:nth-child(2){z-index:1}
+    @media(max-width:760px){.ng-diwali-decor{height:112px}.ng-toran-line{font-size:18px;letter-spacing:4px;top:39px}.ng-toran-line .leaves{font-size:16px;letter-spacing:3px}.ng-light-string{left:3%;right:3%;bottom:22px}.ng-diwali-celebration-strip span{font-size:9px;padding:6px 7px}.ng-diwali-rangoli{width:170px;height:65px;bottom:-23px}.ng-diwali-rangoli:after{inset:12px;font-size:21px}.diwali-street .ng-diwali-welcome{min-height:230px}}
   `;
   document.head.appendChild(style);
 
@@ -298,7 +314,21 @@
     ['🥣', 'Steamed dhokla bites', 'Soft besan dhokla with coriander and a light tempering.', 165, 7, 25, 4, 3],
     ['🍛', 'Light festive thali', 'Dal, seasonal sabzi, salad and one small roti for balance.', 420, 18, 55, 14, 12],
     ['🥗', 'Sprouts festive chaat', 'Moong sprouts, pomegranate, cucumber and mint.', 210, 13, 31, 4, 9],
-    ['🥛', 'Kesar almond milk', 'Warm saffron milk; use a small portion and unsweetened milk.', 130, 6, 10, 7, 2]
+    ['🥛', 'Kesar almond milk', 'Warm saffron milk; use a small portion and unsweetened milk.', 130, 6, 10, 7, 2],
+    ['🍯', 'Date and walnut barfi', 'Dates, walnuts and coconut with no refined sugar; enjoy one square.', 155, 3, 19, 8, 3],
+    ['🥥', 'Light coconut barfi', 'Fresh coconut and low-sugar milk solids in a small festive portion.', 145, 4, 18, 7, 2],
+    ['🌾', 'Besan ladoo, mini', 'Roasted gram flour, cardamom and a little ghee in a mini portion.', 135, 4, 16, 6, 2],
+    ['🫘', 'Til and jaggery ladoo', 'Sesame, peanuts and jaggery for a mineral-rich traditional sweet.', 150, 5, 18, 7, 3],
+    ['🍮', 'Moong dal halwa cup', 'A lighter small cup with roasted moong, saffron and less ghee.', 190, 7, 24, 8, 4],
+    ['🥜', 'Pista almond burfi', 'Nut-rich burfi made with less sugar and a small serving size.', 165, 5, 14, 10, 3],
+    ['🌀', 'Baked chakli', 'A crisp millet and rice flour chakli baked with a light oil brush.', 175, 4, 25, 6, 3],
+    ['🧨', 'Roasted firework chivda', 'Poha, roasted makhana, curry leaves and peanuts with less oil.', 180, 7, 27, 5, 5],
+    ['🌋', 'Baked anaar kachori', 'A small baked lentil kachori with a bright pomegranate chutney.', 205, 7, 29, 7, 4],
+    ['✨', 'Fuljhari makhana', 'Crunchy roasted makhana dusted with chilli, lime and chaat masala.', 145, 5, 22, 4, 4],
+    ['🌀', 'Chakri corn chaat', 'Sweet corn, cucumber, pomegranate and lime in a colourful bowl.', 135, 5, 25, 2, 5],
+    ['🥨', 'Millet namak para', 'Oven-baked millet bites with ajwain and a gentle spice mix.', 165, 4, 24, 6, 3],
+    ['🥟', 'Air-fried samosa bites', 'Mini potato and pea samosas with coriander mint chutney.', 190, 5, 28, 7, 4],
+    ['🌽', 'Masala roasted corn', 'Charred corn with lime, chilli and coriander instead of fried snacks.', 125, 4, 23, 2, 4]
   ];
   const foodGuides = {
     panda: { avatar: '🐼👨‍🍳', name: 'Panda Chef', role: 'Balanced festive plates', message: 'I will help you enjoy mithai, colourful vegetables, and enough protein without taking the joy out of Diwali.' },
@@ -390,16 +420,22 @@
   }
   function installDiwaliExperience() {
     document.body.classList.add('diwali-mode', 'diwali-premium', 'diwali-street');
-    if (!document.querySelector('.ng-diwali-lights')) document.body.insertAdjacentHTML('beforeend', '<div class="ng-diwali-lights" aria-hidden="true"><span>🪔</span><span>🎇</span><span>✨</span><span>🎆</span></div>');
+    if (!document.querySelector('.ng-diwali-decor')) document.body.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-decor" aria-hidden="true"><div class="ng-decor-fireworks"><span>🎇</span><span>🎆</span><span>🌀</span><span>🌋</span></div><div class="ng-toran-line">🌼 🍃 🌼 🍃 🌼 🍃 🌼 🍃 🌼<span class="leaves">🍃 🍃 🍃 🍃 🍃 🍃 🍃 🍃</span></div><div class="ng-light-string"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="ng-decor-diya left">🪔</span><span class="ng-decor-diya right">🪔</span></div>');
     if (!document.querySelector('.ng-diwali-street-effects')) document.body.insertAdjacentHTML('beforeend', '<div class="ng-diwali-street-effects" aria-hidden="true"><span class="petal">🌼</span><span class="petal">🌸</span><span class="petal">🌼</span><span class="petal">🌸</span><i class="spark"></i><i class="spark"></i><i class="spark"></i></div><div class="ng-diwali-rangoli" aria-hidden="true"></div>');
     if (!root.querySelector('.ng-diwali-live-ticker')) root.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-live-ticker"><b>🪔 LIVE DIWALI STREET</b><span id="ngDiwaliLiveMessage">The celebration is glowing.</span></div>');
-    if (!root.querySelector('.ng-diwali-welcome')) root.insertAdjacentHTML('afterbegin', '<section class="ng-diwali-welcome"><div class="ng-diwali-art">🪔<br>🌸</div><div style="flex:1;position:relative;z-index:1"><div class="ng-diwali-topline"><span>✦ DIWALI CELEBRATION STREET ✦</span><button type="button" class="ng-diwali-sound" id="ngFestiveSound" aria-pressed="true">🔊 Enable Diwali sounds</button></div><h2 id="ngDiwaliDayTitle">Diwali wellness season</h2><p id="ngDiwaliDayMessage">The celebration is glowing.</p><div class="ng-diwali-calendar"><span>🌼 Dhanteras</span><span class="today" data-diwali-day-label>Today</span><span>🎆 Deepavali</span><span>🌸 Bhai Dooj</span></div><small id="ngDiwaliNextMessage" style="display:block;margin-top:10px;color:#ffeec8;position:relative;z-index:1">Your next small win is waiting.</small><div class="ng-diwali-fireworks"><i></i><i></i><i></i></div></div><div class="ng-diwali-art">🍬<br>🎇</div></section>');
+    if (!root.querySelector('.ng-diwali-welcome')) root.insertAdjacentHTML('afterbegin', '<section class="ng-diwali-welcome"><div class="ng-diwali-art">🪔<br>🌸</div><div style="flex:1;position:relative;z-index:1"><div class="ng-diwali-topline"><span>✦ DIWALI CELEBRATION STREET ✦</span><button type="button" class="ng-diwali-sound" id="ngFestiveSound" aria-pressed="true">🔊 Enable Diwali sounds</button></div><h2 id="ngDiwaliDayTitle">Diwali wellness season</h2><p id="ngDiwaliDayMessage">The celebration is glowing.</p><div class="ng-diwali-calendar"><span>🌼 Dhanteras</span><span class="today" data-diwali-day-label>Today</span><span>🎆 Deepavali</span><span>🌸 Bhai Dooj</span></div><div class="ng-diwali-celebration-strip"><span>🎇 Sky shot</span><span>🌀 Chakri</span><span>🌋 Anar</span><span>✨ Fuljhari</span><span>🧨 Ladi</span></div><small id="ngDiwaliNextMessage" style="display:block;margin-top:10px;color:#ffeec8;position:relative;z-index:1">Your next small win is waiting.</small><div class="ng-diwali-fireworks"><i></i><i></i><i></i></div></div><div class="ng-diwali-art">🍬<br>🎇</div></section>');
     if (typeof foodSets !== 'undefined') foodSets.diwali = diwaliFoods;
     if (typeof nutritionDatabase !== 'undefined') Object.assign(nutritionDatabase, {
       makhanakheer:{label:'Makhana kheer',emoji:'🪔',cal:180,p:7,c:24,fat:6,f:3}, anjeerdateladoo:{label:'Anjeer date ladoo',emoji:'🍬',cal:145,p:3,c:24,fat:5,f:4}, ragicoconutladoo:{label:'Ragi coconut ladoo',emoji:'🥥',cal:135,p:3,c:21,fat:5,f:3},
       peanutseasamechikki:{label:'Peanut sesame chikki',emoji:'🥜',cal:155,p:5,c:16,fat:8,f:3}, bakedgujiya:{label:'Baked gujiya',emoji:'🥟',cal:210,p:6,c:30,fat:8,f:2}, diwalimakhanamasala:{label:'Diwali masala makhana',emoji:'🍿',cal:150,p:5,c:22,fat:5,f:4},
       roastedchanachivda:{label:'Roasted chana chivda',emoji:'🌾',cal:190,p:8,c:29,fat:5,f:6}, festivefruitchaat:{label:'Festive fruit chaat',emoji:'🍎',cal:120,p:2,c:28,fat:1,f:6}, steamedhoklaybites:{label:'Steamed dhokla bites',emoji:'🥣',cal:165,p:7,c:25,fat:4,f:3},
       lightfestivethali:{label:'Light festive thali',emoji:'🍛',cal:420,p:18,c:55,fat:14,f:12}, sproutsfestivechaat:{label:'Sprouts festive chaat',emoji:'🥗',cal:210,p:13,c:31,fat:4,f:9}, kesaralmondmilk:{label:'Kesar almond milk',emoji:'🥛',cal:130,p:6,c:10,fat:7,f:2}
+    });
+    if (typeof nutritionDatabase !== 'undefined') Object.assign(nutritionDatabase, {
+      datewalnutbarfi:{label:'Date and walnut barfi',emoji:'🍯',cal:155,p:3,c:19,fat:8,f:3}, lightcoconutbarfi:{label:'Light coconut barfi',emoji:'🥥',cal:145,p:4,c:18,fat:7,f:2}, besanladduomini:{label:'Besan ladoo, mini',emoji:'🌾',cal:135,p:4,c:16,fat:6,f:2},
+      tiljaggeryladoo:{label:'Til and jaggery ladoo',emoji:'🫘',cal:150,p:5,c:18,fat:7,f:3}, moongdalhalwacup:{label:'Moong dal halwa cup',emoji:'🍮',cal:190,p:7,c:24,fat:8,f:4}, pistaburfi:{label:'Pista almond burfi',emoji:'🥜',cal:165,p:5,c:14,fat:10,f:3},
+      bakedchakli:{label:'Baked chakli',emoji:'🌀',cal:175,p:4,c:25,fat:6,f:3}, fireworkchivda:{label:'Roasted firework chivda',emoji:'🧨',cal:180,p:7,c:27,fat:5,f:5}, bakedanaarkachori:{label:'Baked anaar kachori',emoji:'🌋',cal:205,p:7,c:29,fat:7,f:4}, fuljharimakhana:{label:'Fuljhari makhana',emoji:'✨',cal:145,p:5,c:22,fat:4,f:4},
+      chakricornchaat:{label:'Chakri corn chaat',emoji:'🌀',cal:135,p:5,c:25,fat:2,f:5}, milletnamakpara:{label:'Millet namak para',emoji:'🥨',cal:165,p:4,c:24,fat:6,f:3}, airfriedsamosabites:{label:'Air-fried samosa bites',emoji:'🥟',cal:190,p:5,c:28,fat:7,f:4}, masalaroastedcorn:{label:'Masala roasted corn',emoji:'🌽',cal:125,p:4,c:23,fat:2,f:4}
     });
     const tabs = document.querySelector('.food-tabs');
     if (tabs && !tabs.querySelector('[data-diwali-foods]')) {
