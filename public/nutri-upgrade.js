@@ -75,6 +75,39 @@
     .diwali-premium .ng-toast{background:#3a1734;border:1px solid #f0c766;box-shadow:0 10px 26px #3a17345c}
     .diwali-premium .ng-diwali-lights span{filter:drop-shadow(0 4px 10px #e5a42b66)}
     @media(max-width:760px){.ng-food-guide-grid{grid-template-columns:1fr}.ng-food-guides{padding:14px}.ng-food-guides-head{display:block}.ng-diwali-topline{align-items:flex-start}.diwali-premium .app-nav{box-shadow:0 8px 20px #6b24432e}}
+
+    /* Diwali Celebration Street: bright market colours, rangoli, torans and live festival motion */
+    body.diwali-street{--ink:#32133d;--muted:#745f7d;--line:#edc86b;background:linear-gradient(125deg,#fff0b8 0%,#ffd5ae 24%,#ffc8d8 52%,#b8e6ed 78%,#ffe5a2 100%);color:var(--ink)}
+    body.diwali-street:before{opacity:.26;background-image:radial-gradient(#ec5a3d 1.4px,transparent 1.4px),radial-gradient(#1296a5 1px,transparent 1px),radial-gradient(#e8a52a 1.2px,transparent 1.2px);background-size:24px 24px,37px 37px,58px 58px;background-position:0 0,12px 16px,22px 10px}
+    .diwali-street .wrap{max-width:1160px;position:relative}
+    .diwali-street .app-nav{background:linear-gradient(100deg,#7d164eF5,#d54454F2 45%,#f08c27F0);border:2px solid #ffe27b;box-shadow:0 14px 30px #9d2d4b42}
+    .diwali-street .app-nav:before{content:'🌼 🪔 🌼 🪔 🌼 🪔 🌼';display:block;position:absolute;left:18px;right:18px;top:-17px;text-align:center;font-size:15px;letter-spacing:8px;pointer-events:none;filter:drop-shadow(0 3px 2px #7d164e55)}
+    .diwali-street .app-nav button{background:#ffffff24;color:#fffbe7;border:1px solid #ffffff52;border-radius:999px}
+    .diwali-street .app-nav button:hover,.diwali-street .app-nav button.active{background:linear-gradient(135deg,#ffe36f,#ffad3d);color:#61133d;box-shadow:0 8px 18px #ffcf524c}
+    .diwali-street .card,.diwali-street .ng-card{border:2px solid #f0c65e;background:linear-gradient(145deg,#fffef9f5,#fff1dcf2);box-shadow:0 18px 38px #a33a4b26,0 0 0 2px #fff8cf inset}
+    .diwali-street .card:hover,.diwali-street .ng-card:hover{box-shadow:0 24px 46px #a33a4b35,0 0 0 2px #fff8cf inset}
+    .diwali-street .hero{border:2px solid #ffe07a;background:linear-gradient(90deg,#fff2c9f5 0%,#ffd9c9dc 44%,#ffb44766 78%),url('market-hero.png') center/cover;box-shadow:0 26px 55px #9d2d4b3b;min-height:335px}
+    .diwali-street .hero h1{color:#6d1247;text-shadow:0 3px 0 #fff4ad}.diwali-street .hero h1 span{color:#e4502e!important}.diwali-street .hero .badge{background:#fffdf0e8;border:2px solid #f0c65e;color:#7d164e;box-shadow:0 12px 24px #8e26402e}
+    .diwali-street .eyebrow{color:#c72f42}
+    .diwali-street button{background:linear-gradient(135deg,#c51e5a,#ef642f);box-shadow:0 9px 18px #b72b4c32}.diwali-street button:hover{filter:saturate(1.2) brightness(1.06);transform:translateY(-2px)}
+    .diwali-street .ng-diwali-welcome{border:2px solid #ffe58a;background:linear-gradient(115deg,#76164f 0%,#c52859 40%,#f2762f 72%,#f3b82f 100%);box-shadow:0 26px 52px #9d2d4b55;min-height:170px}
+    .diwali-street .ng-diwali-welcome:before{content:'🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼🌼';bottom:auto;top:-2px;font-size:16px;letter-spacing:8px;color:#ffe16b;opacity:1}
+    .diwali-street .ng-diwali-welcome:after{content:'🎇  ✨  🎆  ✨  🎇';right:20px;top:16px;color:#fff4a8;font-size:21px;letter-spacing:5px;opacity:.95}
+    .diwali-street .ng-diwali-welcome h2{font-size:clamp(26px,5vw,42px);color:#fff7bf;text-shadow:0 3px 0 #7d164e88}.diwali-street .ng-diwali-welcome p{font-size:14px;color:#fff7de}
+    .diwali-street .ng-diwali-calendar span{background:#ffffff32;border:1px solid #fff0a0;color:#fff9dd}.diwali-street .ng-diwali-calendar .today{background:#ffe16b;color:#711543;border-color:#fff3bb}
+    .diwali-street .ng-diwali-sound{background:#ffffff2c!important;border:1px solid #fff4b5!important;color:#fff9dd!important}
+    .ng-diwali-live-ticker{display:flex;align-items:center;gap:10px;margin:0 0 15px;padding:11px 14px;border:2px solid #f0c65e;border-radius:999px;background:linear-gradient(90deg,#7d164e,#d54454 48%,#f08c27);color:#fff9dc;box-shadow:0 11px 24px #9d2d4b30;font-size:12px;font-weight:800;overflow:hidden}.ng-diwali-live-ticker b{white-space:nowrap;color:#ffe574}.ng-diwali-live-ticker span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .ng-diwali-street-effects{position:fixed;inset:0;pointer-events:none;z-index:9;overflow:hidden}.ng-diwali-street-effects .petal{position:absolute;font-size:22px;animation:ngStreetPetal 8s linear infinite}.ng-diwali-street-effects .petal:nth-child(1){left:8%;top:-6%;animation-delay:0s}.ng-diwali-street-effects .petal:nth-child(2){left:30%;top:-8%;animation-delay:2s}.ng-diwali-street-effects .petal:nth-child(3){right:25%;top:-7%;animation-delay:4s}.ng-diwali-street-effects .petal:nth-child(4){right:7%;top:-5%;animation-delay:6s}.ng-diwali-street-effects .spark{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff38c;box-shadow:0 0 12px 4px #ffe16b;animation:ngStreetSpark 2.2s ease-in-out infinite}.ng-diwali-street-effects .spark:nth-child(5){left:17%;top:32%}.ng-diwali-street-effects .spark:nth-child(6){right:18%;top:48%;animation-delay:.7s}.ng-diwali-street-effects .spark:nth-child(7){left:58%;top:24%;animation-delay:1.2s}
+    .ng-diwali-rangoli{position:fixed;left:50%;bottom:-72px;transform:translateX(-50%);width:210px;height:210px;border-radius:50%;background:conic-gradient(#ee5a3b 0 12.5%,#ffd95d 12.5% 25%,#20a7aa 25% 37.5%,#db3f76 37.5% 50%,#ff9e2c 50% 62.5%,#4d55b4 62.5% 75%,#ffd95d 75% 87.5%,#ee5a3b 87.5% 100%);box-shadow:0 0 0 10px #fff1b5,0 0 0 16px #d5445477,0 0 28px 12px #ffcd4caa;opacity:.88;z-index:8;animation:ngRangoliSpin 20s linear infinite;pointer-events:none}.ng-diwali-rangoli:after{content:'🪔';position:absolute;inset:32px;border-radius:50%;background:radial-gradient(circle,#fff4a9 0 18%,#f08c27 19% 32%,#7d164e 33% 49%,#20a7aa 50% 66%,#fff1b5 67%);display:grid;place-items:center;font-size:52px;animation:ngRangoliSpinReverse 20s linear infinite}
+    .ng-diwali-fireworks{position:absolute;inset:0;pointer-events:none;overflow:hidden}.ng-diwali-fireworks i{position:absolute;width:8px;height:8px;border-radius:50%;background:#ffe16b;box-shadow:0 0 0 5px #ffe16b22,0 0 20px 8px #fff4a4;animation:ngFirework 2.8s ease-in-out infinite}.ng-diwali-fireworks i:nth-child(1){right:17%;top:16%}.ng-diwali-fireworks i:nth-child(2){right:31%;top:34%;animation-delay:1.1s}.ng-diwali-fireworks i:nth-child(3){left:18%;top:22%;animation-delay:1.8s}
+    .diwali-street .food-card{background:linear-gradient(145deg,#fff3a9,#ffd5d8 52%,#b9e7e3);border:2px solid #efb64d;box-shadow:0 12px 22px #a33a4b21}.diwali-street .food-card:hover{box-shadow:0 20px 30px #a33a4b35}.diwali-street .ng-food-guides{background:linear-gradient(135deg,#ffd56d,#ff9d6c 47%,#86d7d2);border:2px solid #ffe27b;box-shadow:0 16px 30px #a33a4b27}.diwali-street .ng-food-guide{background:linear-gradient(145deg,#fffbe8,#ffd9c9 52%,#bce9e2);border:2px solid #efb64d}.diwali-street .ng-food-guide b{color:#701543}.diwali-street .ng-food-guide-message{background:#fffbe8;border:2px solid #efb64d;color:#5b2948}
+    .diwali-street .ng-diwali-badge{background:linear-gradient(90deg,#ffe36f,#ffb24b);border:2px solid #f0a336;color:#6d1247;box-shadow:0 7px 16px #b72b4c22}.diwali-street .ng-diwali-badge span{color:#7d164e}
+    .diwali-street .weekly-strip,.diwali-street .guide-coach,.diwali-street .ng-next,.diwali-street .inspiration{background:linear-gradient(100deg,#76164f,#d54454 52%,#ef8b28);border:2px solid #ffe27b;box-shadow:0 16px 32px #9d2d4b35}
+    @keyframes ngStreetPetal{0%{transform:translate3d(0,-10vh,0) rotate(0);opacity:0}12%{opacity:1}100%{transform:translate3d(80px,110vh,0) rotate(300deg);opacity:.2}}
+    @keyframes ngStreetSpark{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.7)}}
+    @keyframes ngRangoliSpin{to{transform:translateX(-50%) rotate(360deg)}}@keyframes ngRangoliSpinReverse{to{transform:rotate(-360deg)}}
+    @keyframes ngFirework{0%,100%{transform:scale(.4);opacity:.3}35%{transform:scale(1.8);opacity:1}65%{transform:scale(.9);opacity:.75}}
+    @media(max-width:760px){.diwali-street .app-nav:before{font-size:11px;letter-spacing:4px;top:-13px}.ng-diwali-live-ticker{border-radius:18px;align-items:flex-start}.ng-diwali-rangoli{width:145px;height:145px;bottom:-52px}.ng-diwali-rangoli:after{inset:24px;font-size:35px}.diwali-street .ng-diwali-welcome{min-height:190px}}
   `;
   document.head.appendChild(style);
 
@@ -273,28 +306,15 @@
     fox: { avatar: '🦊🍬', name: 'Mithai Fox', role: 'Smarter sweets', message: 'Choose a small serving, savour it slowly, and pair festive sweets with a nourishing meal.' },
     elephant: { avatar: '🐘🪔', name: 'Diya Elephant', role: 'Mindful traditions', message: 'A calm pace, warm food, and a short walk can keep your festive rhythm comfortable.' }
   };
-  let festiveAudioContext;
+  const festiveSoundFiles = { crackle: '/diwali-crackers.wav', success: '/diwali-dhol.wav', tap: '/diwali-diya.wav' };
+  const festiveAudio = {};
   function playFestiveSound(kind) {
     if (localStorage.getItem('ngFestiveSound') === 'off') return;
     try {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextClass) return;
-      festiveAudioContext = festiveAudioContext || new AudioContextClass();
-      const ctx = festiveAudioContext;
-      if (ctx.state === 'suspended') ctx.resume();
-      const gain = ctx.createGain(); gain.gain.value = 0.0001; gain.connect(ctx.destination);
-      const now = ctx.currentTime;
-      const tones = kind === 'success' ? [523.25, 659.25, 783.99] : kind === 'crackle' ? [220, 277.18, 329.63] : [392, 523.25];
-      tones.forEach((frequency, index) => {
-        const oscillator = ctx.createOscillator(); oscillator.type = index === 0 ? 'sine' : 'triangle'; oscillator.frequency.value = frequency;
-        oscillator.connect(gain); oscillator.start(now + index * 0.07); oscillator.stop(now + 0.23 + index * 0.07);
-      });
-      if (kind === 'crackle') {
-        const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.24, ctx.sampleRate); const data = buffer.getChannelData(0);
-        for (let i = 0; i < data.length; i += 1) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 2);
-        const noise = ctx.createBufferSource(); noise.buffer = buffer; const noiseGain = ctx.createGain(); noiseGain.gain.value = 0.045; noise.connect(noiseGain); noiseGain.connect(gain); noise.start(now);
-      }
-      gain.gain.exponentialRampToValueAtTime(kind === 'crackle' ? 0.14 : 0.09, now + 0.02); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.34);
+      const src = festiveSoundFiles[kind] || festiveSoundFiles.tap;
+      const audio = festiveAudio[kind] || (festiveAudio[kind] = new Audio(src));
+      audio.currentTime = 0; audio.volume = kind === 'crackle' ? 0.42 : 0.32;
+      const promise = audio.play(); if (promise?.catch) promise.catch(() => {});
     } catch {}
   }
   function renderFoodGuide() {
@@ -313,7 +333,7 @@
     update();
     if (!document.body.dataset.festiveSoundBound) {
       document.body.dataset.festiveSoundBound = 'true';
-      document.addEventListener('click', (event) => { const target = event.target.closest('button,.food-card,.ng-food-guide,.exercise-card'); if (!target || target.id === 'ngFestiveSound') return; if (target.matches('.app-nav button,.food-tabs button,.ng-food-guide,.exercise-card,.ng-actions button')) playFestiveSound(target.matches('.food-tabs button,.ng-food-guide') ? 'success' : 'tap'); });
+      document.addEventListener('click', (event) => { const target = event.target.closest('button,.food-card,.exercise-card'); if (!target || target.id === 'ngFestiveSound' || target.matches('.ng-food-guide')) return; if (target.matches('.app-nav button')) playFestiveSound('crackle'); else if (target.matches('.food-tabs button')) playFestiveSound('success'); else if (target.matches('.exercise-card,.ng-actions button')) playFestiveSound('tap'); });
     }
   }
   const diwaliDays2026 = {
@@ -326,18 +346,54 @@
     '2026-11-11': { name: 'Bhai Dooj', short: 'Day 7', message: 'Celebrate the bond of family with a sweet moment, a walk, and a grateful heart.', next: 'Keep the light and your healthy rhythm going.' }
   };
   const defaultDiwaliDay = { name: 'Diwali wellness season', short: 'Festival week', message: 'Celebrate with light, colour, movement, and mindful festive choices.', next: 'Your next small win is waiting.' };
+  const diwaliStreetMessages = [
+    'Good morning! Light your first diya and begin with one bright, nourishing choice.',
+    'The market is waking up: add colour to breakfast with fruit, curd, or a warm bowl.',
+    'A little movement makes the morning sparkle. Take a joyful stretch or short walk.',
+    'Panda says: fill half your plate with colourful vegetables before the sweets arrive.',
+    'Fresh flowers, fresh water, fresh energy. Keep your next choice simple and beautiful.',
+    'Your festive plate can be both delicious and balanced. Try one protein-rich food now.',
+    'Midday glow: pause, breathe, and enjoy your meal slowly without rushing.',
+    'Choose a market favourite, then add a salad or fruit to make the plate more complete.',
+    'Firework energy check: log your steps and let your guide suggest the next celebration move.',
+    'Mithai Fox reminds you: choose one sweet you love and savour every bite.',
+    'A colourful snack stall is open: roasted chana, makhana, fruit, or sprouts are ready.',
+    'Drink some water before the next round of festive treats and keep your evening comfortable.',
+    'The rangoli is growing. Add one small win to your journey before the evening lamps.',
+    'Golden hour: a calm ten-minute walk can make space for a joyful dinner.',
+    'Peacock Plater says: variety is the celebration. Add two colours you have not logged yet.',
+    'Light a diya, check your energy, and choose gentle movement if your body asks for it.',
+    'Evening bazaar time: enjoy your favourite food and keep the portion intentional.',
+    'Your guide is cheering: protein, fibre, water, and joy can share the same festive plate.',
+    'Lanterns are glowing. Write one thought about what made today feel special.',
+    'Cracker sparkle outside, calm breath inside. Try a short stretch before bed.',
+    'The celebration continues: review your meals, movement, and water with kindness.',
+    'One sweet moment is enough to create a memory. Let the rest of your plate nourish you.',
+    'Diya Elephant says: slow down, enjoy family time, and protect your sleep tonight.',
+    'The street is quieting. Celebrate your progress and choose tomorrow’s first small win.'
+  ];
   function indiaTodayKey() { try { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date()); } catch { return new Date().toISOString().slice(0, 10); } }
+  function indiaHour() { try { return Number(new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', hour12: false }).format(new Date())) % 24; } catch { return new Date().getHours(); } }
+  function renderDiwaliStreetMessage() {
+    const day = diwaliDays2026[indiaTodayKey()] || defaultDiwaliDay;
+    const live = `${day.name}: ${diwaliStreetMessages[indiaHour()]}`;
+    document.querySelectorAll('[data-diwali-live-message]').forEach((el) => { el.textContent = live; });
+    const banner = document.getElementById('ngDiwaliDayMessage'); if (banner) banner.textContent = live;
+    const ticker = document.getElementById('ngDiwaliLiveMessage'); if (ticker) ticker.textContent = live;
+  }
   function renderDiwaliCalendar() {
     const day = diwaliDays2026[indiaTodayKey()] || defaultDiwaliDay;
     const title = document.getElementById('ngDiwaliDayTitle'); if (title) title.textContent = `${day.name} • ${day.short}`;
-    const message = document.getElementById('ngDiwaliDayMessage'); if (message) message.textContent = day.message;
     const next = document.getElementById('ngDiwaliNextMessage'); if (next) next.textContent = day.next;
     document.querySelectorAll('[data-diwali-day-label]').forEach((el) => { el.textContent = day.name; });
+    renderDiwaliStreetMessage();
   }
   function installDiwaliExperience() {
-    document.body.classList.add('diwali-mode', 'diwali-premium');
+    document.body.classList.add('diwali-mode', 'diwali-premium', 'diwali-street');
     if (!document.querySelector('.ng-diwali-lights')) document.body.insertAdjacentHTML('beforeend', '<div class="ng-diwali-lights" aria-hidden="true"><span>🪔</span><span>🎇</span><span>✨</span><span>🎆</span></div>');
-    if (!root.querySelector('.ng-diwali-welcome')) root.insertAdjacentHTML('afterbegin', '<section class="ng-diwali-welcome"><div class="ng-diwali-art">🪔<br>🌸</div><div style="flex:1;position:relative;z-index:1"><div class="ng-diwali-topline"><span>✦ NUTRIGUIDE ROYAL DEEPAVALI ✦</span><button type="button" class="ng-diwali-sound" id="ngFestiveSound" aria-pressed="true">🔊 Festive sounds</button></div><h2 id="ngDiwaliDayTitle">Diwali wellness season</h2><p id="ngDiwaliDayMessage">Celebrate with light, colour, movement, and mindful festive choices.</p><div class="ng-diwali-calendar"><span>🪔 Dhanteras</span><span class="today" data-diwali-day-label>Today</span><span>🎆 Deepavali</span><span>🌸 Bhai Dooj</span></div><small id="ngDiwaliNextMessage" style="display:block;margin-top:10px;color:#ffeec8;position:relative;z-index:1">Your next small win is waiting.</small></div><div class="ng-diwali-art">🍬<br>🎇</div></section>');
+    if (!document.querySelector('.ng-diwali-street-effects')) document.body.insertAdjacentHTML('beforeend', '<div class="ng-diwali-street-effects" aria-hidden="true"><span class="petal">🌼</span><span class="petal">🌸</span><span class="petal">🌼</span><span class="petal">🌸</span><i class="spark"></i><i class="spark"></i><i class="spark"></i></div><div class="ng-diwali-rangoli" aria-hidden="true"></div>');
+    if (!root.querySelector('.ng-diwali-live-ticker')) root.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-live-ticker"><b>🪔 LIVE DIWALI STREET</b><span id="ngDiwaliLiveMessage">The celebration is glowing.</span></div>');
+    if (!root.querySelector('.ng-diwali-welcome')) root.insertAdjacentHTML('afterbegin', '<section class="ng-diwali-welcome"><div class="ng-diwali-art">🪔<br>🌸</div><div style="flex:1;position:relative;z-index:1"><div class="ng-diwali-topline"><span>✦ DIWALI CELEBRATION STREET ✦</span><button type="button" class="ng-diwali-sound" id="ngFestiveSound" aria-pressed="true">🔊 Enable Diwali sounds</button></div><h2 id="ngDiwaliDayTitle">Diwali wellness season</h2><p id="ngDiwaliDayMessage">The celebration is glowing.</p><div class="ng-diwali-calendar"><span>🌼 Dhanteras</span><span class="today" data-diwali-day-label>Today</span><span>🎆 Deepavali</span><span>🌸 Bhai Dooj</span></div><small id="ngDiwaliNextMessage" style="display:block;margin-top:10px;color:#ffeec8;position:relative;z-index:1">Your next small win is waiting.</small><div class="ng-diwali-fireworks"><i></i><i></i><i></i></div></div><div class="ng-diwali-art">🍬<br>🎇</div></section>');
     if (typeof foodSets !== 'undefined') foodSets.diwali = diwaliFoods;
     if (typeof nutritionDatabase !== 'undefined') Object.assign(nutritionDatabase, {
       makhanakheer:{label:'Makhana kheer',emoji:'🪔',cal:180,p:7,c:24,fat:6,f:3}, anjeerdateladoo:{label:'Anjeer date ladoo',emoji:'🍬',cal:145,p:3,c:24,fat:5,f:4}, ragicoconutladoo:{label:'Ragi coconut ladoo',emoji:'🥥',cal:135,p:3,c:21,fat:5,f:3},
@@ -352,11 +408,11 @@
     const foodStudio = document.querySelector('.food-studio');
     if (foodStudio && !foodStudio.querySelector('.ng-diwali-food-banner')) foodStudio.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-food-banner"><span class="ng-diwali-food-icon">🪔✨</span><div><strong>Diwali, with balance</strong><small>Enjoy traditional flavours, smaller portions, and lighter homemade festive choices.</small></div></div>');
     if (foodStudio && !foodStudio.querySelector('.ng-food-guides')) foodStudio.insertAdjacentHTML('afterbegin', '<div class="ng-food-guides"><div class="ng-food-guides-head"><div><div class="eyebrow">YOUR FESTIVE FOOD COMPANIONS</div><h3>Choose who helps you build the plate</h3><p>Tap a character for a gentle food message. Your choice stays in Food Studio.</p></div><span style="font-size:38px;filter:drop-shadow(0 5px 6px #7d351d22)">🍽️✨</span></div><div class="ng-food-guide-grid"><button type="button" class="ng-food-guide" data-guide="panda" onclick="ngChooseFoodGuide(\'panda\')"><span class="avatar">🐼👨‍🍳</span><b>Panda Chef</b><small>Balanced festive plates</small><em>Protein + joy</em></button><button type="button" class="ng-food-guide" data-guide="peacock" onclick="ngChooseFoodGuide(\'peacock\')"><span class="avatar">🦚🌸</span><b>Peacock Plater</b><small>Colour and variety</small><em>Rainbow meals</em></button><button type="button" class="ng-food-guide" data-guide="fox" onclick="ngChooseFoodGuide(\'fox\')"><span class="avatar">🦊🍬</span><b>Mithai Fox</b><small>Smarter sweets</small><em>Sweet moments</em></button><button type="button" class="ng-food-guide" data-guide="elephant" onclick="ngChooseFoodGuide(\'elephant\')"><span class="avatar">🐘🪔</span><b>Diya Elephant</b><small>Mindful traditions</small><em>Calm rhythm</em></button></div><p class="ng-food-guide-message" id="ngFoodGuideMessage"></p></div>');
-    const messages = {home:'A little light, a little movement, and a calm celebration.',food:'Enjoy your Diwali favourites with colourful plates and mindful portions.',move:'Bring firework energy to your movement, one safe step at a time.',journey:'Light one healthy habit and carry it into the next chapter.',plan:'Your festive week can be joyful, social, and still supportive of your goals.'};
-    document.querySelectorAll('.ng-tab-section').forEach((section) => { if (!section.querySelector('.ng-diwali-badge')) { const tab = section.dataset.ngTab || 'home'; section.insertAdjacentHTML('afterbegin', `<div class="ng-diwali-badge">🪔 Diwali wellness <span>${messages[tab] || messages.home} ✨</span></div>`); } });
+    document.querySelectorAll('.ng-tab-section').forEach((section) => { if (!section.querySelector('.ng-diwali-badge')) section.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-badge">🪔 Diwali Celebration Street <span data-diwali-live-message>Light, joy, movement, and mindful festive choices ✨</span></div>'); });
     renderDiwaliCalendar();
     renderFoodGuide();
     installFestiveSoundControls();
+    clearInterval(window.ngDiwaliStreetTimer); window.ngDiwaliStreetTimer = setInterval(renderDiwaliStreetMessage, 60000);
   }
 
   function dietPreferences() {
