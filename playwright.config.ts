@@ -1,7 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:5173';
-const useLocalServer = !process.env.PLAYWRIGHT_BASE_URL;
+const useLocalServer = !process.env.PLAYWRIGHT_BASE_URL || /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?/.test(baseURL);
+const devCommand = process.platform === 'win32' ? 'npm.cmd run dev' : 'npm run dev';
 const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH;
 
 export default defineConfig({
@@ -25,7 +26,7 @@ export default defineConfig({
   ],
   webServer: useLocalServer
     ? {
-        command: 'npm run dev',
+        command: devCommand,
         url: `${baseURL}/legacy`,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
