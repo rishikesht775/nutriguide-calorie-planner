@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
-import { completeProfile, openTab } from './helpers';
+import { completeProfile, openTab, startFresh } from './helpers';
 
 test.describe('@accessibility keyboard and semantic checks', () => {
   test('profile controls have labels and the trainer image has useful text', async ({ page }) => {
-    await page.goto('/legacy');
+    await startFresh(page);
     for (const id of ['age', 'sex', 'height', 'weight', 'activity', 'goal']) await expect(page.locator(`#${id}`)).toHaveCount(1);
     await completeProfile(page);
     await expect(page.getByRole('img', { name: /wellness mascot buddies/i })).toBeVisible();
