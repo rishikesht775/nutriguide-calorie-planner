@@ -49,10 +49,17 @@ Do not commit real credentials or `.env` files. Use `.env.example` as the templa
 The Playwright suite is organized in `tests/e2e/` and includes:
 
 - Smoke and sanity release gates
+- In-app authentication and sign-up/sign-in field rules
 - UI and responsive mobile checks
+- Frontend runtime, tab isolation, and rendering checks
 - Functional calorie, food, protein, trainer, and exercise checks
 - Integration and system tab/state flows
+- Complete end-to-end first-day journey across every primary tab
 - Accessibility labels, names, alt text, and keyboard focus
+- Security checks for auth gating, credential URL leakage, and user input handling
+- Backend/API checks for `/api/me` and `/api/state`
+- Database checks for the D1 `user_state` schema and user isolation
+- Performance checks for initial load, tab response, and scrollability
 - Regression checks for Journey, Plan & reports, duplicate guides, and tab isolation
 - UAT first-day user journeys
 - Edge cases for required fields, unknown foods, zero-state tracking, boundary profiles, and long journal text
@@ -64,5 +71,8 @@ Run one category with a title filter, for example:
 
 ```powershell
 npx playwright test tests/e2e/functional.spec.ts
+npx playwright test tests/e2e/complete-flow.spec.ts
+npx playwright test tests/e2e/backend.spec.ts tests/e2e/database.spec.ts
+npx playwright test tests/e2e/security.spec.ts tests/e2e/performance.spec.ts
 npx playwright test --grep "@regression"
 ```
