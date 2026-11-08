@@ -763,4 +763,103 @@
   installFoodPreferenceFilter();
   renderToday(); renderQuickStatus(); renderGroceries(); renderExerciseCoach(); renderJourneyBadge();
   if (typeof window.setTab === 'function') window.setTab(document.querySelector('.app-nav button.active')?.dataset.tab || 'home');
+  style.textContent += `.guide-coach{flex-wrap:wrap}.ng-trainer-plan{display:flex;flex-direction:column;gap:3px;min-width:240px;flex:1 1 260px;padding:7px 10px;border-left:1px solid #ffffff35}.ng-trainer-role{display:block;color:#ffe08e;font-size:10px;font-weight:900;letter-spacing:.7px;text-transform:uppercase}.ng-trainer-focus{display:block;color:#e4f7eb;font-size:11px;line-height:1.35}.ng-food-guides,.mascot-gallery{display:none!important}@media(max-width:760px){.ng-trainer-plan{flex-basis:100%;border-left:0;border-top:1px solid #ffffff35;padding:8px 0 0}.guide-coach{align-items:flex-start}}`;
+
+  /* Central trainer experience: one selected guide, one personalized plan across tabs. */
+  const trainerProfiles = {
+    0: { role: 'Fresh-start nutrition coach', focus: 'easy meal wins', workout: 'gentle walking and mobility', voice: 'We will keep your first steps simple and repeatable.' },
+    1: { role: 'Hydration and recovery coach', focus: 'hydration and balanced meals', workout: 'low-impact movement and recovery', voice: 'We will build your energy one glass and one calm session at a time.' },
+    2: { role: 'Workout partner coach', focus: 'fuel for movement', workout: 'fun cardio and bodyweight strength', voice: 'I will count the reps with you and keep the pace comfortable.' },
+    3: { role: 'Outdoor fitness coach', focus: 'fresh food and active days', workout: 'walking, cycling, and outdoor stamina', voice: 'Let us turn your daily routine into an active adventure.' },
+    4: { role: 'Performance motivation coach', focus: 'protein and consistent meals', workout: 'progressive strength and stamina', voice: 'We will make each session stronger through steady practice.' },
+    5: { role: 'Personal gym trainer', focus: 'protein, recovery, and mindful portions', workout: 'warm-up, form, strength, and martial-arts balance', voice: 'I will coach your warm-up, form, reps, recovery, and next small win.' }
+  };
+  function activeTrainer() {
+    const index = Number(localStorage.getItem('selectedGuide') || 5);
+    const guide = (typeof guides !== 'undefined' && guides[index]) || ['🐼🥋', 'Panda trainer', 'Personal gym trainer', 'Breathe, balance, and train with calm strength!', 'Calm strength'];
+    return { index, guide, plan: trainerProfiles[index] || trainerProfiles[5] };
+  }
+  function trainerGoalText() {
+    const p = profile();
+    return p.goal === 'gain' ? 'support healthy weight gain' : p.goal === 'maintain' ? 'maintain your current weight' : 'support gradual weight loss';
+  }
+  function trainerPlanText() {
+    const p = profile();
+    const weight = Number(p.weight || 0);
+    const proteinTarget = Math.max(70, Math.round((weight || 70) * (p.goal === 'gain' ? 1.4 : 1.2)));
+    const activity = Number(p.activity || 1.2);
+    const session = activity >= 1.55 ? '25–35 min training' : activity >= 1.375 ? '20–30 min training' : '10–20 min beginner training';
+    return { proteinTarget, session, goal: trainerGoalText() };
+  }
+  function renderTrainerExperience(tab) {
+    const { guide, plan } = activeTrainer();
+    const next = trainerPlanText();
+    const tabCopy = {
+      home: `${guide[1]} is setting today’s plan to ${next.goal}. Start with one small win.`,
+      food: `${guide[1]} says: build your plate around ${plan.focus}; your protein target is about ${next.proteinTarget} g today.`,
+      move: `${guide[1]} is your ${plan.role.toLowerCase()}. Today’s session: ${next.session} focused on ${plan.workout}.`,
+      journey: `${guide[1]} will guide your story chapter and check in after every step.`,
+      plan: `${guide[1]} has your reminders and weekly review ready. Keep the next action realistic.`
+    };
+    const coachAvatar = document.getElementById('coachAvatar');
+    const coachName = document.getElementById('coachName');
+    const coachText = document.getElementById('coachText');
+    if (coachAvatar) coachAvatar.textContent = guide[0];
+    if (coachName) coachName.textContent = guide[1];
+    if (coachText) coachText.textContent = tabCopy[tab] || plan.voice;
+    const coach = document.getElementById('guideCoach');
+    if (coach) {
+      let card = coach.querySelector('.ng-trainer-plan');
+      if (!card) { coach.insertAdjacentHTML('beforeend', '<div class="ng-trainer-plan"><span class="ng-trainer-role" id="ngTrainerRole"></span><span class="ng-trainer-focus" id="ngTrainerFocus"></span></div>'); card = coach.querySelector('.ng-trainer-plan'); }
+      const role = document.getElementById('ngTrainerRole');
+      const focus = document.getElementById('ngTrainerFocus');
+      if (role) role.textContent = `${plan.role} • ${plan.workout}`;
+      if (focus) focus.textContent = `Plan: ${next.goal} • ${next.proteinTarget} g protein target • ${next.session}`;
+    }
+    const banner = document.getElementById('ngAppBanner');
+    if (banner) {
+      const mark = banner.querySelector('.trainer-mark');
+      const heading = banner.querySelector('h2');
+      const copy = banner.querySelector('p');
+      const small = banner.querySelector('small');
+      if (mark) mark.textContent = guide[0];
+      if (small) small.textContent = plan.role.toUpperCase();
+      if (heading) heading.textContent = `${guide[1]} is your trainer`;
+      if (copy) copy.textContent = `${plan.voice} I’ll plan your food focus, workout, recovery, and motivation around your details.`;
+    }
+    if (document.getElementById('ngExerciseTitle') && tab === 'move') document.getElementById('ngExerciseTitle').textContent = `${guide[1]}'s training plan`;
+    if (document.getElementById('ngExerciseSubtitle') && tab === 'move') document.getElementById('ngExerciseSubtitle').textContent = `${plan.workout} • ${next.session} • adjusted for your ${trainerGoalText()} goal.`;
+    if (document.getElementById('ngJourneyGuide')) document.getElementById('ngJourneyGuide').textContent = guide[0];
+    if (document.getElementById('ngJourneyModeText') && !localStorage.getItem('journeyMode')) document.getElementById('ngJourneyModeText').textContent = `${guide[1]} is ready. Choose a story mode to start your guided journey.`;
+  }
+  const routedSetTab = window.setTab;
+  window.setTab = function (tab) { routedSetTab(tab); renderTrainerExperience(tab); };
+  const existingChooseGuide = window.chooseGuide;
+  window.chooseGuide = function (index) {
+    if (typeof existingChooseGuide === 'function') existingChooseGuide(index);
+    else localStorage.setItem('selectedGuide', String(index));
+    localStorage.setItem('ngTrainerChosen', 'true');
+    renderTrainerExperience(document.querySelector('.app-nav button.active')?.dataset.tab || 'home');
+    if (typeof renderJourneyGuide === 'function') renderJourneyGuide();
+    notify(`${activeTrainer().guide[1]} is now your personal trainer`);
+  };
+  window.changeGuide = function () {
+    const picker = document.querySelector('.guide-picker');
+    if (picker) { picker.scrollIntoView({ behavior: 'smooth', block: 'center' }); picker.animate([{ boxShadow: '0 0 0 0 #e7a92f00' }, { boxShadow: '0 0 0 8px #e7a92f55' }, { boxShadow: '0 0 0 0 #e7a92f00' }], { duration: 700 }); }
+  };
+  document.getElementById('form')?.addEventListener('submit', () => setTimeout(() => {
+    if (!localStorage.getItem('ngTrainerChosen')) {
+      const picker = document.querySelector('.guide-picker');
+      if (picker) { picker.scrollIntoView({ behavior: 'smooth', block: 'start' }); picker.animate([{ transform: 'scale(.98)' }, { transform: 'scale(1)' }], { duration: 400 }); }
+      const message = document.getElementById('guideMessage');
+      if (message) message.textContent = 'Your details are saved. Choose the guide who will plan your meals, workouts, and motivation.';
+    }
+    renderTrainerExperience(document.querySelector('.app-nav button.active')?.dataset.tab || 'home');
+  }, 120));
+  document.querySelectorAll('.ng-food-guides').forEach((element) => element.remove());
+  document.querySelectorAll('.ng-tab-section .ng-diwali-badge').forEach((element) => element.remove());
+  const foodHost = document.querySelector('.food-studio');
+  if (foodHost && !foodHost.querySelector('.ng-diwali-badge')) foodHost.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-badge">🪔 Diwali Food Studio <span>Festive favourites with lighter portions and trainer guidance ✨</span></div>');
+  renderTrainerExperience(document.querySelector('.app-nav button.active')?.dataset.tab || 'home');
+
 })();
