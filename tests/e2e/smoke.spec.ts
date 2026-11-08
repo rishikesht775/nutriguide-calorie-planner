@@ -1,11 +1,21 @@
 import { test, expect } from '@playwright/test';
-import { completeProfile } from './helpers';
+import { completeProfile, openTab } from './helpers';
 
-test('profile unlocks the main app tabs', async ({ page }) => {
-  await completeProfile(page);
-  await expect(page.getByRole('button', { name: /Home/i })).toBeVisible();
-  await expect(page.getByRole('button', { name: /Food studio/i })).toBeVisible();
-  await expect(page.getByRole('button', { name: /Exercise/i })).toBeVisible();
-  await expect(page.getByRole('button', { name: /Journey/i })).toBeVisible();
-  await expect(page.getByRole('button', { name: /Plan & reports/i })).toBeVisible();
+test.describe('@smoke core availability', () => {
+  test('profile unlocks all primary tabs', async ({ page }) => {
+    await completeProfile(page);
+    for (const label of [/Home/i, /Food studio/i, /Exercise/i, /Journey/i, /Plan & reports/i]) {
+      await expect(page.getByRole('button', { name: label })).toBeVisible();
+    }
+  });
+
+  test('primary tabs open without a page error', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await completeProfile(page);
+    for (const label of [/Home/i, /Food studio/i, /Exercise/i, /Journey/i, /Plan & reports/i]) {
+      await openTab(page, label);
+    }
+    expect(errors).toEqual([]);
+  });
 });
