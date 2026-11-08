@@ -164,6 +164,16 @@
     @keyframes ngRealPopup{0%{transform:translateZ(-80px) scale(.15);opacity:0}35%{transform:translateZ(25px) scale(1.15);opacity:1}100%{transform:translateZ(110px) scale(1.6);opacity:0}}
     @keyframes ngRealLadi{0%,100%{transform:rotateX(18deg) scale(.9)}50%{transform:rotateX(-18deg) scale(1.08)}}
     @media(prefers-reduced-motion:reduce){.ng-3d-fireworks .fx,.ng-3d-fireworks .fx:after{animation-duration:8s!important}}
+    /* Keep the festive layer inside its section and leave a clear reading area. */
+    .diwali-street .ng-theme-courtyard,.diwali-street .ng-theme-bazaar,.diwali-street .ng-theme-palace{padding-top:52px!important;overflow:hidden;isolation:isolate}
+    .diwali-street .ng-theme-courtyard>.ng-3d-fireworks,.diwali-street .ng-theme-bazaar>.ng-3d-fireworks,.diwali-street .ng-theme-palace>.ng-3d-fireworks{z-index:0!important}
+    .diwali-street .ng-theme-courtyard>.ng-firework-canvas,.diwali-street .ng-theme-bazaar>.ng-firework-canvas,.diwali-street .ng-theme-palace>.ng-firework-canvas{z-index:0!important;opacity:.72}
+    .diwali-street .ng-theme-courtyard>.ng-festive-garland,.diwali-street .ng-theme-bazaar>.ng-festive-garland,.diwali-street .ng-theme-palace>.ng-festive-garland{z-index:1!important}
+    .diwali-street .ng-theme-courtyard>h1,.diwali-street .ng-theme-courtyard>h2,.diwali-street .ng-theme-courtyard>h3,.diwali-street .ng-theme-courtyard>p,.diwali-street .ng-theme-courtyard>div:not(.ng-3d-fireworks):not(.ng-festive-garland),.diwali-street .ng-theme-bazaar>h1,.diwali-street .ng-theme-bazaar>h2,.diwali-street .ng-theme-bazaar>h3,.diwali-street .ng-theme-bazaar>p,.diwali-street .ng-theme-bazaar>div:not(.ng-3d-fireworks):not(.ng-festive-garland),.diwali-street .ng-theme-palace>h1,.diwali-street .ng-theme-palace>h2,.diwali-street .ng-theme-palace>h3,.diwali-street .ng-theme-palace>p,.diwali-street .ng-theme-palace>div:not(.ng-3d-fireworks):not(.ng-festive-garland){position:relative;z-index:2}
+    .diwali-street .ng-theme-palace p,.diwali-street .ng-theme-palace small,.diwali-street .ng-theme-palace label{color:#fff1cf}
+    .ng-diwali-festival-calendar .ng-calendar-status{margin:0 0 10px;color:#ffeec5;font-size:12px;line-height:1.4}
+    .ng-diwali-festival-calendar .festival-days span{min-height:58px;display:flex;flex-direction:column;justify-content:center}
+    @media(max-width:760px){.diwali-street .ng-theme-courtyard,.diwali-street .ng-theme-bazaar,.diwali-street .ng-theme-palace{padding-top:44px!important}.ng-diwali-festival-calendar .festival-days span{min-height:64px;font-size:10px}}
   `;
   document.head.appendChild(style);
 
@@ -463,6 +473,15 @@
     const title = document.getElementById('ngDiwaliDayTitle'); if (title) title.textContent = `${day.name} • ${day.short}`;
     const next = document.getElementById('ngDiwaliNextMessage'); if (next) next.textContent = day.next;
     document.querySelectorAll('[data-diwali-day-label]').forEach((el) => { el.textContent = day.name; });
+    const calendar = document.querySelector('.ng-diwali-festival-calendar');
+    const grid = calendar?.querySelector('.festival-days');
+    const currentKey = indiaTodayKey();
+    if (calendar) calendar.dataset.currentDate = currentKey;
+    if (grid) {
+      grid.innerHTML = Object.entries(diwaliDays2026).map(([date, item]) => `<span class="${date === currentKey ? 'today' : ''}" data-date="${date}" title="${item.message}">${item.name}<br><small>${item.short}</small></span>`).join('');
+      const status = calendar.querySelector('.ng-calendar-status');
+      if (status) status.textContent = `${day.name} is today • ${day.message}`;
+    }
     renderDiwaliStreetMessage();
   }
   const diwaliFireworkTypes = ['Anaar', 'Rocket', 'Skyshot', 'Fuljadi', 'Chakri', 'Popup', 'Ladi'];
@@ -561,12 +580,12 @@
     addTheme(['.ng-move-section','.exercise-library','.inspiration','.ng-plan-section','.weekly-report','.reminders'], 'ng-theme-palace');
     document.querySelectorAll('.ng-tab-section').forEach((section) => { if (!section.querySelector('.ng-diwali-badge')) section.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-badge">🪔 Diwali Celebration Street <span data-diwali-live-message>Light, joy, movement, and mindful festive choices ✨</span></div>'); });
     const planSection = document.querySelector('[data-ng-tab="plan"]');
-    if (planSection && !planSection.querySelector('.ng-diwali-festival-calendar')) planSection.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-festival-calendar"><h3>🪔 Diwali festival calendar</h3><div class="festival-days"><span>🌼 Dhanteras<br><small>Welcome light</small></span><span>✨ Naraka Chaturdashi<br><small>Oil lamps</small></span><span class="today">🎆 Deepavali<br><small>Lakshmi Puja</small></span><span>🌼 Bhai Dooj<br><small>Family blessings</small></span></div></div>');
+    if (planSection && !planSection.querySelector('.ng-diwali-festival-calendar')) planSection.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-festival-calendar"><h3>🪔 Diwali festival calendar</h3><p class="ng-calendar-status" aria-live="polite">Loading today’s festival…</p><div class="festival-days"></div></div>');
     install3DFireworks();
     renderDiwaliCalendar();
     renderFoodGuide();
     installFestiveSoundControls();
-    clearInterval(window.ngDiwaliStreetTimer); window.ngDiwaliStreetTimer = setInterval(renderDiwaliStreetMessage, 60000);
+    clearInterval(window.ngDiwaliStreetTimer); window.ngDiwaliStreetTimer = setInterval(renderDiwaliCalendar, 60000);
   }
 
   function dietPreferences() {
