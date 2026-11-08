@@ -17,6 +17,11 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:debug": "playwright test --debug",
     "test:smoke": "playwright test tests/e2e/smoke.spec.ts",
+    "test:all": "playwright test",
+    "test:backend": "playwright test tests/e2e/backend.spec.ts tests/e2e/database.spec.ts",
+    "test:security": "playwright test tests/e2e/auth.spec.ts tests/e2e/security.spec.ts",
+    "test:performance": "playwright test tests/e2e/performance.spec.ts",
+    "test:uat": "playwright test tests/e2e/uat.spec.ts tests/e2e/complete-flow.spec.ts",
     "test:report": "playwright show-report",
     "test:install-browsers": "playwright install chromium"
   },
