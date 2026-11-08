@@ -174,6 +174,9 @@
     .ng-diwali-festival-calendar .ng-calendar-status{margin:0 0 10px;color:#ffeec5;font-size:12px;line-height:1.4}
     .ng-diwali-festival-calendar .festival-days span{min-height:58px;display:flex;flex-direction:column;justify-content:center}
     @media(max-width:760px){.diwali-street .ng-theme-courtyard,.diwali-street .ng-theme-bazaar,.diwali-street .ng-theme-palace{padding-top:44px!important}.ng-diwali-festival-calendar .festival-days span{min-height:64px;font-size:10px}}
+    .ng-app-banner{display:none;align-items:center;gap:16px;margin:0 0 16px;padding:16px 18px;border:2px solid #ffd86a;border-radius:22px;background:linear-gradient(105deg,#3b1737,#7a2443 52%,#b75a2b);color:#fff7df;box-shadow:0 16px 32px #6b24433d;position:relative;z-index:3}
+    .post-profile .ng-app-banner{display:flex}.ng-app-banner .trainer-mark{display:grid;place-items:center;min-width:70px;height:70px;border-radius:20px;background:linear-gradient(145deg,#ffd96b,#ef7a36);font-size:42px;filter:drop-shadow(0 8px 7px #16081b66)}.ng-app-banner small{display:block;color:#ffe08e;font-weight:900;letter-spacing:1.2px;font-size:10px}.ng-app-banner h2{margin:3px 0;font-size:22px;color:#fff4b0}.ng-app-banner p{margin:0;color:#ffe9c8;font-size:12px;line-height:1.45}.ng-app-banner button{width:auto;margin:0 0 0 auto;background:#ffd86a;color:#3b1737;padding:10px 13px;font-size:11px;white-space:nowrap}.guide-coach{position:relative}.guide-coach .coach-role{display:block;margin-bottom:3px;color:#ffe08e;font-size:9px;font-weight:900;letter-spacing:1px;text-transform:uppercase}.guide-coach .coach-training{display:block;color:#fff4c7;font-size:10px;font-weight:800;margin-top:3px}.guide-coach .coach-start{width:auto;margin:0;padding:8px 10px;background:#ffd86a;color:#3b1737;font-size:10px;white-space:nowrap}
+    @media(max-width:760px){.ng-app-banner{align-items:flex-start;padding:13px}.ng-app-banner .trainer-mark{min-width:52px;height:52px;font-size:30px}.ng-app-banner h2{font-size:17px}.ng-app-banner button{margin:8px 0 0 auto}.guide-coach .coach-start{display:none}}
   `;
   document.head.appendChild(style);
 
@@ -311,8 +314,15 @@
     if (tab === 'move') renderExerciseCoach();
     if (tab === 'journey') renderJourneyBadge();
     if (tab === 'plan') renderShareStatus();
+    const coach = document.getElementById('coachText');
+    if (coach) coach.textContent = (window.storyTabMessages?.[tab]) || ({ home: 'Let’s start with one small win today.', food: 'Build a colourful plate and add your protein foods.', move: 'Train with control. I’ll stay beside you for every rep.', journey: 'Choose a story mode and make this journey yours.', plan: 'Your plan is ready. Keep the next step simple.' }[tab] || 'I’m here to coach your next step.');
     requestAnimationFrame(() => window.ngResumeFireworks?.());
   };
+  document.querySelectorAll('.app-nav button').forEach((button) => {
+    if (button.dataset.ngTabBound) return;
+    button.dataset.ngTabBound = 'true';
+    button.addEventListener('click', () => window.setTab(button.dataset.tab));
+  });
 
   function profile() {
     return read('ngProfile', { age: get('age')?.value, height: get('height')?.value, weight: get('weight')?.value, goal: get('goal')?.value || 'loss' });
@@ -552,6 +562,14 @@
     if (!document.querySelector('.ng-diwali-decor')) document.body.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-decor" aria-hidden="true"><div class="ng-decor-fireworks"><span>🎇</span><span>🎆</span><span>🌀</span><span>🌋</span></div><div class="ng-toran-line">🌼 🍃 🌼 🍃 🌼 🍃 🌼 🍃 🌼<span class="leaves">🍃 🍃 🍃 🍃 🍃 🍃 🍃 🍃</span></div><div class="ng-light-string"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="ng-decor-diya left">🪔</span><span class="ng-decor-diya right">🪔</span></div>');
     if (!document.querySelector('.ng-diwali-street-effects')) document.body.insertAdjacentHTML('beforeend', '<div class="ng-diwali-street-effects" aria-hidden="true"><span class="petal">🌼</span><span class="petal">🌼</span><span class="petal">🌼</span><span class="petal">🌼</span><i class="spark"></i><i class="spark"></i><i class="spark"></i></div><div class="ng-diwali-rangoli" aria-hidden="true"></div>');
     if (!root.querySelector('.ng-diwali-live-ticker')) root.insertAdjacentHTML('afterbegin', '<div class="ng-diwali-live-ticker"><b>🪔 LIVE DIWALI STREET</b><span id="ngDiwaliLiveMessage">The celebration is glowing.</span></div>');
+    if (!root.querySelector('.ng-app-banner')) root.insertAdjacentHTML('afterbegin', '<section class="ng-app-banner" id="ngAppBanner"><div class="trainer-mark">🐼🥋</div><div><small>YOUR PERSONAL GYM TRAINER</small><h2>Train with your guide</h2><p>Panda Trainer will coach your warm-up, form, workout, recovery, and next small win.</p></div><button type="button" onclick="window.setTab(\'move\')">Start training</button></section>');
+    const guideCoach = document.getElementById('guideCoach');
+    if (guideCoach && !guideCoach.querySelector('.coach-role')) {
+      const copy = guideCoach.querySelector(':scope > div:nth-child(2)');
+      if (copy) copy.insertAdjacentHTML('afterbegin', '<small class="coach-role">PERSONAL GYM TRAINER</small><small class="coach-training">Warm-up • form • reps • recovery</small>');
+      const change = guideCoach.querySelector('button'); if (change) change.textContent = 'Change trainer';
+      guideCoach.insertAdjacentHTML('beforeend', '<button type="button" class="coach-start" onclick="window.setTab(\'move\')">Start workout</button>');
+    }
     if (!root.querySelector('.ng-diwali-welcome')) root.insertAdjacentHTML('afterbegin', '<section class="ng-diwali-welcome"><div class="ng-diwali-art">🪔<br>🌼</div><div style="flex:1;position:relative;z-index:1"><div class="ng-diwali-topline"><span>✦ DIWALI CELEBRATION STREET ✦</span><button type="button" class="ng-diwali-sound" id="ngFestiveSound" aria-pressed="true">🔊 Enable Diwali sounds</button></div><h2 id="ngDiwaliDayTitle">Diwali wellness season</h2><p id="ngDiwaliDayMessage">The celebration is glowing.</p><div class="ng-diwali-calendar"><span>🌼 Dhanteras</span><span class="today" data-diwali-day-label>Today</span><span>🎆 Deepavali</span><span>🌼 Bhai Dooj</span></div><small id="ngDiwaliNextMessage" style="display:block;margin-top:10px;color:#ffeec8;position:relative;z-index:1">Your next small win is waiting.</small><div class="ng-diwali-fireworks"><i></i><i></i><i></i></div></div><div class="ng-diwali-art">🍬<br>🎇</div></section>');
     if (typeof foodSets !== 'undefined') foodSets.diwali = diwaliFoods;
     if (typeof nutritionDatabase !== 'undefined') Object.assign(nutritionDatabase, {
