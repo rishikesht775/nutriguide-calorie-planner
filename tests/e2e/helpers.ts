@@ -8,7 +8,21 @@ export type ProfileValues = {
   goal?: string;
 };
 
+const authRoutesInstalled = new WeakSet<Page>();
+
+/** Keep local Playwright runs deterministic without requiring a real platform login. */
+export async function mockAuthenticatedSession(page: Page) {
+  if (authRoutesInstalled.has(page)) return;
+  await page.route('**/api/me', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ authenticated: true, user: { email: 'playwright@example.test' } }),
+  }));
+  authRoutesInstalled.add(page);
+}
+
 export async function startFresh(page: Page) {
+  await mockAuthenticatedSession(page);
   await page.goto('/legacy');
   await page.evaluate(() => localStorage.clear());
   await page.reload();
