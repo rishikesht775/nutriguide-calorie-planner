@@ -33,7 +33,7 @@ export default defineConfig({
     ? {
         command: devCommand,
         url: `${baseURL}/legacy`,
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: true,
         timeout: 180_000,
       }
     : undefined,
