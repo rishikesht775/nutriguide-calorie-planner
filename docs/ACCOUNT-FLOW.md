@@ -9,3 +9,7 @@ Supabase email confirmation is required. The PKCE callback uses /account/callbac
 /account/connected selects the hosting platform identity and redirects through its reserved sign-in path at the top level. The platform owns /signin-with-chatgpt, /signout-with-chatgpt and /callback. Matching email addresses never silently link separate provider identities or migrate profiles.
 
 Local portable previews may have development-only mock identity, and Playwright tests mock account endpoints. These are not real provider verification. Production identity, confirmation, recovery and cross-device persistence require external acceptance. Registration email receipt has been reported by the owner; complete confirmation/login/reset acceptance remains pending.
+
+## Shared-browser isolation
+
+The authenticated gate waits for cloud-sync to finish the matching account switch. A missing or different local owner causes active wellness keys and form/model state to reset before access. Previous pending state stays under its prior owner; legacy unassigned data is quarantined and never automatically imported into a new account. A new account with empty server state must fill its own profile. Returning accounts restore only their own server/pending state. Already contaminated server records require separate verified cleanup; this repair does not delete user data.

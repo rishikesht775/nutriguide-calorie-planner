@@ -22,7 +22,7 @@
  let nextAction={tab:'food',target:'nutritionFood'};
  function snapshot(){return core.progress({today:day(),food:nutritionLog,history:read('ngTrainerHistory',[]),measurements:read('ngMeasurements',[]),settings:settings()})}
  function applyDefaults({forceFood=false,forceTraining=false}={}){
-  if(applying)return;const profile=currentProfile();if(!profile){guide.hidden=true;return}applying=true;
+  if(applying)return;const profile=currentProfile();if(!profile){window.ngPersonalPlan=null;guide.hidden=true;return}applying=true;
   try{
    let s=settings();if(!s.startedOn)s.startedOn=day();
    // A cached legacy widget value is not evidence of a deliberate custom target.

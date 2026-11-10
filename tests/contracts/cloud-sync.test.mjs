@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 const source=readFileSync(new URL('../../public/cloud-sync.js',import.meta.url),'utf8');
 const flush=async()=>{for(let i=0;i<6;i++)await new Promise(resolve=>setImmediate(resolve));};
 function fixture({initial={},remote={},identity={id:'alice',email:'a@example.test'},save,load}={}){
- const storage=new Map(Object.entries(initial));const nodes=new Map();const listeners={};const intervals=[];const timeouts=[];const writes=[];
+ const storage=new Map(Object.entries({_ngCloudOwner:'alice',...initial}));const nodes=new Map();const listeners={};const intervals=[];const timeouts=[];const writes=[];
  const element=()=>({id:'',textContent:'',style:{},setAttribute(){},append(...items){for(const item of items)if(item.id)nodes.set(item.id,item)}});
  const document={getElementById:id=>nodes.get(id)||null,createElement:element,body:{prepend(node){nodes.set(node.id,node)}},addEventListener(){},visibilityState:'visible'};
  const localStorage={getItem:key=>storage.has(key)?storage.get(key):null,setItem:(key,value)=>storage.set(key,String(value)),removeItem:key=>storage.delete(key)};
@@ -39,4 +39,16 @@ test('switching accounts cannot upload previous account state',async()=>{
 });
 test('GET failure never blindly uploads stale data over unread cloud state',async()=>{
  let fail=true;const f=fixture({initial:{water:'2'},load:async()=>fail?{ok:false}:{ok:true,json:async()=>({state:{water:1}})}});await flush();assert.equal(f.writes.length,0);assert.match(f.status(),/Cloud unavailable/);fail=false;await f.tick();assert.equal(f.storage.get('water'),'2');assert.equal(f.writes[0].water,2);
+});
+
+test('unowned browser data is quarantined and never adopted by a newly registered account',async()=>{
+ const f=fixture({identity:{id:'new-user',email:'new@example.test'},initial:{_ngCloudOwner:'',profile:JSON.stringify({weight:'84'}),proteinTarget:'125',ngMeals:JSON.stringify([{name:'Other account meal'}])},remote:{}});await flush();
+ assert.equal(f.storage.get('profile'),undefined);assert.equal(f.storage.get('proteinTarget'),undefined);assert.equal(f.storage.get('ngMeals'),undefined);assert.equal(f.writes.length,0);assert.match(f.storage.get('_ngUnassignedState'),/Other account meal/);assert.equal(f.storage.get('_ngCloudOwner'),'new-user');
+});
+test('new second account with empty cloud starts empty while first account pending data stays owned',async()=>{
+ const f=fixture({identity:{id:'bob',email:'b@example.test'},initial:{_ngCloudOwner:'alice',profile:JSON.stringify({weight:'84'}),nutritionLog:JSON.stringify([{name:'Alice food'}]),selectedGuide:'5',water:'7'},remote:{}});await flush();
+ assert.equal(f.storage.get('profile'),undefined);assert.equal(f.storage.get('nutritionLog'),undefined);assert.equal(f.storage.get('selectedGuide'),undefined);assert.equal(f.writes.length,0);assert.match(f.storage.get('_ngCloudState:alice'),/Alice food/);
+});
+test('returning account restores only its own pending snapshot',async()=>{
+ const f=fixture({identity:{id:'bob',email:'b@example.test'},initial:{_ngCloudOwner:'alice',water:'7','_ngCloudState:bob':JSON.stringify({pending:{water:2}})},remote:{}});await flush();assert.equal(f.storage.get('water'),'2');assert.ok(f.writes.every(x=>x.water===2));assert.match(f.storage.get('_ngCloudState:alice'),/7/);
 });

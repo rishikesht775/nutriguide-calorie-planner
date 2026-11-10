@@ -1,0 +1,10 @@
+NutriGuide account isolation validation — 11 November 2026
+
+Problem: ownerless browser wellness data could be adopted by a new account.
+Fix: quarantine unassigned data, preserve prior-owner pending data, clear active keys and models, restore verified-owner state only, wait for matching account-ready signal before displaying the application.
+
+Executed: npm run test:contracts — 180 passed, 0 failed.
+Executed: npx tsc --noEmit — passed.
+Added: Playwright same-browser Alice -> Bob -> Alice regression (desktop/mobile).
+Not executed here: Playwright browser suite and real Supabase account-switch acceptance.
+Existing previously contaminated cloud records are preserved and require verified selective cleanup.

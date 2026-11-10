@@ -19,3 +19,7 @@ Uploaded report for 457cc8a: 223 passed, five failed, zero skipped. Two meal-rem
 ## Tablet badge overflow follow-up
 
 Failed-only Windows run at 4fb6049: four passed, one failed (768px Food Studio, 19px horizontal overflow). Reconstructed the supplied trace DOM in an inert iframe at the original 768x900 viewport with the current CSS. Before: document scrollWidth 785; nowrap ngFoodTools heading badge extended its text beyond its own box. After wrapping ng-heading children and ng-section ng-chip text: document scrollWidth 753, within viewport 768. This is captured-DOM browser verification, not execution of the full live Playwright suite. User should rerun --last-failed, then full regression.
+
+## Account isolation repair — 11 November 2026
+
+180 contract tests passed, including unowned-data quarantine, new-account empty state, prior-owner preservation, returning-owner restoration and matching-identity UI gate. TypeScript passed. Added tests/e2e/account-isolation.spec.ts for Alice → new Bob → Alice with empty Bob profile and preserved Alice water/profile. Browser execution and real-provider account-switch acceptance remain pending. No existing cloud wellness records were deleted. See docs/ACCOUNT-ISOLATION-VALIDATION.txt.

@@ -45,6 +45,7 @@
       () => { if (typeof renderJournal === 'function') renderJournal(); },
       () => { if (typeof renderReminders === 'function') renderReminders(); },
       () => { if (typeof renderGrocery === 'function') renderGrocery(); },
+      () => { if (typeof ngRender === 'function') ngRender(); },
       () => { if (typeof renderTracker === 'function') renderTracker(); },
       () => { if (typeof renderNutritionLog === 'function') renderNutritionLog(); },
       () => { if (typeof renderJourneyGuide === 'function') renderJourneyGuide(); },
@@ -135,8 +136,8 @@
       const previousOwner = get(ownerKey);
       // Keep prior user's unsynced state in their own metadata, never upload it
       // into a newly authenticated account on a shared browser.
-      if (previousOwner && previousOwner !== identity) {
-        const priorKey = `_ngCloudState:${previousOwner}`;
+      if (previousOwner !== identity) {
+        const priorKey = previousOwner ? `_ngCloudState:${previousOwner}` : '_ngUnassignedState';
         const prior = parse(get(priorKey) || '{}', {});
         put(priorKey, JSON.stringify({ ...prior, pending: readState() }));
         for (const key of keys) remove(key);
@@ -161,6 +162,7 @@
         put('profile',JSON.stringify(profile)); persist(); setTimeout(() => sync(false),300);
       });
       await hydrate();
+      window.ngCloudIdentity=identity;window.dispatchEvent(new Event('ng:account-ready'));
       setInterval(() => ready ? sync(false) : hydrate(),3500);
       window.addEventListener('online', () => ready ? sync(false) : hydrate());
       window.addEventListener('pagehide', persist);

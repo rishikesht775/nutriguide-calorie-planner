@@ -29,7 +29,7 @@
   const configPromise=fetch('/api/account/config',{cache:'no-store',signal:AbortSignal.timeout(8000)}).then(async r=>r.ok?await r.json():null).catch(()=>null);
   try{
    const response=await fetch('/api/me',{cache:'no-store',signal:AbortSignal.timeout(8000)});if(!response.ok)throw Error('unavailable');const data=await response.json();
-   if(data.authenticated&&data.user){document.body.classList.remove('auth-pending');gate.hidden=true;return}
+   if(data.authenticated&&data.user){const identity=String(data.user.id||data.user.email||'');const unlock=()=>{if(identity&&window.ngCloudIdentity===identity){document.body.classList.remove('auth-pending');gate.hidden=true}};status.textContent='Loading your account data…';unlock();if(!gate.hidden)window.addEventListener('ng:account-ready',unlock,{once:true});return}
    document.body.classList.add('auth-pending');gate.hidden=false;status.textContent='';
   }catch{document.body.classList.add('auth-pending');gate.hidden=false;status.textContent='Could not check your account. Try again or use the connected-account option.';retry.hidden=false}
   finally{

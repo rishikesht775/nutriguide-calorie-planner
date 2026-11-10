@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 1.0 | Reviewed 10 November 2026 | Owner Rishikesh Tiwari
+Version 1.8 | Reviewed 11 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
@@ -306,7 +306,7 @@ Physical Android and iPhone checks, screen readers, 200 percent zoom and slow ne
 
 Node contract tests execute route code, planning modules and controllers with explicit stubs at external boundaries. SQLite tests use an in-memory database and the real route SQL. They cover ownership, upsert, corruption, bounded streams and provider failure cases. UI state adapters check controller behavior but do not measure rendered layout.
 
-The latest recorded contract run passed 166 checks. TypeScript, JavaScript syntax and production build checks passed for the confirmation release. Playwright discovery previously reported 228 desktop/mobile executions in 29 spec files. Re-run discovery for current counts; the generated inventory avoids treating counts as test results.
+The account-isolation release passed 180 contract checks. TypeScript, JavaScript syntax and production build checks passed for the confirmation release. Playwright discovery previously reported 228 desktop/mobile executions in 29 spec files. Re-run discovery for current counts; the generated inventory avoids treating counts as test results.
 
 The Playwright suite uses Desktop Chrome and Pixel 7 emulation. It covers smoke, sanity, functional, integration, system, regression, UAT/E2E, frontend, UI, accessibility, security, performance, backend, database and edge cases. Categories overlap. Most signed-in UI tests use mocked identity/state; they do not log into real provider accounts.
 
@@ -402,6 +402,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 11 November 2026 | 1.8 | Fixed unowned browser data being adopted by a new account. On owner change, preserve prior pending state under its own owner (or quarantine unassigned state), clear active profile/logs, and restore only the verified account snapshot. Gate waits for matching account-ready signal. Reset planner render models and personal-plan context. Four isolation/gate contracts added; 180 contracts and TypeScript pass. Browser switching regression added; real-provider acceptance remains pending. |
 | 11 November 2026 | 1.7 | Unified companion selection and introduction in one card; removed duplicate mascot gallery. First visit opens the six-character chooser; selecting a guide reveals its introduction and Start my journey. Change guide from any tab opens the same chooser on Home. Selected name and symbol persist across tabs/reload. Added two browser scenarios; local fixture interaction verified, full browser suite pending. |
 | 11 November 2026 | 1.6 | Home Calculate my plan now resets the protein override and recalculates the Home results card, tracker and all-tab shared target from the submitted profile. Custom protein edits remain available afterward and survive refresh until the next Home calculation. Added existing-125 override regression and browser scenario; 176 contracts pass. |
 | 11 November 2026 | 1.5 | Protein defaults no longer promote the legacy proteinTarget cache into a custom shared override. Home profile estimates update automatic targets; deliberate shared overrides remain intact and can be reset. Added stale-125, multi-profile and explicit-custom/reset regression contracts. |
@@ -418,3 +419,9 @@ Primary implementation references are public/legacy.html, public/cloud-sync.js, 
 Operational observations recorded in this project session include Supabase email confirmation enabled, Brevo SMTP stored in Supabase, hosted native-auth feature switch enabled, a verified freemail sender and the owner's signup-email receipt. These are dated deployment observations, not source-code guarantees of future provider availability. Keep secrets and user identifiers out of this reference.
 
 Earlier specialist documents and test notes are useful context but cannot override current route code or the explicit status catalogue above. Competitor feature research describes public product behavior only; it does not establish access to competitors' internal architecture, database, security controls or test results.
+
+### Account isolation and legacy local data
+
+The active browser wellness keys belong to `_ngCloudOwner`, using the verified server user ID. On any owner mismatch, including a missing legacy owner, cloud-sync preserves prior pending data under that owner or `_ngUnassignedState`, clears active wellness keys and resets visible profile/model state. Only the incoming account’s own pending snapshot and server state can be restored. Account-gate keeps the application hidden until cloud-sync signals the matching identity is ready. A failed state fetch never uploads unread remote state; the isolated account can use its own local data while synchronization retries.
+
+Existing server records already contaminated before this fix are not automatically deleted or reclassified: identical profile values alone cannot establish ownership. Those accounts require verified, selective cleanup. Cross-device concurrent writes remain last-write-wins. The browser-switching regression uses mocked identities and does not certify live Supabase email delivery or confirmation.
