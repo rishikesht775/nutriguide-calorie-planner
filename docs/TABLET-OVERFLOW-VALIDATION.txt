@@ -1,0 +1,11 @@
+NutriGuide tablet overflow validation - 11 November 2026
+INPUT: user failed-only TXT report and tablet UI trace.
+Windows failed-only run: 5 executed, 4 passed, 1 failed.
+Meal deletion and pause/resume now passed for desktop and mobile.
+REPRODUCTION: captured trace DOM replayed without scripts in a 768x900 iframe,
+using current app CSS. Document scrollWidth 785 exceeded viewport 768.
+CAUSE: nowrap header badge text overflowed its flex-shrunk box in ngFoodTools.
+FIX: flex-wrap on ng-heading; shrinkable heading content; wrapping badge text.
+BROWSER CHECK: same replay document scrollWidth now 753 within viewport 768;
+visible badge content widths fit their boxes. No overflow:hidden workaround.
+PENDING: actual Playwright --last-failed rerun on Windows, then full regression.

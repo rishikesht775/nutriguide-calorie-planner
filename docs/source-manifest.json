@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "cda2465e6cc2a7428ce150a505db3cc27cb9d44082e55ff3d80d2886e41ce0e2",
+  "sourceDigest": "8441bd62b683288f48d033f3c435f05dd244844ccc653d17a123021553ad6d53",
   "files": {
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
     ".github/workflows/playwright.yml": "6097bdecc620b679ebf77087717d17b63702983047eebc70572bff7ec0f5e01b",
@@ -81,7 +81,7 @@
     "components/ui/tooltip.tsx": "a0784eb77831a799fad7991df4f1b666f876201565a80175e1aa68733574a2e4",
     "db/schema.ts": "433a7f9a630470ddb6e26e9b164e2b37d18c6a2067feb3019d10ad38325503f8",
     "docs/ACCOUNT-FLOW.md": "b85086d0010a7f713ca1fcc0926822535ff5919ec3d63e92aae47b8adcba012d",
-    "docs/APPLICATION.md": "7d33933c6cfe5c3f09476395010f83afc06f5db354129ef9c9b05872921cc198",
+    "docs/APPLICATION.md": "32b6b8c57a45bfe1366daa8545e28a4921ab11666c31a979f9ab6cd54b900a30",
     "docs/DOCUMENTATION.md": "65dc6ad7789229d1b42029dfe7386ced2425b96ca6112e1d9b5206eed3b7d962",
     "docs/EMAIL-ACCOUNTS.md": "8ec7bad82243f35996be01e313656595f5f78138ea5f194e56c63d33e2935e36",
     "docs/PROFILE-DEFAULTS-AND-GUIDE.md": "ce2c0d65adcda244885e50e1d4e1396af7d63c7c262ddeed8497de9c0d726609",
@@ -105,7 +105,7 @@
     "public/app/personal-plan.js": "41457c92d44f26c177ea55e4bd9fc9ff89406eabe7565bb544abdf5891609832",
     "public/app/stability.js": "d82c32262f018214aa4db83b6b55fb2e1c91cfd2522d7cb9a212b735d4eceee7",
     "public/app/storage.js": "2d953f8ddbc2495e4328a2b1371671119d06ba7dbbdf134d2cae5fbfd1d2846d",
-    "public/app/wellness.css": "e26b7836d3519d015968e673acf9eefc02a7d2e707d22aae8abf20365a4c8230",
+    "public/app/wellness.css": "40286820843873d365c078c054d454354b5ae57d57bb879054384edd568d7917",
     "public/app/wellness.js": "04d50da851925b5eb2e159921994efafce93613253e6ffdc5a05a78974cd913a",
     "public/cloud-sync.js": "e7994a77ac31ec42ff52714d1383152fc91a5ba61ba74d116a2dcc88003eb4d4",
     "public/legacy.html": "35b062035166bdd84df4a8849f2383588ae0844619c0ef767c7ce47def9d857b",

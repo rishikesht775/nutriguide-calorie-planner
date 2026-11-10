@@ -15,3 +15,7 @@ The supplied Windows trace/report at ea4b4e showed 161 passed, 45 failed asserti
 ## Follow-up Windows run
 
 Uploaded report for 457cc8a: 223 passed, five failed, zero skipped. Two meal-removal tests clicked Meal-0 but asserted Meal-2 removed; corrected to target Meal-2 and verify count, preserved neighbor and reload. Two pause tests allowed the installed clock to continue during action/expect polling; pause the clock before starting so advancing time is explicit. Tablet food form grid tracks now use minmax(0, ...) with shrinkable children. These follow-up changes require browser verification and are not reported as passing browser tests.
+
+## Tablet badge overflow follow-up
+
+Failed-only Windows run at 4fb6049: four passed, one failed (768px Food Studio, 19px horizontal overflow). Reconstructed the supplied trace DOM in an inert iframe at the original 768x900 viewport with the current CSS. Before: document scrollWidth 785; nowrap ngFoodTools heading badge extended its text beyond its own box. After wrapping ng-heading children and ng-section ng-chip text: document scrollWidth 753, within viewport 768. This is captured-DOM browser verification, not execution of the full live Playwright suite. User should rerun --last-failed, then full regression.

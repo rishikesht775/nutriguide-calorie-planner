@@ -400,6 +400,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 11 November 2026 | 1.4 | Four failed-only tests now pass on Windows; one tablet UI failure remains in the supplied report. Captured DOM replay identified nowrap header badges overflowing the sidebar content column. Header flex wrapping and badge text wrapping remove replay overflow (document 785 to 753 px at viewport 768). Full Playwright rerun pending. |
 | 11 November 2026 | 1.3 | Windows rerun at 457cc8a: 223 passed, five failed, no skipped tests. Corrected meal-removal test to select the named meal and check reload, froze trainer test clock before actions, and allowed food form grid tracks to shrink at tablet widths. Browser rerun pending. |
 | 11 November 2026 | 1.2 | Repaired four truncated fragments in the GitHub legacy page (food catalogue, download link, nutrition log markup, trainer progress). Captured trace reproduced three syntax errors; new whole-page inline syntax gate and 172 contracts pass. Windows rerun still required; previous run had 161 passed and 67 failed/timeouts. |
 | 10 November 2026 | 1.1 | Automatic test startup uses a dedicated port and one shared target for launch/readiness; Windows invokes Node directly. Five new launcher contract checks; browser execution on Windows still requires confirmation. |

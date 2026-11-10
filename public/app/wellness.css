@@ -23,3 +23,7 @@ a.gate-submit{display:block;text-align:center;text-decoration:none;font:750 15px
 .protein-add{grid-template-columns:minmax(0,1.3fr) minmax(0,.8fr) minmax(0,.8fr) auto}
 .protein-add>*,.nutrition-form>*,.food-grid>*,.ng-form>*{min-width:0;max-width:100%}
 @media(max-width:760px){.protein-add{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Sidebar layouts leave a narrow content column even on tablet screens. */
+.ng-heading{flex-wrap:wrap}
+.ng-heading>div{min-width:0}
+.ng-section .ng-chip{max-width:100%;white-space:normal;overflow-wrap:anywhere}
