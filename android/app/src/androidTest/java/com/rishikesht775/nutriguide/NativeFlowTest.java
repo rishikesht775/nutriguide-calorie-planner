@@ -22,13 +22,13 @@ public class NativeFlowTest {
             onView(withText("Set up profile")).perform(scrollTo(),click());
             onView(withHint("Age")).perform(replaceText("30"));
             onView(withHint("Height (cm)")).perform(replaceText("168"));
-            onView(withHint("Weight (kg)")).perform(replaceText("84"),closeSoftKeyboard());
+            onView(withHint("Weight (kg)")).perform(replaceText("84"),androidx.test.espresso.action.ViewActions.closeSoftKeyboard());
             onView(withText("Save profile")).perform(scrollTo(),click());
             onView(withText(containsString("1950 kcal"))).check(matches(isDisplayed()));
             onView(withText("Food")).perform(click());
             onView(withHint("Search Indian foods")).perform(typeText("Paneer"));
             onData(is("Paneer")).inRoot(isPlatformPopup()).perform(click());
-            closeSoftKeyboard();
+            androidx.test.espresso.Espresso.closeSoftKeyboard();
             onView(withText("Log food")).perform(scrollTo(),click());
             onView(withText("Paneer · 100.0 g")).perform(scrollTo()).check(matches(isDisplayed()));
             onView(withText("Home")).perform(click());

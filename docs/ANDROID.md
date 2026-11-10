@@ -62,3 +62,5 @@ Physical Samsung S21 FE acceptance remains required: installation, profile/targe
 The earlier browser-backed build/run 42908566596 is historical and must not be used as the native download. Actual native build/run evidence is recorded after the new workflow completes.
 
 The first native build compiled and reached Android lint. Lint rejected raw integer layout orientations; those were replaced by explicit LinearLayout.VERTICAL constants before rebuilding. Native APK acceptance remains tied to a subsequent successful build/emulator run.
+
+The emulator test import conflict between Espresso and ViewActions keyboard helpers was corrected. The workflow now compiles the instrumentation APK before starting the emulator to catch test compilation problems earlier.
