@@ -16,7 +16,7 @@
  window.closeExercise=function(){oldClose();document.body.style.overflow='';lastFocus?.focus()};
  document.addEventListener('keydown',ev=>{if(modal.style.display!=='flex')return;if(ev.key==='Escape'){ev.preventDefault();closeExercise()}if(ev.key==='Tab'){const els=[...modal.querySelectorAll('button,a[href]')];if(ev.shiftKey&&document.activeElement===els[0]){ev.preventDefault();els.at(-1)?.focus()}else if(!ev.shiftKey&&document.activeElement===els.at(-1)){ev.preventDefault();els[0]?.focus()}}});
  window.openTrainerForm=()=>{const st=window.ngTrainerState;const name=st?.plan?.[st.exerciseIndex]?.[1]||'';const aliases={'Low-impact step jack':'Low-impact jumping jack','Easy walking':'Brisk walking','Glute bridge reset':'Glute bridge'};const i=exerciseData.findIndex(x=>x.n===(aliases[name]||name));if(i>=0)openExercise(i);else document.getElementById('ngTrainerCue').textContent='Use the machine demonstration and ask gym staff to check your setup before adding weight.'};
- window.changeGuide=()=>{setTab('home');document.querySelector('.guide-picker').scrollIntoView({behavior:'smooth'})};
+ window.changeGuide=()=>{setTab('home');const choices=document.getElementById('guideChoices');choices.open=true;document.querySelector('.guide-picker').scrollIntoView({behavior:'smooth',block:'center'});choices.querySelector('summary').focus({preventScroll:true})};
  // Remaining legacy user-controlled render paths.
  const oldRenderProtein=window.renderProtein;
  window.renderProtein=()=>{oldRenderProtein();document.querySelectorAll('.protein-entry').forEach((el,i)=>{if(!proteinItems[i])return;const remove=el.querySelector('button');el.textContent=proteinItems[i].name+' '+proteinItems[i].g+' g';if(remove)el.append(remove)})};

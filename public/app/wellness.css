@@ -27,3 +27,18 @@ a.gate-submit{display:block;text-align:center;text-decoration:none;font:750 15px
 .ng-heading{flex-wrap:wrap}
 .ng-heading>div{min-width:0}
 .ng-section .ng-chip{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+
+/* A single companion gallery and introduction, using the same character identity. */
+.guide-picker:before{content:none!important}
+.guide-picker .guide-stage-card{display:grid;grid-template-columns:100px minmax(0,1fr);gap:20px;align-items:center;background:linear-gradient(130deg,#e8f5eb,#f9f9ef);border:1px solid #cce2d4;border-radius:22px;padding:24px;margin:18px 0}
+#guideIntroduction[hidden]{display:none!important}
+.guide-picker .guide-stage-avatar{font-size:64px;line-height:1.2;text-align:center;animation:companionHello .5s ease-out}
+.guide-picker .guide-stage-card h3{margin:0 0 8px;color:#194a3c;font-size:22px}
+#guideJourneyStart{width:auto;margin:12px 0 0;padding:11px 18px}
+#guideChoices summary{cursor:pointer;font-size:14px;font-weight:700;color:#176c58;padding:12px 0}
+#guideChoices .guide-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+#guideChoices .guide-card{min-width:0;white-space:normal;min-height:164px;border-radius:18px}
+#guideChoices .guide-card[aria-pressed="true"]{border:2px solid #168c79;box-shadow:0 0 0 3px #168c7914}
+@keyframes companionHello{from{transform:translateY(5px);opacity:.5}to{transform:translateY(0);opacity:1}}
+@media(max-width:760px){.guide-picker .guide-stage-card{grid-template-columns:64px minmax(0,1fr);gap:12px;padding:16px}.guide-picker .guide-stage-avatar{font-size:44px}#guideChoices .guide-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.guide-picker .guide-stage-avatar{animation:none}}

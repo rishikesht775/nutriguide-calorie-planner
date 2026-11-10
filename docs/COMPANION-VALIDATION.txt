@@ -1,0 +1,13 @@
+NutriGuide companion selection - 11 November 2026
+Changed one guide picker into a first-visit gallery / selected introduction card.
+Removed the separate mascot gallery and its unrelated character labels.
+Selected guide name/symbol are shared with the contextual guide on all tabs.
+Change guide opens the same Home chooser; choosing collapses it and focuses intro.
+Start my journey invokes the existing contextual next action; no fake completion.
+Verified in local isolated UI fixture: first visit; choose Fresh-start kid;
+Food tab same character; Change guide opens chooser; choose Blue hydration cat;
+reload retains Blue hydration cat; duplicate gallery count zero. Visual desktop
+review shows readable intro, selected symbol, journey action and change link.
+PASS 176 Node contracts. PASS TypeScript and inline script syntax gate.
+Added two Playwright companion scenarios; full browser suite not executed here.
+No changes to sign-in, real account records, nutrition logs or provider settings.

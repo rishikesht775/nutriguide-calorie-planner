@@ -273,6 +273,8 @@ Independent devices still use last-write-wins JSON documents. Concurrent edits c
 
 ## 9 Interface and accessibility requirements
 
+The Home companion card owns one six-character gallery and the matching selected introduction. New users see the gallery; returning users see their selected companion with Start my journey and Change guide. The contextual guide on each tab displays the same saved character name and symbol. The unrelated mascot gallery is removed.
+
 The visual direction is a calm wellness theme with light surfaces, green/teal actions, readable dark text and rounded cards. Desktop and mobile navigation expose the same five areas. The old festive runtime assets must not reappear. Legacy source remnants are not evidence that the festive experience is active.
 
 No banner should crop essential wording or cover navigation, login controls or account status. Tab switches must expose their own content and hide unrelated tab sections. Input labels must remain programmatically associated. Buttons must have meaningful names and visible focus. Dialogs must support close and Escape with a usable focus path. Reduced-motion preferences must be respected where effects are present.
@@ -400,6 +402,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 11 November 2026 | 1.7 | Unified companion selection and introduction in one card; removed duplicate mascot gallery. First visit opens the six-character chooser; selecting a guide reveals its introduction and Start my journey. Change guide from any tab opens the same chooser on Home. Selected name and symbol persist across tabs/reload. Added two browser scenarios; local fixture interaction verified, full browser suite pending. |
 | 11 November 2026 | 1.6 | Home Calculate my plan now resets the protein override and recalculates the Home results card, tracker and all-tab shared target from the submitted profile. Custom protein edits remain available afterward and survive refresh until the next Home calculation. Added existing-125 override regression and browser scenario; 176 contracts pass. |
 | 11 November 2026 | 1.5 | Protein defaults no longer promote the legacy proteinTarget cache into a custom shared override. Home profile estimates update automatic targets; deliberate shared overrides remain intact and can be reset. Added stale-125, multi-profile and explicit-custom/reset regression contracts. |
 | 11 November 2026 | 1.4 | Four failed-only tests now pass on Windows; one tablet UI failure remains in the supplied report. Captured DOM replay identified nowrap header badges overflowing the sidebar content column. Header flex wrapping and badge text wrapping remove replay overflow (document 785 to 753 px at viewport 768). Full Playwright rerun pending. |

@@ -53,6 +53,8 @@ export async function openTab(page: Page, label: RegExp | string) {
 }
 
 export async function chooseGuide(page: Page, guide: RegExp = /Panda trainer Martial arts Calm strength/) {
+  const choices=page.locator('#guideChoices');
+  if(await choices.getAttribute('open')===null)await choices.locator('summary').click();
   const card = page.getByRole('button', { name: guide }).first();
   await card.click();
   await expect(page.locator('#coachName')).toContainText(/Panda trainer|Fresh-start kid|hydration cat|Workout duo|Adventure explorer|Star fitness hero/i);
