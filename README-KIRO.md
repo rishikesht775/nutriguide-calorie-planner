@@ -83,3 +83,9 @@ notepad test-reports\contracts-latest.txt
 ```
 
 Send the TXT files here after testing. For overlap/layout failures, also send the screenshot or trace named in the report. Text reports are ignored by Git and included in CI artifacts, so test logs do not enter the source repository.
+
+## Current stability release
+
+New product modules are in `public/app/`; the main page is `public/legacy.html`. The active sync implementation is `public/cloud-sync.js` (the duplicate root-level legacy copy was removed). API routes are under `app/api/`. See `docs/COMPETITOR-AND-ARCHITECTURE-REVIEW.md` for the feature comparison, implementation boundaries and remaining work.
+
+After pulling this release, use `npm.cmd run test:release`. The new meal-plan/recovery/barcode UI cases are included in `test:all` and `test:functional`. The secure sign-in tests now check the platform account handoff instead of the removed unused password form.

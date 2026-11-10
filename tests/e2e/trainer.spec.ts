@@ -21,13 +21,13 @@ test.describe('@functional @integration @regression trainer sessions',()=>{
  }
  test('pause freezes timer and resume continues',async({page})=>{
   await page.clock.install();await page.getByRole('button',{name:'Start session',exact:true}).click();
-  await page.clock.runFor(2000);await expect(page.locator('#ngTrainerTimer')).toHaveText('00:43');
+  await page.clock.runFor(2000);await expect(page.locator('#ngTrainerTimer')).toHaveText('04:58');
   await page.getByRole('button',{name:'Pause',exact:true}).click();await page.clock.runFor(5000);
-  await expect(page.locator('#ngTrainerTimer')).toHaveText('00:43');await page.getByRole('button',{name:'Resume',exact:true}).click();
-  await page.clock.runFor(1000);await expect(page.locator('#ngTrainerTimer')).toHaveText('00:42');
+  await expect(page.locator('#ngTrainerTimer')).toHaveText('04:58');await page.getByRole('button',{name:'Resume',exact:true}).click();
+  await page.clock.runFor(1000);await expect(page.locator('#ngTrainerTimer')).toHaveText('04:57');
  });
  test('timer advances automatically to next exercise',async({page})=>{
-  await page.clock.install();await page.getByRole('button',{name:'Start session',exact:true}).click();await page.clock.runFor(45000);
+  await page.clock.install();await page.getByRole('button',{name:'Start session',exact:true}).click();await page.clock.runFor(300000);
   await expect(page.locator('#ngTrainerStep')).toHaveText('Step 2 of 4');
  });
  test('last next completes a session and saves history after reload',async({page})=>{
@@ -45,7 +45,7 @@ test.describe('@functional @integration @regression trainer sessions',()=>{
  test('@edge starting again resets progress without duplicate active timers',async({page})=>{
   await page.clock.install();await page.getByRole('button',{name:'Start session',exact:true}).click();await page.getByRole('button',{name:'Next exercise',exact:true}).click();
   await page.getByRole('button',{name:'Start session',exact:true}).click();await page.clock.runFor(1000);
-  await expect(page.locator('#ngTrainerStep')).toHaveText('Step 1 of 4');await expect(page.locator('#ngTrainerTimer')).toHaveText('00:44');
+  await expect(page.locator('#ngTrainerStep')).toHaveText('Step 1 of 4');await expect(page.locator('#ngTrainerTimer')).toHaveText('04:59');
  });
  test('corrupt history does not prevent starting training',async({page})=>{
   await page.evaluate(()=>localStorage.setItem('ngTrainerHistory','not-json'));await page.reload();await openTab(page,/Exercise/i);

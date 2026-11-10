@@ -1,18 +1,18 @@
 import {test,expect} from '@playwright/test';
-import {completeProfile} from './helpers';
+import {completeProfile,openTab} from './helpers';
 
 test.describe('@functional @integration planner and groceries',()=>{
- test.beforeEach(async({page})=>{await completeProfile(page);});
+ test.beforeEach(async({page})=>{await completeProfile(page);await openTab(page,/Food studio/i);});
  test('meal is added, survives reload and can be removed',async({page})=>{
   await page.locator('#ngMealName').fill('Paneer bowl');await page.locator('#ngMealDay').selectOption('Tomorrow');
   await page.locator('.ng-smart-card').first().getByRole('button',{name:'Add',exact:true}).click();
-  await expect(page.locator('#ngMealList')).toContainText('Tomorrow: Paneer bowl');await page.reload();
+  await expect(page.locator('#ngMealList')).toContainText('Tomorrow: Paneer bowl');await page.reload();await openTab(page,/Food studio/i);
   await expect(page.locator('#ngMealList')).toContainText('Paneer bowl');await page.getByRole('button',{name:'Remove meal',exact:true}).click();
   await expect(page.locator('#ngMealList')).toContainText('No meals planned');
  });
  test('duplicate grocery is stored only once, then removed',async({page})=>{
   for(let i=0;i<2;i++){await page.locator('#ngGroceryName').fill('Oats');await page.locator('.ng-smart-card').nth(1).getByRole('button',{name:'Add',exact:true}).click();}
-  await expect(page.locator('#ngGroceryList .ng-smart-pill')).toHaveCount(1);await page.reload();
+  await expect(page.locator('#ngGroceryList .ng-smart-pill')).toHaveCount(1);await page.reload();await openTab(page,/Food studio/i);
   await expect(page.locator('#ngGroceryList')).toContainText('Oats');await page.getByRole('button',{name:'Remove grocery',exact:true}).click();
   await expect(page.locator('#ngGroceryList')).toContainText('empty');
  });

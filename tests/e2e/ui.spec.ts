@@ -11,7 +11,7 @@ test.describe('@ui @regression responsive geometry',()=>{
     expect(overflow,`horizontal overflow in ${tab}`).toBeLessThanOrEqual(1);
    }
    await openTab(page,/Home/i);
-   const hero=page.locator('.hero');const heading=hero.locator('h1');
+   const hero=page.locator('#ngToday');const heading=hero.locator('h2');
    const h=await hero.boundingBox(),t=await heading.boundingBox();expect(h).not.toBeNull();expect(t).not.toBeNull();
    expect(t!.x).toBeGreaterThanOrEqual(h!.x);expect(t!.y+t!.height).toBeLessThanOrEqual(h!.y+h!.height);
    const nav=await page.locator('.app-nav').boundingBox();expect(nav).not.toBeNull();
@@ -24,7 +24,7 @@ test.describe('@ui @regression responsive geometry',()=>{
    await page.setViewportSize({width,height:844});await page.route('**/api/me',r=>r.fulfill({json:{authenticated:false,user:null}}));await page.goto('/legacy');
    await expect(page.locator('#appAuthGate')).toBeVisible();
    expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(1);
-   for(const sel of ['.auth-gate-art h1','#gateEmail','#gatePassword','#gateSubmit']){
+   for(const sel of ['.auth-gate-art h1','#gateSubmit']){
     const b=await page.locator(sel).boundingBox();expect(b).not.toBeNull();expect(b!.x).toBeGreaterThanOrEqual(0);expect(b!.x+b!.width).toBeLessThanOrEqual(width+1);
    }
   });

@@ -1,22 +1,22 @@
-# Validation status — 10 November 2026
+# Current stability release validation — 10 November 2026
 
-- Test TypeScript check: passed (`npx tsc -p tests/tsconfig.json`).
-- Playwright collection: passed, 188 executions in 27 spec files (94 cases × 2 projects).
-- Node backend/database contracts: 17 passed. Actual route exports and migration executed with an in-memory SQLite adapter and controlled identity; this does not validate the Cloudflare deployment.
-- Local HTTP backend/database checks: 12 passed (6 cases repeated by both projects). Real local `/api/me` and `/api/state`, no mocked HTTP responses.
-- Browser smoke attempt: blocked before page load. Installed Chromium exited with `socket() failed: Operation not permitted`. No browser pass rate is claimed.
-- Full browser suite: requires execution in Windows Kiro or GitHub Actions. Screenshots/traces/JSON/HTML are produced by Playwright; they are not preapproved visual baselines.
+## Completed
 
-## Static review findings to validate in browser
+- Node contracts exercise actual state/barcode route exports, actual SQL migration with SQLite, cloud-client sync behavior, meal planning and backup validation. See `test-reports/contracts-latest.txt` for the exact run count/status.
+- JS syntax checks for all new client modules and inline scripts.
+- TypeScript application and Playwright checks.
+- Playwright test collection: 202 executions in 28 spec files before any later additions.
+- Browser preview: secure sign-in layout and successful script initialization inspected. No password is collected; no app login was bypassed for QA.
 
-These are suspected product defects identified while writing tests, not confirmed browser results:
+## Verification boundaries
 
-- New meal/grocery/trainer keys are absent from the cloud-sync allowlist.
-- Trainer finish does not guard against repeat completion.
-- Meal removal indexes use a sliced list index rather than the original index after eight entries.
-- Planner/grocery entries interpolate user text into HTML.
-- Several profile inputs lack associated `for` labels; exercise modal lacks dialog semantics/Escape behavior.
-- Food quantity and profile boundaries need runtime validation checks.
-- Selected-tab sections may remain inside a hidden ancestor; tests assert actual visibility without force-clicks.
+- Authenticated full-browser flows were not executed here. The cloud preview is at the sign-in gate, and direct Playwright Chromium launch was previously blocked by workspace socket permissions. Run the release suite in Kiro or GitHub Actions.
+- The local HTTP backend attempt using the managed preview URL could not reach that URL from the test runner; report startup failure is retained, not classified as an app assertion failure.
+- Barcode provider behavior is tested with mocked upstream responses; a real package lookup depends on provider/network availability. Camera and speech permissions require physical browser/device testing.
+- The production identity provider, actual multi-device D1 data, wearable providers and AI services were not certified by local SQLite or mocked tests.
 
-Assertions intentionally remain strict. Do not mark them skipped to obtain a green report. Record an app defect for a reproducible failure and fix the app before release.
+## Defects repaired
+
+Hidden tab ancestry, duplicate trainer completion, mismatched session block durations, unsafe HTML rendering in user-text paths, quantity/profile validation, grocery removal indexing, missing cloud keys, overlapping saves, successful-save acknowledgments, missing accessible labels/dialog focus, and private-response caching.
+
+Existing tests remain strict. Do not skip failures to obtain a green report. Further browser findings should be reproduced and fixed before asserting full stability.

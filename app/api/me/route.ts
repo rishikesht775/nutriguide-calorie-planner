@@ -11,5 +11,5 @@ export async function GET() {
       : null,
     signInUrl: chatGPTSignInPath("/legacy.html"),
     signOutUrl: chatGPTSignOutPath("/legacy.html"),
-  });
+  }, { headers: { "Cache-Control": "private, no-store, max-age=0", "X-Content-Type-Options": "nosniff" } });
 }

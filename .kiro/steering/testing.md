@@ -16,3 +16,11 @@
 
 ## Test data
 Use the fixed demo profile in `tests/e2e/helpers.ts`. Do not put real account details, passwords, or tokens in the repository.
+
+## Release checks and evidence
+- Use `npm.cmd run test:release` on Windows; Playwright starts the app automatically.
+- `npm.cmd run test:contracts` exercises state/barcode routes, SQLite, sync and meal/backup logic without a browser.
+- Every Playwright category writes `test-reports/playwright-latest.txt`; contracts write `test-reports/contracts-latest.txt`. Preserve failure evidence.
+- UI auth is mocked in test contexts only. Never add an authentication bypass to production.
+- Camera, speech, actual provider login and cross-device D1 need manual/sandbox validation.
+- Do not skip real failing cases to make reports green.

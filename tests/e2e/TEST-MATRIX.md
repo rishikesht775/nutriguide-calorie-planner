@@ -4,14 +4,14 @@
 
 The suite targets `public/legacy.html`, its cloud-sync client, `/api/me`, `/api/state`, and the current SQLite migration. It replaces the removed festival/upgrade runtime selectors. Browser contexts are isolated; authenticated UI tests mock identity and state endpoints, while backend tests call real local HTTP routes anonymously. These are different layers and are not evidence of a real identity-provider login or production D1 integration.
 
-There are 94 browser/API cases, run in two Playwright projects (188 executions), and 17 Node contract/database cases. Projects are desktop Chromium and Pixel 7 emulation, not physical device or cross-browser certification.
+There are 101 browser/API cases, run in two Playwright projects (202 executions), and 87 Node contract/database cases. Projects are desktop Chromium and Pixel 7 emulation, not physical device or cross-browser certification.
 
 | Category | Files | Assertions / negative cases |
 | --- | --- | --- |
 | Smoke | smoke.spec.ts | Profile unlock; all five navigation tabs; uncaught errors |
 | Sanity | sanity.spec.ts | Current trainer start; food input; reports reachable |
 | Functional | functional, food, exercise, tracking specs | Calorie/BMI/meal output; guide selection; portion-scaled nutrition/protein; checklist; water/steps; export |
-| Trainer | trainer.spec.ts | Four goals; home/gym; 10/20/30 min; pause/resume; expiry; next; completion; repeated finish; restart timer; invalid stored history |
+| Trainer | trainer.spec.ts | Four goals; home/gym; duration-correct 10/20/30 min; pause/resume; expiry; next; completion; repeated finish; restart timer; invalid stored history |
 | Integration | integration, cloud-sync specs | Profile persistence; story routing; totals after tab changes; payload; hydration; failed save and retry; new storage keys |
 | System | system.spec.ts | Offline interaction; saved food read after network recovery and reload |
 | E2E | complete-flow.spec.ts | Profile → guide → food → workout → journal → reminder → report download → reload |
@@ -20,7 +20,7 @@ There are 94 browser/API cases, run in two Playwright projects (188 executions),
 | UI | ui, mobile specs | 320/360/390/768/1024/1440 layouts; every tab overflow; banner bounds; navigation collision; login bounds; screenshots; label contrast |
 | Frontend | frontend.spec.ts | Page errors; selected content visible; unrelated sections hidden |
 | Accessibility | accessibility.spec.ts | Programmatic profile labels; navigation names; keyboard activation; trainer labels; dialog semantics/Escape; image alt attributes |
-| Security | auth, security specs | Gate; sign-up required name; auth handoff; no credential leakage; persisted XSS probes in journal/planner/groceries |
+| Security | auth, security specs | Gate; sign-up intent; platform auth handoff; no credential leakage; persisted XSS probes in journal/planner/groceries |
 | Performance | performance.spec.ts | Response <5s; DOM <8s; tab click <2.5s; scrollability. These are local interaction budgets, not load or stress tests. |
 | Backend | backend.spec.ts | Anonymous me/state; unauthorized writes; malformed JSON; unknown route |
 | Database | database.spec.ts; ../contracts/state.test.mjs | Migration; actual route SQL with in-memory SQLite; upsert; user isolation; primary key; JSON round trip; corruption; outage |
@@ -44,3 +44,5 @@ Run `npm.cmd run test:list` for every concrete case title and file location. No 
 | MAN-DATA-01 | Nutrition and calorie calculations reviewed against approved reference data | Accurate units, serving sizes, rounding and target logic | Clinical/data-source validation |
 
 Barcode scanning, AI photo recognition, voice, AI coaching, wearables, family plans and other requested but unimplemented features require acceptance criteria and provider sandbox tests when implemented. They are not represented as passing features here.
+
+Current feature additions: `wellness-features.spec.ts` covers weekly plans, household ingredients, favourites, recipes, recovery, barcode fallback, rule-guide scope and export downloads. Contract tests also cover barcode provider failure cases, sync races/retries and bounded state request streams.

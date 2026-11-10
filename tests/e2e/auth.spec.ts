@@ -1,34 +1,14 @@
 import { test, expect } from '@playwright/test';
-
-test.describe('@security @auth in-app authentication gate', () => {
-  test('unauthenticated users start inside the app auth gate', async ({ page }) => {
-    await page.goto('/legacy');
-    await expect(page.locator('#appAuthGate')).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Nourish.*Move.*Thrive/i })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Sign in', exact: true })).toHaveClass(/active/);
-    await expect(page.locator('#gateNameWrap')).toBeHidden();
-    await expect(page.locator('#gateName')).toBeDisabled();
-  });
-
-  test('name is requested only when creating an account', async ({ page }) => {
-    await page.goto('/legacy');
-    await page.getByRole('button', { name: 'Create account', exact: true }).click();
-    await expect(page.locator('#gateNameWrap')).toBeVisible();
-    await expect(page.locator('#gateName')).toBeEnabled();
-    await expect(page.locator('#gateName')).toHaveAttribute('required', '');
-    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-    await expect(page.locator('#gateNameWrap')).toBeHidden();
-    await expect(page.locator('#gateName')).toBeDisabled();
-    await expect(page.locator('#gateName')).not.toHaveAttribute('required');
-  });
-
-  test('auth handoff does not place credentials in the URL', async ({ page }) => {
-    await page.goto('/legacy');
-    await page.locator('#gateEmail').fill('test@example.com');
-    await page.locator('#gatePassword').fill('not-a-real-password');
-    const requestPromise = page.waitForRequest(request => request.url().includes('/signin-with-chatgpt'));
-    await page.getByRole('button', { name: /secure sign in/i }).click();
-    const request = await requestPromise;
-    expect(request.url()).not.toMatch(/password|not-a-real-password|test%40example/);
-  });
+test.describe('@security @auth secure platform sign-in',()=>{
+ test.beforeEach(async({page})=>{await page.route('**/api/me',r=>r.fulfill({json:{authenticated:false,user:null}}));await page.goto('/legacy');});
+ test('sign-in gate explains platform handoff without collecting credentials',async({page})=>{
+  await expect(page.locator('#appAuthGate')).toBeVisible();await expect(page.getByRole('heading',{name:/Nourish.*Move.*Thrive/})).toBeVisible();
+  await expect(page.locator('#appAuthGate input[type=password]')).toHaveCount(0);await expect(page.locator('#gateSubmit')).toHaveText('Continue with secure account');
+ });
+ test('sign-up intent changes heading without claiming a direct password service',async({page})=>{
+  await page.locator('#gateSignUp').click();await expect(page.locator('#gateTitle')).toHaveText('Create your wellness account');await page.locator('#gateSignIn').click();await expect(page.locator('#gateTitle')).toHaveText('Welcome back');
+ });
+ test('handoff uses fixed same-origin return path',async({page})=>{
+  await page.route('**/signin-with-chatgpt**',r=>r.fulfill({body:'Test handoff'}));const request=page.waitForRequest('**/signin-with-chatgpt**');await page.locator('#gateSubmit').click();const url=new URL((await request).url());expect(url.pathname).toBe('/signin-with-chatgpt');expect(url.searchParams.get('return_to')).toBe('/legacy.html');expect(url.search).not.toMatch(/password|email/);
+ });
 });

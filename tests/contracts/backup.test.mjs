@@ -1,0 +1,12 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const window={};vm.runInNewContext(readFileSync(new URL('../../public/app/backup.js',import.meta.url),'utf8'),{window});
+const validate=window.NGBackup.validate;
+const wrap=data=>({app:'NutriGuide',version:1,data});
+test('backup validation accepts valid food and journal rows',()=>{assert.doesNotThrow(()=>validate(wrap({nutritionLog:[{name:'Dal',cal:116,p:9}],journal:[{date:'today',text:'Hello'}]}),['nutritionLog','journal']))});
+test('backup rejects auth and sync ownership metadata',()=>{assert.throws(()=>validate(wrap({_ngCloudOwner:'other'}),['profile']))});
+test('backup rejects invalid row data before replacing any account state',()=>{assert.throws(()=>validate(wrap({nutritionLog:[{name:'Dal',cal:-1}]}),['nutritionLog']));assert.throws(()=>validate(wrap({nutritionLog:[null]}),['nutritionLog']))});
+test('backup rejects malformed recipe plans and unsupported versions',()=>{assert.throws(()=>validate(wrap({ngWeeklyPlans:[{date:'today',items:[]}]}),['ngWeeklyPlans']));assert.throws(()=>validate({app:'NutriGuide',version:2,data:{}},[]))});
+test('backup preserves unsafe-looking text as data for escaped rendering',()=>{const value=wrap({journal:[{date:'today',text:'<img onerror=alert(1)>'}]});assert.equal(validate(value,['journal']).journal[0].text,'<img onerror=alert(1)>')});

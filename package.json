@@ -24,7 +24,7 @@
     "test:uat": "playwright test tests/e2e/uat.spec.ts tests/e2e/complete-flow.spec.ts",
     "test:report": "playwright show-report",
     "test:install-browsers": "playwright install chromium",
-    "test:functional": "playwright test tests/e2e/functional.spec.ts tests/e2e/food.spec.ts tests/e2e/exercise.spec.ts tests/e2e/trainer.spec.ts tests/e2e/planner.spec.ts tests/e2e/tracking.spec.ts",
+    "test:functional": "playwright test tests/e2e/functional.spec.ts tests/e2e/food.spec.ts tests/e2e/exercise.spec.ts tests/e2e/trainer.spec.ts tests/e2e/planner.spec.ts tests/e2e/tracking.spec.ts tests/e2e/wellness-features.spec.ts",
     "test:integration": "playwright test tests/e2e/integration.spec.ts tests/e2e/cloud-sync.spec.ts",
     "test:system": "playwright test tests/e2e/system.spec.ts",
     "test:regression": "playwright test tests/e2e/regression.spec.ts tests/e2e/diwali.spec.ts",
