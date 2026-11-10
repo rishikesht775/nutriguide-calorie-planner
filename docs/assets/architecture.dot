@@ -1,0 +1,19 @@
+digraph NutriGuide {
+ graph [rankdir=TB, bgcolor="white", nodesep=0.35, ranksep=0.45, pad=0.2];
+ node [shape=box, style="rounded,filled", fillcolor="#F2F5F4", color="#5D7169", fontname="DejaVu Sans", fontsize=12, margin="0.18,0.12"];
+ edge [color="#61766C", fontname="DejaVu Sans", fontsize=10];
+ browser [label="Browser\nFive tabs and account forms"];
+ local [label="Device storage\nWellness JSON and photo journal"];
+ worker [label="NutriGuide Worker\nIdentity validation and API routes"];
+ auth [label="Supabase Auth\nEmail identity and sessions"];
+ d1 [label="Cloudflare D1\nAccount owned wellness state"];
+ food [label="Open Food Facts\nBarcode nutrition lookup"];
+ mail [label="Brevo SMTP\nAccount email delivery"];
+ browser -> worker [label="HTTPS JSON"];
+ browser -> local [label="local only"];
+ worker -> auth [label="verify user"];
+ worker -> d1 [label="prepared SQL"];
+ worker -> food [label="barcode"];
+ auth -> mail [label="verification and reset"];
+ {rank=same; auth; d1; food;}
+}

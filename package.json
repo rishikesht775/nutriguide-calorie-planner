@@ -41,7 +41,10 @@
     "test:desktop": "playwright test --project=chromium",
     "test:mobile": "playwright test --project=mobile-chrome",
     "test:reporter": "node --test tests/reporting/*.test.mjs",
-    "test:personalization": "playwright test tests/e2e/personal-plan.spec.ts"
+    "test:personalization": "playwright test tests/e2e/personal-plan.spec.ts",
+    "docs:update": "node scripts/update-docs.mjs",
+    "docs:check": "node scripts/update-docs.mjs --check",
+    "docs:export": "node scripts/export-docs.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

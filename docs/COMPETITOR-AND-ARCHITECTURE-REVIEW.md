@@ -1,5 +1,7 @@
 # NutriGuide product and architecture review — 10 November 2026
 
+This is a dated earlier review. For the current architecture and account implementation, use `APPLICATION.md`; Supabase email accounts and Brevo SMTP were added after the provider-only account description below.
+
 ## Basis and limits
 
 Compared public product documentation from MyFitnessPal, Lifesum, HealthifyMe and Nike Training Club. Their private source, database schemas, performance and security controls are not public, so this is feature/workflow comparison and an assessment of NutriGuide's own architecture, not a claim that their internal implementations were inspected.

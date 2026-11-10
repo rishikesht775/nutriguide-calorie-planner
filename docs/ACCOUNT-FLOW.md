@@ -1,13 +1,11 @@
 # NutriGuide account flow
 
-NutriGuide currently uses the hosting platform's **Sign in with ChatGPT** integration. It does not operate a separate email/password account database or a Google OAuth provider.
+NutriGuide offers real independent email registration/sign-in through Supabase Auth, plus its preserved connected-account option. See APPLICATION.md sections 2, 6 and 7 and EMAIL-ACCOUNTS.md for the current contracts and release limits. Earlier descriptions of provider-only login are superseded.
 
-The earlier Sign in/Create account buttons changed a local UI mode but both continued to the same provider. They have been removed because that distinction suggested a separate registration flow that was not implemented.
+Registration calls the server sign-up action. Accepted requests show a prominent Check your email panel, hide the original form and offer Continue to sign in or Use a different email. These controls do not send another email by themselves. Generic duplicate-address wording avoids account enumeration. Failure keeps the form visible and displays the error.
 
-The entry page now has one ordinary anchor with `target="_top"` to `/signin-with-chatgpt?return_to=%2Flegacy.html`. The hosting platform owns the sign-in, sign-out and callback routes. After identity is established, `/api/me` identifies the user and `/api/state` reads/writes that user's state using the trusted user ID. Saving a profile associates it with this account; NutriGuide never collects its password.
+Supabase email confirmation is required. The PKCE callback uses /account/callback, and recovery uses the same callback with recovery intent followed by /account-reset.html. Use the requesting browser for confirmation links. Sign-in validates the provider identity and confirmed email; HttpOnly cookies hold native sessions. Passwords and SMTP keys are not wellness state.
 
-Local Kiro development has no hosted identity gateway. The preview explains this and points the account link to the hosted site. Playwright mocks identity and intercepts provider navigation for UI tests, while API tests check anonymous denial. There is no development auth bypass in production.
+/account/connected selects the hosting platform identity and redirects through its reserved sign-in path at the top level. The platform owns /signin-with-chatgpt, /signout-with-chatgpt and /callback. Matching email addresses never silently link separate provider identities or migrate profiles.
 
-The gate is visible before JavaScript executes; an authenticated response hides it. Failed identity checks keep the app gated and offer a retry. The real link remains navigable on the hosted site even when the gate script fails.
-
-Actual provider login/consent and cross-device persistence require a signed-in browser test. Test fixtures or an API mock do not prove those external steps passed.
+Local portable previews may have development-only mock identity, and Playwright tests mock account endpoints. These are not real provider verification. Production identity, confirmation, recovery and cross-device persistence require external acceptance. Registration email receipt has been reported by the owner; complete confirmation/login/reset acceptance remains pending.

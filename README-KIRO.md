@@ -93,3 +93,7 @@ After pulling this release, use `npm.cmd run test:release`. The new meal-plan/re
 ## Shared profile defaults and journey guide
 
 The latest release automatically fills every tab from the saved profile while preserving explicit edits. Use `npm.cmd run test:personalization` for the focused Playwright suite. See `docs/PROFILE-DEFAULTS-AND-GUIDE.md` for default-versus-custom behavior, guide actions and implementation boundaries.
+
+## Maintained application document
+
+Read `docs/APPLICATION.md` for current architecture, requirements, integrations and limits. Every code change must update relevant sections and run `npm.cmd run docs:update` followed by `npm.cmd run docs:check`. GitHub Actions checks freshness and publishes the current Word export as the NutriGuide-Application-Document artifact. See `docs/DOCUMENTATION.md` for export instructions.

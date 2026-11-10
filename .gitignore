@@ -54,3 +54,8 @@ yarn-error.log*
 
 # Timestamped text test reports
 /test-reports/
+
+# Generated Word snapshots and render review output
+/docs/exports/
+/docs/rendered/
+__pycache__/
