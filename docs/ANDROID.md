@@ -60,3 +60,5 @@ The workflow assembles the APK, runs seven JVM policy tests and Android lint, th
 Physical Samsung S21 FE acceptance remains required: installation, profile/target edits, food/custom portions, timer pause on background, day rollover, recovery, CSV export, native email confirmation/login, two-account isolation, explicit cloud sync and offline edits/retry. These must not be reported as passed until actually executed.
 
 The earlier browser-backed build/run 42908566596 is historical and must not be used as the native download. Actual native build/run evidence is recorded after the new workflow completes.
+
+The first native build compiled and reached Android lint. Lint rejected raw integer layout orientations; those were replaced by explicit LinearLayout.VERTICAL constants before rebuilding. Native APK acceptance remains tied to a subsequent successful build/emulator run.

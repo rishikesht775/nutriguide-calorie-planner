@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "446f7a9835b8cbbb2475b18170c0ba639f0e76fd92350de2af171771dfd595bc",
+  "sourceDigest": "0681223d95854f2b38de64fb0f48270977c95dbbcad3ca83755c2e8ea2647a1d",
   "files": {
     ".github/workflows/android.yml": "59b01f8a5c87174067661d2fc5c91fe1914697f31e091ce5cb5e01ec1be181ec",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
@@ -12,7 +12,7 @@
     "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.java": "20a98f562da89c4c0d18af44e558023700b5bbfc62a794ed9dc37339e05c0adb",
     "android/app/src/main/AndroidManifest.xml": "86159d4a78b356bddd310fe551018c2c0e22a90894aacdf28a67958946c52adc",
     "android/app/src/main/java/com/rishikesht775/nutriguide/FoodCatalog.java": "e8276e89f4c174ba0c707227c9e6e9a9b3e21f25c9b51ed205aca1a18f833652",
-    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.java": "b237bc63143bed076bb5ee8943dd9b299d7e1930b6275318f9addf784a810cd7",
+    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.java": "3b53ee908620dc3d5bdbdaea38db704aa5befef377de68f4b1ab3386884b4224",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeApi.java": "acae2545de4065c72605d04c521e985bfb16e2e2fef82a6f48fb1c689232f965",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeStore.java": "c5f4be47192513549511ba71169637b6ea87b2d2a656e210be9fd1ca35570811",
     "android/app/src/main/java/com/rishikesht775/nutriguide/StateMerge.java": "2d3a372b61934b7272a3e9615dee3ddf0181150a908d523cf34d3457c86b909e",
@@ -98,7 +98,7 @@
     "components/ui/tooltip.tsx": "a0784eb77831a799fad7991df4f1b666f876201565a80175e1aa68733574a2e4",
     "db/schema.ts": "433a7f9a630470ddb6e26e9b164e2b37d18c6a2067feb3019d10ad38325503f8",
     "docs/ACCOUNT-FLOW.md": "c6f147bd241250e12778b200a77efecb3433f69ad9f765a2a601ec3a99ad3634",
-    "docs/ANDROID.md": "c4dadd713a15b022b7fabe1aee7041323c585142422d3826fd839d42e4f273f7",
+    "docs/ANDROID.md": "b37f39eeda58dd808b1ace47088c54bd9bde4f59e33934007bb5dc39f876905b",
     "docs/APPLICATION.md": "885ee3fde33d9ad6cfdf7d8d2fb2a8cc6b84ce5f215cbabede9c7a70367d4d77",
     "docs/DOCUMENTATION.md": "3143c2d85820f1d684f3742076978957f06e9f59654ad9e3fbcf3af902f3cc72",
     "docs/EMAIL-ACCOUNTS.md": "8ec7bad82243f35996be01e313656595f5f78138ea5f194e56c63d33e2935e36",
