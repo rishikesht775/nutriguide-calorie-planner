@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "sourceDigest": "43313a20f1db2e01a423952daf8e5615243a15fd8e6aa922a62e8ef469f0424f",
+  "sourceDigest": "a61c0980043c50a9a8389e3f49220c9219a2fff0f29eac1c57f87c2f5793c79c",
   "files": {
-    ".github/workflows/android.yml": "b72f5de14802526822eaf7d4f72342b0b671bac68aa90307991c5e7bb1e69b4d",
+    ".github/workflows/android.yml": "f168be18f3f95c7fb479fcf4462e33db1541f1e905cf53fe8c0ac27ec74c09d2",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
     ".github/workflows/playwright.yml": "6097bdecc620b679ebf77087717d17b63702983047eebc70572bff7ec0f5e01b",
     ".openai/hosting.json": "264fe98d68f46295988a7010abfc2d3b38777ae9fb9a3408c9663c7e09f623f7",
@@ -91,7 +91,7 @@
     "components/ui/tooltip.tsx": "a0784eb77831a799fad7991df4f1b666f876201565a80175e1aa68733574a2e4",
     "db/schema.ts": "433a7f9a630470ddb6e26e9b164e2b37d18c6a2067feb3019d10ad38325503f8",
     "docs/ACCOUNT-FLOW.md": "c6f147bd241250e12778b200a77efecb3433f69ad9f765a2a601ec3a99ad3634",
-    "docs/ANDROID.md": "c88aee275eafe3430704d3216eebf04de570d845625cf2115dfc6c29d0298cc7",
+    "docs/ANDROID.md": "adb8e641fe76551548edf1891215208df215de9fdd28ec241b85428a6b1f23bb",
     "docs/APPLICATION.md": "66c18cd482d388a76f58efc287f89ee4e6dd3f2b317329aaa86ed2d7b6aefc5d",
     "docs/DOCUMENTATION.md": "3143c2d85820f1d684f3742076978957f06e9f59654ad9e3fbcf3af902f3cc72",
     "docs/EMAIL-ACCOUNTS.md": "8ec7bad82243f35996be01e313656595f5f78138ea5f194e56c63d33e2935e36",

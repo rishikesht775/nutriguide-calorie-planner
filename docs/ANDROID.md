@@ -44,3 +44,5 @@ Local APK: android/app/build/outputs/apk/debug/app-debug.apk. GitHub Actions bui
 | APK-10 | Second device login | Website/cloud implementation supplies data; APK adds no cross-device datastore |
 
 Build and lint results must come from the actual Android workflow run. Physical-phone acceptance is pending until installed and tested by the owner.
+
+The SDK setup explicitly installs platform-tools instead of the action's obsolete default tools package. The first CI attempt failed during that SDK setup before compilation; the workflow was corrected and rebuilt.
