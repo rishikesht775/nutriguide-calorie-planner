@@ -1,5 +1,9 @@
 # NutriGuide testing in Kiro (Windows)
 
+## Android APK
+
+The android/ directory is the browser-backed Android launcher. GitHub Actions -> NutriGuide Android APK builds a downloadable debug APK and runs Android lint. See docs/ANDROID.md for installation, local Gradle 8.11.1 / JDK 17 / SDK 35 setup, and ten phone acceptance cases. The APK opens the currently published website; it does not include unpublished web changes. No local Android setup is required to download a successful CI APK.
+
 ## Fresh-account target fix (11 November 2026)
 
 The menu and its setup rules are unchanged. New accounts show setup prompts instead of automatic 1,800 kcal / 100 g targets. Pull main before testing. Run the focused checks after the setup commands below:

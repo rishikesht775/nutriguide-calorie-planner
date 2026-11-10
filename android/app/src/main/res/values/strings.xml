@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NutriGuide</string>
+    <string name="app_tagline">A little better, every day.</string>
+    <string name="open_nutriguide">Open my wellness space</string>
+    <string name="browser_notice">Food, movement and recovery in your secure browser. Internet is required. Your browser handles sign-in and permissions.</string>
+    <string name="no_browser">Install or enable an Android browser, then try again.</string>
+    <string name="return_notice">Your wellness space opens in a browser tab. Tap below to continue whenever you are ready.</string>
+</resources>

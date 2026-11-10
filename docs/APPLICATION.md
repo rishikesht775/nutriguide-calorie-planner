@@ -1,8 +1,10 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 1.9 | Reviewed 11 November 2026 | Owner Rishikesh Tiwari
+Version 2.0 | Reviewed 11 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
+
+An Android test APK project is maintained under android/. It launches the fixed published NutriGuide HTTPS /legacy URL in an Android Custom Tab (or the default browser fallback). Browser chrome remains visible. Android 8.0+ and a browser/internet are required. Website sign-in, cookies, downloads and cloud data remain managed by that browser and the web backend. No native wellness datastore, Health Connect/Fitbit integration, offline app, native reminder service or Play Store signing is added. The APK follows the current live deployment; it does not embed unpublished web changes. See docs/ANDROID.md for installation, pinned build inputs, Kiro setup and physical-device test cases. GitHub Actions builds a debug-signed APK and runs Android lint; physical acceptance must still be performed on the phone.
 
 NutriGuide is a browser-based nutrition, movement and wellness planner. This document is the maintained reference for its implemented requirements, architecture, data flows, integrations, operational limits and acceptance criteria. It supports development in Kiro, release review, onboarding and regression testing.
 
@@ -402,6 +404,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 11 November 2026 | 2.0 | Added an Android browser-backed launcher using Custom Tabs, pinned SDK/build inputs and a GitHub Actions debug APK/lint workflow. The app reuses the published responsive website and browser sessions; no offline/native health integration or release signing is implied. Added Android build/install/Kiro instructions and ten physical-device acceptance cases in docs/ANDROID.md. Actual APK build/lint results come from the Android workflow; physical-phone acceptance remains pending. |
 | 11 November 2026 | 1.9 | Removed automatic 1,800 kcal / 100 g dashboard targets for accounts without a completed profile. Shared target policy rejects missing/incomplete profiles and stale plans; unset dashboard/food tracker states show setup prompts, and meal generation requires personal targets. Menu and setup navigation rules explicitly preserved. Added five target-policy/hydration contracts and desktop/mobile target browser cases; expanded account-switch assertions. All 185 contracts, 22 focused browser regressions, TypeScript and production build pass. See docs/UNCONFIGURED-TARGETS.md and docs/TARGETS-VALIDATION.txt for acceptance and actual check status. |
 | 11 November 2026 | 1.8 | Fixed unowned browser data being adopted by a new account. On owner change, preserve prior pending state under its own owner (or quarantine unassigned state), clear active profile/logs, and restore only the verified account snapshot. Gate waits for matching account-ready signal. Reset planner render models and personal-plan context. Four isolation/gate contracts added; 180 contracts and TypeScript pass. Browser switching regression added; real-provider acceptance remains pending. |
 | 11 November 2026 | 1.7 | Unified companion selection and introduction in one card; removed duplicate mascot gallery. First visit opens the six-character chooser; selecting a guide reveals its introduction and Start my journey. Change guide from any tab opens the same chooser on Home. Selected name and symbol persist across tabs/reload. Added two browser scenarios; local fixture interaction verified, full browser suite pending. |

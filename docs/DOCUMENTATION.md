@@ -31,3 +31,5 @@ If Python is not installed on your Windows machine, use the NutriGuide applicati
 The repository AGENTS.md carries the update rule for future development sessions. The independent documentation CI job runs even when browser tests cannot start. It checks freshness, regenerates DOCX from the maintained Markdown and uploads the export. It does not certify content correctness, provider status or visual layout. Inspect rendered Word pages after substantive layout changes. Do not edit DOCX independently of Markdown.
 
 This workflow creates no recurring scheduled task: updates belong to the change/release workflow. To review separate test categories and automatic TXT evidence, use README-KIRO.md.
+
+ANDROID.md describes the Android launcher, build/install instructions and physical-device acceptance cases. Android source/configuration and this guide are fingerprinted; generated Android builds, local SDK paths and signing keys are excluded.
