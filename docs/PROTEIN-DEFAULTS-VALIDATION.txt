@@ -1,0 +1,9 @@
+NutriGuide protein default correction - 11 November 2026
+CAUSE: migration treated a legacy proteinTarget widget cache as a custom override.
+FIX: only explicit shared custom settings override profile-derived protein.
+Automatic profile changes update shared target; deliberate custom edits persist.
+PASS stale legacy 125g resets to 118g for the 84kg loss fixture.
+PASS 70kg, 84kg and 90kg Home profiles derive 98g, 118g and 126g respectively.
+PASS explicit shared custom 125g remains custom; Use profile targets resets it.
+PASS 175 Node contracts and TypeScript noEmit.
+NOT RUN: Windows full Playwright suite for this change.

@@ -41,3 +41,7 @@ Food questions use remaining calories and protein from actual logs. Questions ab
 - `tests/e2e/personal-plan.spec.ts`: seven desktop/mobile scenarios for shared defaults, edits, persistence, reset and actual-log progression.
 
 Useful future upgrades are professionally reviewed form videos, an optional qualified-coach review workflow, and provider-backed AI with separate response evaluation. They should preserve this explicit default/override model.
+
+## Protein target provenance
+
+A legacy proteinTarget cache (including 125 g) does not establish a custom target. On first migration the app derives the automatic target from the saved Home profile. Only an explicit ngPersonalSettings.targets.protein value overrides that estimate. Existing shared custom settings remain preserved; use Personalize your plan > Use profile targets to remove them. Weight/goal changes refresh automatic protein targets across shared context and the tracker; other profile fields affect calorie/BMI estimates according to the documented policy.

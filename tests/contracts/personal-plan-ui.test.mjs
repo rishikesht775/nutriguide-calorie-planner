@@ -48,3 +48,13 @@ test('real food logging changes next action without generating fake completion',
  const f=fixture();assert.equal(f.nodes.get('ngGuideNextTitle').textContent,'Start with a food log');
  f.context.nutritionLog.push({date:f.context.NG.day(),cal:116,p:9});f.context.dispatchEvent(new Event('ng:data-changed'));f.flush();assert.equal(f.nodes.get('ngGuideNextTitle').textContent,'Make time for comfortable movement');assert.match(f.nodes.get('ngGuideSteps').innerHTML,/Food logged: completed/);
 });
+
+test('stale legacy 125g cache is replaced by the individual profile estimate',()=>{
+ const f=fixture({proteinTarget:'125'});assert.equal(f.context.ngPersonalPlan.protein,118);assert.equal(f.context.ngPersonalPlan.proteinSource,'profile');assert.equal(f.storage.get('proteinTarget'),'118');
+});
+test('different Home weights update the target in shared context rather than retaining 125g',()=>{
+ const f=fixture({proteinTarget:'125'});for(const [weight,expected]of [['70',98],['84',118],['90',126]]){f.nodes.get('weight').value=weight;f.submit();assert.equal(f.context.ngPersonalPlan.protein,expected);assert.equal(f.storage.get('proteinTarget'),String(expected));assert.match(f.nodes.get('ngSharedTargets').innerHTML,new RegExp(expected+' g protein'));}
+});
+test('explicit 125g shared custom target remains editable and reset restores profile estimate',()=>{
+ const f=fixture({proteinTarget:'125',ngPersonalSettings:JSON.stringify({version:1,targets:{protein:125}})});assert.equal(f.context.ngPersonalPlan.protein,125);assert.equal(f.context.ngPersonalPlan.proteinSource,'custom');f.click('data-personal-action',{personalAction:'reset-targets'});assert.equal(f.context.ngPersonalPlan.protein,118);assert.equal(f.context.ngPersonalPlan.proteinSource,'profile');
+});

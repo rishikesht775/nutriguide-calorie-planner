@@ -24,7 +24,10 @@
  function applyDefaults({forceFood=false,forceTraining=false}={}){
   if(applying)return;const profile=currentProfile();if(!profile){guide.hidden=true;return}applying=true;
   try{
-   let s=settings();if(!s.startedOn)s.startedOn=day();if(!s.version){const previous=Number(localStorage.getItem('proteinTarget'));const estimate=core.derive(profile);if(previous&&previous!==100&&previous!==estimate.protein&&previous>=20&&previous<=300)s.targets={...s.targets,protein:previous};s.version=1;}
+   let s=settings();if(!s.startedOn)s.startedOn=day();
+   // A cached legacy widget value is not evidence of a deliberate custom target.
+   // Only explicit shared settings override the current Home profile estimate.
+   if(!s.version)s.version=1;
    // Preserve pre-existing edited plans during migration. Never overwrite diary entries.
    if(!s.food)s.food={mode:read('ngWeeklyPlans',[]).length?'custom':'auto'};
    if(!s.training)s.training={mode:'auto'};
