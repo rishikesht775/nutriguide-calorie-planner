@@ -327,7 +327,7 @@ Use disposable consenting test accounts and avoid production user health data. R
 
 ### Commands and reports
 
-Use npm.cmd on Windows to avoid PowerShell npm.ps1 execution-policy failures. In the actual checkout, run git pull --ff-only origin main, npm.cmd install and npm.cmd run test:install-browsers. Playwright starts its own local server and stops the server it launched. Do not run multiple test commands concurrently against the same port.
+Use npm.cmd on Windows to avoid PowerShell npm.ps1 execution-policy failures. In the actual checkout, run git pull --ff-only origin main, npm.cmd install and npm.cmd run test:install-browsers. Playwright starts a fresh local server at http://127.0.0.1:5187 and stops the server it launched. A local PLAYWRIGHT_BASE_URL override sets both the actual CLI port/bind address and the readiness URL. Existing servers are not silently reused. The launcher honors PORT for manual development and explicit CLI ports take precedence without duplicate defaults. Do not run multiple test commands concurrently against the same port.
 
 Run npm.cmd run test:release for contracts plus all Playwright cases. Use the individual test scripts for separate categories. Normal runs generate latest and timestamped TXT reports under test-reports. Browser reports also include HTML, JSON and retained failure screenshots/traces/video. Reporter overrides or failures before configuration loads may only appear in terminal output. Secrets and sensitive wellness data should be removed before sharing evidence.
 
@@ -400,6 +400,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 10 November 2026 | 1.1 | Automatic test startup uses a dedicated port and one shared target for launch/readiness; Windows invokes Node directly. Five new launcher contract checks; browser execution on Windows still requires confirmation. |
 | 10 November 2026 | 1.0 | Consolidated current source, native accounts, Brevo setup, confirmation UI, profile propagation, trainer, APIs, D1/local storage, tests and deferred scope. Contract baseline 166 passed; full external account acceptance remains pending. |
 
 ## 15 Source evidence

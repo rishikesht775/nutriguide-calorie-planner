@@ -1,0 +1,10 @@
+NutriGuide automatic test server validation 2026-11-10
+PASS 171 contract tests, including five launcher/target tests.
+PASS TypeScript noEmit.
+PASS docs freshness and git whitespace checks.
+Launcher cases: dedicated default port; explicit local URL on portable/managed
+profiles; CLI precedence over PORT with no duplicate defaults; invalid ports;
+exact localhost detection; remote targets; IPv6 bind arguments.
+NOT VERIFIED: real Windows browser/server startup in this Linux session.
+Run npm.cmd run test:all in Kiro after pulling. No manual dev server is needed.
+See README-KIRO.md for clearing obsolete environment overrides.

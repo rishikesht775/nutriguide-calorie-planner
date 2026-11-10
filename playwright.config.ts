@@ -1,8 +1,12 @@
 import { defineConfig, devices } from '@playwright/test';
+import { readExecutionProfile } from './scripts/execution-profile.mjs';
+import { testServerSettings } from './scripts/dev-server-settings.mjs';
 
-const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:5173';
-const useLocalServer = !process.env.PLAYWRIGHT_BASE_URL || /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?/.test(baseURL);
-const devCommand = process.platform === 'win32' ? 'npm.cmd run dev' : 'npm run dev';
+const server = testServerSettings(process.env.PLAYWRIGHT_BASE_URL, readExecutionProfile() === 'managed-linux');
+const baseURL = server.baseURL;
+const useLocalServer = server.local;
+// Direct Node invocation avoids npm.cmd shell differences on Windows.
+const devCommand = [JSON.stringify(process.execPath), 'scripts/run-framework.mjs', 'dev', ...server.args].join(' ');
 const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH;
 const configuredWorkers = process.env.PLAYWRIGHT_WORKERS;
 const workers = configuredWorkers ? Number(configuredWorkers) : 1;
@@ -33,7 +37,7 @@ export default defineConfig({
     ? {
         command: devCommand,
         url: `${baseURL}/legacy`,
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: false,
         timeout: 180_000,
       }
     : undefined,

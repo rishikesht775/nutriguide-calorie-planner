@@ -9,7 +9,7 @@ npm.cmd install
 npm.cmd run test:install-browsers
 ```
 
-Use Node 24 LTS (Node 22.13+ also provides the required SQLite API). No manual `npm run dev` is needed: Playwright starts the local server, waits for `/legacy`, reuses an available local server, and stops the server it started. CI requires its own fresh server. Do not run separate test commands simultaneously against the same port.
+Use Node 24 LTS (Node 22.13+ also provides the required SQLite API). No manual `npm run dev` is needed: Playwright starts the local server, waits for `/legacy`, binds a dedicated test server at http://127.0.0.1:5187, and stops the server it started. Tests require their own fresh server so another checkout is never silently reused. PLAYWRIGHT_BASE_URL overrides both the readiness URL and the actual launched port for local HTTP targets; remote targets do not launch a server. PORT controls manual dev only and explicit CLI --port takes priority. Do not run separate test commands simultaneously against the same port.
 
 If you previously set a remote URL in this terminal, clear it for local testing:
 
@@ -97,3 +97,15 @@ The latest release automatically fills every tab from the saved profile while pr
 ## Maintained application document
 
 Read `docs/APPLICATION.md` for current architecture, requirements, integrations and limits. Every code change must update relevant sections and run `npm.cmd run docs:update` followed by `npm.cmd run docs:check`. GitHub Actions checks freshness and publishes the current Word export as the NutriGuide-Application-Document artifact. See `docs/DOCUMENTATION.md` for export instructions.
+
+## Automatic test server troubleshooting
+
+After pulling the automatic-server fix, stop earlier manual dev/test runs with Ctrl+C in their terminals. Clear temporary overrides from older troubleshooting, then use one command:
+
+```powershell
+Remove-Item Env:PORT -ErrorAction SilentlyContinue
+Remove-Item Env:PLAYWRIGHT_BASE_URL -ErrorAction SilentlyContinue
+npm.cmd run test:all
+```
+
+No separate dev terminal is needed. Allow up to 180 seconds for startup. If the dedicated port is occupied, stop that specific earlier app/test run or set PLAYWRIGHT_BASE_URL to another local HTTP port; Playwright launches the app there automatically. Do not terminate unrelated processes. A test discovery command does not run browser assertions.
