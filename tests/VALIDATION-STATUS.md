@@ -11,3 +11,7 @@ See docs/APPLICATION.md, docs/ACCOUNT-VALIDATION.txt and generated test-reports 
 ## 11 November 2026 trace diagnosis
 
 The supplied Windows trace/report at ea4b4e showed 161 passed, 45 failed assertions and 22 timeouts out of 228 executions. All 18 mocked auth UI cases passed. Four legacy-page fragments were missing in the GitHub copy; the served HTML reproduces three syntax errors, then nutrition state resolves to a DOM element and dependent controllers fail. The corrected page passes the inline syntax regression gate and all 172 Node contracts. The fourth trainer fragment parsed but used an incorrect property. No claim is made that all 67 browser failures are fixed: cloud-hydration policy, controls/selectors and responsive overflow require rerun evidence.
+
+## Follow-up Windows run
+
+Uploaded report for 457cc8a: 223 passed, five failed, zero skipped. Two meal-removal tests clicked Meal-0 but asserted Meal-2 removed; corrected to target Meal-2 and verify count, preserved neighbor and reload. Two pause tests allowed the installed clock to continue during action/expect polling; pause the clock before starting so advancing time is explicit. Tablet food form grid tracks now use minmax(0, ...) with shrinkable children. These follow-up changes require browser verification and are not reported as passing browser tests.

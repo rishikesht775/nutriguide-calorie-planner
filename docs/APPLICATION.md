@@ -400,6 +400,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 11 November 2026 | 1.3 | Windows rerun at 457cc8a: 223 passed, five failed, no skipped tests. Corrected meal-removal test to select the named meal and check reload, froze trainer test clock before actions, and allowed food form grid tracks to shrink at tablet widths. Browser rerun pending. |
 | 11 November 2026 | 1.2 | Repaired four truncated fragments in the GitHub legacy page (food catalogue, download link, nutrition log markup, trainer progress). Captured trace reproduced three syntax errors; new whole-page inline syntax gate and 172 contracts pass. Windows rerun still required; previous run had 161 passed and 67 failed/timeouts. |
 | 10 November 2026 | 1.1 | Automatic test startup uses a dedicated port and one shared target for launch/readiness; Windows invokes Node directly. Five new launcher contract checks; browser execution on Windows still requires confirmation. |
 | 10 November 2026 | 1.0 | Consolidated current source, native accounts, Brevo setup, confirmation UI, profile propagation, trainer, APIs, D1/local storage, tests and deferred scope. Contract baseline 166 passed; full external account acceptance remains pending. |

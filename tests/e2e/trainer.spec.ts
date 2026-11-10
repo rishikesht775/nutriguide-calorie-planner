@@ -20,7 +20,8 @@ test.describe('@functional @integration @regression trainer sessions',()=>{
   });
  }
  test('pause freezes timer and resume continues',async({page})=>{
-  await page.clock.install();await page.getByRole('button',{name:'Start session',exact:true}).click();
+  const time=new Date('2030-01-01T12:00:00Z');
+  await page.clock.install({time});await page.clock.pauseAt(time);await page.getByRole('button',{name:'Start session',exact:true}).click();
   await page.clock.runFor(2000);await expect(page.locator('#ngTrainerTimer')).toHaveText('04:58');
   await page.getByRole('button',{name:'Pause',exact:true}).click();await page.clock.runFor(5000);
   await expect(page.locator('#ngTrainerTimer')).toHaveText('04:58');await page.getByRole('button',{name:'Resume',exact:true}).click();

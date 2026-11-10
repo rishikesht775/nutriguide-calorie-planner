@@ -18,7 +18,14 @@ test.describe('@functional @integration planner and groceries',()=>{
  });
  test('@edge deleting a meal after more than eight entries removes the selected item',async({page})=>{
   for(let i=0;i<10;i++){await page.locator('#ngMealName').fill(`Meal-${i}`);await page.locator('.ng-smart-card').first().getByRole('button',{name:'Add',exact:true}).click();}
-  await page.locator('#ngMealList .ng-smart-pill').first().getByRole('button').click();
-  await expect(page.locator('#ngMealList')).not.toContainText('Meal-2');
+  const entries=page.locator('#ngMealList .ng-smart-pill');
+  await expect(entries).toHaveCount(10);
+  await entries.filter({hasText:/^Today: Meal-2 /}).getByRole('button',{name:'Remove meal',exact:true}).click();
+  await expect(entries).toHaveCount(9);
+  await expect(entries.filter({hasText:/^Today: Meal-2 /})).toHaveCount(0);
+  await expect(entries.filter({hasText:/^Today: Meal-0 /})).toHaveCount(1);
+  await page.reload();await openTab(page,/Food studio/i);
+  await expect(entries).toHaveCount(9);
+  await expect(entries.filter({hasText:/^Today: Meal-2 /})).toHaveCount(0);
  });
 });

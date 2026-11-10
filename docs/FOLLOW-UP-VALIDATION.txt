@@ -1,0 +1,10 @@
+NutriGuide browser follow-up - 11 November 2026
+User Windows report at 457cc8a: 228 executed, 223 passed, 5 failed, 0 skipped.
+Two meal deletion failures: test selected first meal (Meal-0) but asserted Meal-2
+removed. Test now explicitly selects Meal-2 and verifies count/neighbor/reload.
+Two trainer pause failures: fake time advanced during browser action/polling.
+Test now pauses installed clock before starting; only explicit runFor advances it.
+Tablet Food Studio overflow: grid tracks/children now shrink within their cards.
+PASS 172 Node contracts. PASS TypeScript and documentation freshness checks.
+PENDING browser verification of these follow-up changes; no full pass claimed.
+Run focused cases: npx.cmd playwright test tests/e2e/planner.spec.ts tests/e2e/trainer.spec.ts tests/e2e/ui.spec.ts
