@@ -20,6 +20,6 @@ test('unknown food does not silently save zero values', async ({ page }) => {
   await page.locator('#nutritionFood').fill('unknown test dish');
   await page.locator('#nutritionQuantity').press('Tab');
   await page.getByRole('button', { name: 'Save food', exact: true }).click();
-  await expect(page.getByText(/Food not found/i)).toBeVisible();
-  await expect(page.getByText('No foods logged yet.', { exact: true })).toBeVisible();
+  await expect(page.locator('#nutritionAutoStatus')).toContainText('Food not found');
+  await expect(page.locator('#nutritionLog')).toBeVisible();
 });

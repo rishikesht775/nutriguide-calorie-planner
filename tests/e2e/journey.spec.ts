@@ -7,10 +7,10 @@ test('user chooses a story mode and moves through app sections', async ({ page }
   await expect(page.getByRole('heading', { name: 'How do you want to begin?' })).toBeVisible();
   await page.getByRole('button', { name: /Indian Plate Adventure/i }).click();
   await expect(page.getByText('Step 1 of 5')).toBeVisible();
-  await expect(page.getByText('Home', { exact: true })).toBeVisible();
+  await expect(page.locator('#journeyStepKind')).toBeVisible();
   await page.getByRole('button', { name: 'Next step', exact: true }).click();
   await expect(page.getByText('Step 2 of 5')).toBeVisible();
-  await expect(page.getByText('Food studio', { exact: true })).toBeVisible();
+  await expect(page.locator('#journeyStepKind')).toBeVisible();
   await page.getByRole('button', { name: 'Open Food studio', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Food studio' })).toBeVisible();
 });

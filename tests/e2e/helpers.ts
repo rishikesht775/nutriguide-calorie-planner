@@ -18,14 +18,20 @@ export async function mockAuthenticatedSession(page: Page) {
     contentType: 'application/json',
     body: JSON.stringify({ authenticated: true, user: { email: 'playwright@example.test' } }),
   }));
+  await page.route('**/api/state', route => route.fulfill({
+    status: 200, contentType: 'application/json',
+    body: JSON.stringify(route.request().method() === 'POST' ? { saved: true } : { authenticated: true, state: {} }),
+  }));
   authRoutesInstalled.add(page);
 }
 
 export async function startFresh(page: Page) {
   await mockAuthenticatedSession(page);
   await page.goto('/legacy');
+  await expect(page.locator('body')).not.toHaveClass(/auth-pending/);
   await page.evaluate(() => localStorage.clear());
   await page.reload();
+  await expect(page.locator('body')).not.toHaveClass(/auth-pending/);
 }
 
 export async function completeProfile(page: Page, values: ProfileValues = {}) {
@@ -35,23 +41,23 @@ export async function completeProfile(page: Page, values: ProfileValues = {}) {
   await page.locator('#weight').fill(values.weight ?? '70');
   await page.locator('#activity').selectOption(values.activity ?? '1.375');
   await page.locator('#goal').selectOption(values.goal ?? 'loss');
-  await page.getByRole('button', { name: 'Calculate my plan', exact: true }).click({ force: true });
+  await page.getByRole('button', { name: 'Calculate my plan', exact: true }).click();
   await expect(page.locator('body')).toHaveClass(/post-profile/);
-  await expect(page.getByRole('button', { name: /Food studio/i })).toBeVisible();
+  await expect(page.locator('.app-nav button[data-tab=food]')).toBeVisible();
 }
 
 export async function openTab(page: Page, label: RegExp | string) {
   const tab = page.locator('.app-nav button').filter({ hasText: label }).first();
   await expect(tab).toBeVisible();
-  await tab.click({ force: true });
+  await tab.click();
 }
 
 export async function chooseGuide(page: Page, guide: RegExp = /Panda trainer Martial arts Calm strength/) {
   const card = page.getByRole('button', { name: guide }).first();
-  await card.click({ force: true });
+  await card.click();
   await expect(page.locator('#coachName')).toContainText(/Panda trainer|Fresh-start kid|hydration cat|Workout duo|Adventure explorer|Star fitness hero/i);
 }
 
 export async function visibleTabSection(page: Page, tab: string) {
-  return page.locator(`[data-ng-tab="${tab}"]:visible`);
+  return page.locator(({ home: '.dashboard-summary', food: '.food-nutrition', move: '.exercise-library', journey: '.journey', plan: '.weekly-report' } as Record<string, string>)[tab] + ':visible');
 }

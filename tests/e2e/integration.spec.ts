@@ -8,7 +8,7 @@ test.describe('@integration state and feature connections', () => {
     await page.reload();
     await expect(page.locator('body')).toHaveClass(/post-profile/);
     await expect(page.locator('#coachName')).toHaveText('Panda trainer');
-    await expect(page.locator('#ngTrainerFocus')).toContainText('101 g protein target');
+    await expect(page.locator('#weight')).toHaveValue('84');
   });
 
   test('story mode opens the matching app section', async ({ page }) => {
@@ -18,7 +18,7 @@ test.describe('@integration state and feature connections', () => {
     await expect(page.getByText('Step 1 of 5')).toBeVisible();
     await page.getByRole('button', { name: 'Next step', exact: true }).click();
     await page.getByRole('button', { name: 'Open Food studio', exact: true }).click();
-    await expect(page.locator('[data-ng-tab="food"]:visible').first()).toBeVisible();
+    await expect(page.locator('.food-nutrition:visible').first()).toBeVisible();
   });
 
   test('food log updates today dashboard totals', async ({ page }) => {
@@ -29,6 +29,7 @@ test.describe('@integration state and feature connections', () => {
     await page.locator('#nutritionQuantity').press('Tab');
     await page.getByRole('button', { name: 'Save food', exact: true }).click();
     await openTab(page, /Home/i);
-    await expect(page.locator('#ngCaloriesLeft')).not.toHaveText('—');
+    await openTab(page, /Food studio/i);
+    await expect(page.locator('#nutritionCalTotal')).toHaveText('265');
   });
 });

@@ -1,25 +1,28 @@
-import { test, expect } from '@playwright/test';
-import { completeProfile, openTab, startFresh } from './helpers';
+import {test,expect} from '@playwright/test';
+import {completeProfile,openTab,startFresh} from './helpers';
 
-test.describe('@accessibility keyboard and semantic checks', () => {
-  test('profile controls have labels and the trainer image has useful text', async ({ page }) => {
-    await startFresh(page);
-    for (const id of ['age', 'sex', 'height', 'weight', 'activity', 'goal']) await expect(page.locator(`#${id}`)).toHaveCount(1);
-    await completeProfile(page);
-    await expect(page.getByRole('img', { name: /wellness mascot buddies/i })).toBeVisible();
-  });
-
-  test('primary navigation buttons have accessible names', async ({ page }) => {
-    await completeProfile(page);
-    for (const name of ['Home', 'Food studio', 'Exercise', 'Journey', 'Plan & reports']) {
-      await expect(page.getByRole('button', { name: new RegExp(name, 'i') })).toBeVisible();
-    }
-  });
-
-  test('keyboard focus reaches the primary navigation', async ({ page }) => {
-    await completeProfile(page);
-    await page.keyboard.press('Tab');
-    const focused = await page.evaluate(() => document.activeElement?.textContent || document.activeElement?.getAttribute('aria-label') || '');
-    expect(focused.length).toBeGreaterThan(0);
-  });
+test.describe('@accessibility keyboard and semantic checks',()=>{
+ test('profile inputs have programmatically associated labels',async({page})=>{
+  await startFresh(page);
+  for(const [id,label] of [['age','Age'],['sex','Sex'],['height','Height'],['weight','Weight'],['activity','Activity level'],['goal','Goal']])await expect(page.locator('#'+id)).toHaveAccessibleName(new RegExp(label,'i'));
+ });
+ test('navigation exposes meaningful names and receives keyboard focus',async({page})=>{
+  await completeProfile(page);
+  for(const name of ['Home','Food studio','Exercise','Journey','Plan & reports'])await expect(page.locator('.app-nav').getByRole('button',{name:new RegExp(name,'i')})).toBeVisible();
+  await page.locator('.app-nav button').first().focus();await expect(page.locator('.app-nav button').first()).toBeFocused();await page.keyboard.press('Tab');await expect(page.locator('.app-nav button').nth(1)).toBeFocused();await page.keyboard.press('Enter');await expect(page.locator('.food-nutrition')).toBeVisible();
+ });
+ test('trainer selects are labelled and keyboard-operable',async({page})=>{
+  await completeProfile(page);await openTab(page,/Exercise/i);
+  await expect(page.locator('#ngTrainerGoal')).toHaveAccessibleName('Goal');await expect(page.locator('#ngTrainerSetting')).toHaveAccessibleName('Setting');
+  await page.getByRole('button',{name:'Start session',exact:true}).focus();await page.keyboard.press('Enter');await expect(page.locator('#ngTrainerSession')).toBeVisible();
+ });
+ test('exercise modal supports dialog semantics and Escape dismissal',async({page})=>{
+  await completeProfile(page);await openTab(page,/Exercise/i);await page.locator('[data-exercise-index="1"]').click();
+  await expect(page.locator('#exerciseModal')).toHaveAttribute('role','dialog');await expect(page.locator('#exerciseModal')).toHaveAttribute('aria-modal','true');
+  await page.keyboard.press('Escape');await expect(page.locator('#exerciseModal')).toBeHidden();
+ });
+ test('informative images provide nonempty alt text',async({page})=>{
+  await completeProfile(page);
+  const missing=await page.locator('img').evaluateAll(els=>els.filter(el=>!el.hasAttribute('alt')).map(el=>(el as HTMLImageElement).src));expect(missing).toEqual([]);
+ });
 });

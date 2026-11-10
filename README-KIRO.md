@@ -1,82 +1,70 @@
-# NutriGuide in Kiro
+# NutriGuide testing in Kiro (Windows)
 
-This repository is ready to open as a Kiro workspace. It includes the complete Site source, local development scripts, Kiro steering/spec files, and Playwright end-to-end tests.
-
-## Open the repository
-
-1. Install Kiro IDE for Windows x64 from the [official Kiro downloads page](https://kiro.dev/downloads/). Choose **Windows User Installer (x64)**.
-2. Open this repository folder in Kiro.
-
-For a one-command dependency setup, run `./scripts/setup-windows.ps1` in PowerShell.
-3. Open the integrated terminal in the repository root.
-
-## Install and run
+Open your actual repository folder, for example:
 
 ```powershell
-npm install
-npm run dev
+cd "C:\Users\rishi\Downloads\nutriguide-kiro-project\nutriguide-calorie-planner"
+git pull --ff-only origin main
+npm.cmd install
+npm.cmd run test:install-browsers
 ```
 
-The local app runs at `http://127.0.0.1:5173/legacy`.
+Use Node 24 LTS (Node 22.13+ also provides the required SQLite API). No manual `npm run dev` is needed: Playwright starts the local server, waits for `/legacy`, reuses an available local server, and stops the server it started. CI requires its own fresh server. Do not run separate test commands simultaneously against the same port.
 
-## Playwright
+If you previously set a remote URL in this terminal, clear it for local testing:
 
 ```powershell
-npm run test:install-browsers
-npm run test:e2e
+Remove-Item Env:PLAYWRIGHT_BASE_URL -ErrorAction SilentlyContinue
 ```
 
-Useful modes:
+## Run everything
 
 ```powershell
-npm run test:e2e:headed
-npm run test:e2e:ui
-npm run test:e2e:debug
-npm run test:report
+npm.cmd run test:release
 ```
 
-To test the deployed site instead of the local server:
+This runs Node route/database contracts followed by every Playwright test. For just Playwright use `npm.cmd run test:all`.
+
+## Run categories separately
 
 ```powershell
-$env:PLAYWRIGHT_BASE_URL="https://nutriguide-calorie-planner.rishikesht775.chatgpt.site"
-npm run test:e2e
+npm.cmd run test:smoke
+npm.cmd run test:sanity
+npm.cmd run test:functional
+npm.cmd run test:integration
+npm.cmd run test:system
+npm.cmd run test:uat
+npm.cmd run test:regression
+npm.cmd run test:ui
+npm.cmd run test:frontend
+npm.cmd run test:accessibility
+npm.cmd run test:security
+npm.cmd run test:performance
+npm.cmd run test:edge
+npm.cmd run test:database
+npm.cmd run test:backend
+npm.cmd run test:contracts
 ```
 
-Do not commit real credentials or `.env` files. Use `.env.example` as the template.
+`test:uat` includes the full E2E journey; backend includes the Node SQLite contracts. Some category coverage overlaps by design.
 
-## Test suite coverage
-
-The Playwright suite is organized in `tests/e2e/` and includes:
-
-- Smoke and sanity release gates
-- In-app authentication and sign-up/sign-in field rules
-- UI and responsive mobile checks
-- Frontend runtime, tab isolation, and rendering checks
-- Functional calorie, food, protein, trainer, and exercise checks
-- Integration and system tab/state flows
-- Complete end-to-end first-day journey across every primary tab
-- Accessibility labels, names, alt text, and keyboard focus
-- Security checks for auth gating, credential URL leakage, and user input handling
-- Backend/API checks for `/api/me` and `/api/state`
-- Database checks for the D1 `user_state` schema and user isolation
-- Performance checks for initial load, tab response, and scrollability
-- Regression checks for Journey, Plan & reports, duplicate guides, and tab isolation
-- UAT first-day user journeys
-- Edge cases for required fields, unknown foods, zero-state tracking, boundary profiles, and long journal text
-- Diwali visual and festival-calendar checks
-
-See [`tests/e2e/TEST-MATRIX.md`](tests/e2e/TEST-MATRIX.md) for the full mapping.
-
-Run one category with a title filter, for example:
+## Browser, debugging and reports
 
 ```powershell
-npx playwright test tests/e2e/functional.spec.ts
-npx playwright test tests/e2e/complete-flow.spec.ts
-npx playwright test tests/e2e/backend.spec.ts tests/e2e/database.spec.ts
-npx playwright test tests/e2e/security.spec.ts tests/e2e/performance.spec.ts
-npx playwright test --grep "@regression"
+npm.cmd run test:desktop
+npm.cmd run test:mobile
+npm.cmd run test:e2e:ui
+npm.cmd run test:e2e:headed
+npm.cmd run test:e2e:debug
+npm.cmd run test:list
+npm.cmd run test:report
+npx.cmd tsc -p tests/tsconfig.json
 ```
 
-## Automatic test server
+Failure evidence: `playwright-report/`, `test-results/results.json`, failure screenshots, traces and retained videos. UI tests attach full-page screenshots but do not claim approved pixel baselines. Use `npx.cmd playwright show-trace <trace.zip>` to inspect a failure.
 
-Playwright starts the local app automatically when you run any test command. You do not need to run `npm.cmd run dev` first. The config waits for `http://127.0.0.1:5173/legacy` and reuses an existing server if one is already running.
+The GitHub Actions workflow runs contracts plus desktop/mobile tests on pushes and pull requests. Reports upload even on failure. External identity login and actual cloud cross-device testing are manual release checks; UI tests stub auth/state to avoid touching real accounts.
+
+See `tests/e2e/TEST-MATRIX.md` for coverage and manual checks; `tests/VALIDATION-STATUS.md` for what has actually run and known concerns. A red test can indicate a real current product defect. Unimplemented AI/scanner/wearable features are not claimed as working.
+
+If pull fails because of local edits, run `git status` and resolve them before pulling; do not reset or discard work blindly.

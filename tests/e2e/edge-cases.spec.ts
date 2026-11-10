@@ -14,15 +14,15 @@ test.describe('@edge cases validation and resilience', () => {
     await page.locator('#nutritionFood').fill('unknown test dish');
     await page.locator('#nutritionFood').press('Tab');
     await page.getByRole('button', { name: 'Save food', exact: true }).click();
-    await expect(page.getByText(/Food not found/i)).toBeVisible();
+    await expect(page.locator('#nutritionAutoStatus')).toContainText('Food not found');
     await expect(page.locator('#nutritionLog')).toContainText('No foods logged yet');
   });
 
   test('zero steps and zero water produce a valid empty progress state', async ({ page }) => {
     await completeProfile(page);
-    await expect(page.locator('#ngStepsToday')).toHaveText('0');
-    await expect(page.locator('#ngWaterToday')).toHaveText('0 / 8');
-    await expect(page.locator('#ngTodayProgress')).toHaveCSS('width', /0px|0%/);
+    await expect(page.locator('#stepsOut')).toHaveText('0');
+    await expect(page.locator('#waterOut')).toHaveText('0 / 8');
+    await expect(page.locator('#stripWater')).toHaveText('0');
   });
 
   test('large but valid profile values still calculate a plan', async ({ page }) => {

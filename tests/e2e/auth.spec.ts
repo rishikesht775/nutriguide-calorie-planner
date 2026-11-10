@@ -4,7 +4,7 @@ test.describe('@security @auth in-app authentication gate', () => {
   test('unauthenticated users start inside the app auth gate', async ({ page }) => {
     await page.goto('/legacy');
     await expect(page.locator('#appAuthGate')).toBeVisible();
-    await expect(page.getByRole('heading', { name: /Celebrate\. Recharge\. Stay well/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Nourish.*Move.*Thrive/i })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign in', exact: true })).toHaveClass(/active/);
     await expect(page.locator('#gateNameWrap')).toBeHidden();
     await expect(page.locator('#gateName')).toBeDisabled();

@@ -1,26 +1,46 @@
-# NutriGuide Playwright test matrix
+# NutriGuide current release test matrix
 
-Run locally with `npm.cmd run test:e2e` or by category with a title filter.
+## Scope and execution
 
-| Suite | File | Coverage |
+The suite targets `public/legacy.html`, its cloud-sync client, `/api/me`, `/api/state`, and the current SQLite migration. It replaces the removed festival/upgrade runtime selectors. Browser contexts are isolated; authenticated UI tests mock identity and state endpoints, while backend tests call real local HTTP routes anonymously. These are different layers and are not evidence of a real identity-provider login or production D1 integration.
+
+There are 94 browser/API cases, run in two Playwright projects (188 executions), and 17 Node contract/database cases. Projects are desktop Chromium and Pixel 7 emulation, not physical device or cross-browser certification.
+
+| Category | Files | Assertions / negative cases |
 | --- | --- | --- |
-| Smoke | `smoke.spec.ts` | Profile unlock, primary navigation, page errors |
-| Authentication | `auth.spec.ts` | In-app sign-in gate, sign-up-only name field, safe auth handoff |
-| UI | `ui.spec.ts` | Trainer banner, tab content, mobile overflow |
-| Frontend | `frontend.spec.ts` | Runtime errors, visible-tab isolation, responsive rendering |
-| Functional | `functional.spec.ts` | Calories/BMI, guide selection, food nutrition, exercise completion |
-| Integration | `integration.spec.ts` | Reload persistence, story-to-tab routing, dashboard updates |
-| System | `system.spec.ts` | Full tab sequence, tab isolation, offline manual logging |
-| End to end | `complete-flow.spec.ts` | Profile → trainer → food → exercise → journey → reports |
-| Accessibility | `accessibility.spec.ts` | Labels, names, alt text, keyboard focus |
-| Security | `security.spec.ts` | Auth gating, password exposure, safe user input rendering |
-| Backend/API | `backend.spec.ts` | `/api/me`, `/api/state`, invalid payloads, controlled errors |
-| Database | `database.spec.ts` | D1 schema contract and unauthenticated state isolation |
-| Performance | `performance.spec.ts` | Load budget, tab response budget, scrollability |
-| Regression | `regression.spec.ts` | Journey/Reports navigation, duplicate guide removal, trainer switching, badge duplication |
-| Sanity | `sanity.spec.ts` | Release-gate Panda flow and Diwali Food Studio |
-| UAT | `uat.spec.ts` | First-day weight-loss journey and guided story onboarding |
-| Edge cases | `edge-cases.spec.ts` | Required fields, unknown foods, zero state, boundary profile values, long journal text |
-| Visual/festival | `diwali.spec.ts` | Firework layers, marigold decorations, festival calendar, festive food banner |
+| Smoke | smoke.spec.ts | Profile unlock; all five navigation tabs; uncaught errors |
+| Sanity | sanity.spec.ts | Current trainer start; food input; reports reachable |
+| Functional | functional, food, exercise, tracking specs | Calorie/BMI/meal output; guide selection; portion-scaled nutrition/protein; checklist; water/steps; export |
+| Trainer | trainer.spec.ts | Four goals; home/gym; 10/20/30 min; pause/resume; expiry; next; completion; repeated finish; restart timer; invalid stored history |
+| Integration | integration, cloud-sync specs | Profile persistence; story routing; totals after tab changes; payload; hydration; failed save and retry; new storage keys |
+| System | system.spec.ts | Offline interaction; saved food read after network recovery and reload |
+| E2E | complete-flow.spec.ts | Profile → guide → food → workout → journal → reminder → report download → reload |
+| UAT | uat, journey specs | Beginner mobility; story onboarding, navigation and change |
+| Regression | regression, diwali specs | Repeat tab clicks; guide persistence; modal layering/close; removed festival script and decorations do not return |
+| UI | ui, mobile specs | 320/360/390/768/1024/1440 layouts; every tab overflow; banner bounds; navigation collision; login bounds; screenshots; label contrast |
+| Frontend | frontend.spec.ts | Page errors; selected content visible; unrelated sections hidden |
+| Accessibility | accessibility.spec.ts | Programmatic profile labels; navigation names; keyboard activation; trainer labels; dialog semantics/Escape; image alt attributes |
+| Security | auth, security specs | Gate; sign-up required name; auth handoff; no credential leakage; persisted XSS probes in journal/planner/groceries |
+| Performance | performance.spec.ts | Response <5s; DOM <8s; tab click <2.5s; scrollability. These are local interaction budgets, not load or stress tests. |
+| Backend | backend.spec.ts | Anonymous me/state; unauthorized writes; malformed JSON; unknown route |
+| Database | database.spec.ts; ../contracts/state.test.mjs | Migration; actual route SQL with in-memory SQLite; upsert; user isolation; primary key; JSON round trip; corruption; outage |
+| Planner | planner.spec.ts | Meal/grocery save, reload, remove; duplicate grocery; remove correct item beyond visible list window |
+| Edge cases | edge-cases, validation specs | Empty fields; age limits; zero/negative weight and quantity; unknown foods; long journal; blank journal; zero state; nutrition removal |
 
-The tests use Playwright projects for Chromium desktop and mobile Chrome from `playwright.config.ts`.
+## Automated case inventory
+
+Run `npm.cmd run test:list` for every concrete case title and file location. No conditional skips or expected-failure annotations hide known product problems. A failing requirement remains a failing test until fixed.
+
+## Manual / external release checks
+
+| ID | Procedure | Expected result | Automation boundary |
+| --- | --- | --- | --- |
+| MAN-AUTH-01 | Use a test account to sign in, cancel sign-in, and sign out | Controlled handoff; authenticated data only; signed-out UI hidden | Real platform identity provider |
+| MAN-DB-01 | Save on device A; log in on device B; edit and return to A | Correct user's state only; refresh/reconciliation verified | Actual staging D1 and two sessions |
+| MAN-SEC-01 | Two test accounts probe each other's state; test origin, CSRF and forged platform headers at ingress | Access denied; platform headers trusted only from ingress | Hosting trust boundary; never use real user records |
+| MAN-A11Y-01 | NVDA/VoiceOver, 200% zoom, reduced motion, full keyboard walkthrough | Logical reading order and focus; readable text; no trapped focus | No claim of complete WCAG audit |
+| MAN-UI-01 | Physical Android and iPhone; portrait/landscape; large font; slow network | Banner text and controls remain readable and operable | Emulation is not hardware validation |
+| MAN-PERF-01 | Staging load test with an approved concurrency/data budget | Record p50/p95/p99, throughput, errors, CPU and memory | No production load generated by this suite |
+| MAN-DATA-01 | Nutrition and calorie calculations reviewed against approved reference data | Accurate units, serving sizes, rounding and target logic | Clinical/data-source validation |
+
+Barcode scanning, AI photo recognition, voice, AI coaching, wearables, family plans and other requested but unimplemented features require acceptance criteria and provider sandbox tests when implemented. They are not represented as passing features here.

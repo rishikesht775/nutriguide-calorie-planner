@@ -14,8 +14,8 @@ test.describe('@functional user actions', () => {
     await completeProfile(page);
     await chooseGuide(page);
     await expect(page.locator('#coachName')).toHaveText('Panda trainer');
-    await expect(page.locator('#ngAppBanner')).toContainText('Panda trainer is your trainer');
-    await expect(page.locator('#ngTrainerRole')).toContainText('PERSONAL GYM TRAINER');
+    await expect(page.locator('#guideStageTitle')).toContainText('Panda trainer');
+    await expect(page.locator('#guideStageAvatar')).toHaveText('🐼🥋');
   });
 
   test('nutrition lookup calculates values for an Indian food portion', async ({ page }) => {
@@ -31,9 +31,9 @@ test.describe('@functional user actions', () => {
   test('exercise plan supports start and completion actions', async ({ page }) => {
     await completeProfile(page);
     await openTab(page, /Exercise/i);
-    await page.getByRole('button', { name: 'Start', exact: true }).first().click();
-    await expect(page.getByText(/started/i).last()).toBeVisible();
-    await page.getByRole('button', { name: 'Done', exact: true }).first().click();
-    await expect(page.locator('#ngExerciseStatus')).toContainText('Completed sessions this week: 1');
+    await page.getByRole('button', { name: 'Start session', exact: true }).click();
+    await expect(page.locator('#ngTrainerStatus')).toHaveText('Session in progress');
+    await page.getByRole('button', { name: 'Finish session', exact: true }).click();
+    await expect(page.locator('#ngTrainerHistory')).toContainText('Full-body');
   });
 });

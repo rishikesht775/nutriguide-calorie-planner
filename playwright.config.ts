@@ -16,10 +16,10 @@ export default defineConfig({
   // become unresponsive when every project starts at once. Override with
   // PLAYWRIGHT_WORKERS when the environment can handle more concurrency.
   workers,
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
+  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['json', { outputFile: 'test-results/results.json' }]],
   use: {
     baseURL,
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     testIdAttribute: 'data-testid',
@@ -33,7 +33,7 @@ export default defineConfig({
     ? {
         command: devCommand,
         url: `${baseURL}/legacy`,
-        reuseExistingServer: true,
+        reuseExistingServer: !process.env.CI,
         timeout: 180_000,
       }
     : undefined,

@@ -1,32 +1,21 @@
 import { test, expect } from '@playwright/test';
-import { chooseGuide, completeProfile, openTab } from './helpers';
+import { completeProfile, openTab, chooseGuide, startFresh } from './helpers';
 
-test.describe('@regression previously reported bugs', () => {
-  test('Journey and Plan & reports tabs are clickable', async ({ page }) => {
-    await completeProfile(page);
-    await openTab(page, /Journey/i);
-    await expect(page.locator('[data-ng-tab="journey"]:visible').first()).toBeVisible();
-    await openTab(page, /Plan & reports/i);
-    await expect(page.locator('[data-ng-tab="plan"]:visible').first()).toBeVisible();
-  });
-
-  test('only one trainer is used and food guide cards are removed', async ({ page }) => {
-    await completeProfile(page);
-    await chooseGuide(page);
-    await expect(page.locator('.ng-food-guides')).toHaveCount(0);
-    await expect(page.locator('.ng-app-banner')).toContainText('Panda trainer');
-    await expect(page.locator('.guide-coach')).toContainText('Panda trainer');
-  });
-
-  test('changing trainer updates the global guide message', async ({ page }) => {
-    await completeProfile(page);
-    await page.getByRole('button', { name: /Fresh-start kid Food buddy/i }).click();
-    await expect(page.locator('#coachName')).toHaveText('Fresh-start kid');
-    await expect(page.locator('#ngAppBanner')).toContainText('Fresh-start kid is your trainer');
-  });
-
-  test('festival decoration does not create duplicate badge content in every tab', async ({ page }) => {
-    await completeProfile(page);
-    await expect(page.locator('.ng-tab-section .ng-diwali-badge')).toHaveCount(1);
-  });
+test.describe('@regression reported failures', () => {
+ test('Journey and reports remain clickable after repeat navigation', async ({page}) => {
+  await completeProfile(page);
+  for(let i=0;i<3;i++){await openTab(page,/Journey/i);await expect(page.locator('.journey')).toBeVisible();await openTab(page,/Plan & reports/i);await expect(page.locator('.weekly-report')).toBeVisible();}
+ });
+ test('guide changes update banner and persist',async({page})=>{
+  await completeProfile(page);await page.locator('.guide-card').first().click();
+  await expect(page.locator('#coachName')).toHaveText('Fresh-start kid');
+  await page.reload();await expect(page.locator('#coachName')).toHaveText('Fresh-start kid');
+ });
+ test('exercise dialog opens above navigation and closes',async({page})=>{
+  await completeProfile(page);await openTab(page,/Exercise/i);
+  await page.locator('[data-exercise-index="1"]').click();
+  await expect(page.locator('#exerciseModal')).toBeVisible();
+  await page.locator('#exerciseModal .close').click();
+  await expect(page.locator('#exerciseModal')).toBeHidden();
+ });
 });

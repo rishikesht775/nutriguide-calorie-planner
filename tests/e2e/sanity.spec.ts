@@ -1,19 +1,16 @@
 import { test, expect } from '@playwright/test';
-import { completeProfile, openTab } from './helpers';
+import { completeProfile, openTab, chooseGuide, startFresh } from './helpers';
 
 test.describe('@sanity release gate', () => {
-  test('a user can calculate, choose Panda, and reach Exercise', async ({ page }) => {
-    await completeProfile(page);
-    await page.getByRole('button', { name: /Panda trainer Martial arts/i }).click({ force: true });
-    await expect(page.locator('#coachName')).toHaveText('Panda trainer');
-    await openTab(page, /Exercise/i);
-    await expect(page.getByRole('heading', { name: /Panda trainer.s training plan/i })).toBeVisible();
-  });
-
-  test('Food Studio retains festive food content', async ({ page }) => {
-    await completeProfile(page);
-    await openTab(page, /Food studio/i);
-    await expect(page.locator('.ng-diwali-food-banner')).toBeVisible();
-    await expect(page.getByRole('button', { name: '🪔 Diwali treats', exact: true })).toBeVisible();
-  });
+ test('profile, trainer, nutrition and reports are usable', async ({page}) => {
+  await completeProfile(page); await chooseGuide(page);
+  await openTab(page,/Exercise/i);
+  await expect(page.locator('#ngTrainerHub')).toBeVisible();
+  await page.getByRole('button',{name:'Start session',exact:true}).click();
+  await expect(page.locator('#ngTrainerSession')).toBeVisible();
+  await openTab(page,/Food studio/i);
+  await expect(page.locator('#nutritionFood')).toBeEditable();
+  await openTab(page,/Plan & reports/i);
+  await expect(page.locator('.weekly-report')).toBeVisible();
+ });
 });

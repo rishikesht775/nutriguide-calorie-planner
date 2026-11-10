@@ -1,28 +1,41 @@
-import { test, expect } from '@playwright/test';
-import { completeProfile, openTab } from './helpers';
+import {test,expect} from '@playwright/test';
+import {completeProfile,openTab} from './helpers';
 
-test.describe('@ui visual and layout behavior', () => {
-  test('trainer banner and coach card are visible after profile completion', async ({ page }) => {
-    await completeProfile(page);
-    await expect(page.locator('#ngAppBanner')).toBeVisible();
-    await expect(page.locator('#guideCoach')).toBeVisible();
-    await expect(page.getByText('PERSONAL GYM TRAINER', { exact: true }).first()).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Start training', exact: true })).toBeVisible();
+test.describe('@ui @regression responsive geometry',()=>{
+ for(const width of [320,360,390,768,1024,1440]){
+  test(`${width}px: banner, navigation and every tab fit`,async({page},testInfo)=>{
+   await page.setViewportSize({width,height:900});await completeProfile(page);
+   for(const tab of [/Home/i,/Food studio/i,/Exercise/i,/Journey/i,/Plan & reports/i]){
+    await openTab(page,tab);
+    const overflow=await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
+    expect(overflow,`horizontal overflow in ${tab}`).toBeLessThanOrEqual(1);
+   }
+   await openTab(page,/Home/i);
+   const hero=page.locator('.hero');const heading=hero.locator('h1');
+   const h=await hero.boundingBox(),t=await heading.boundingBox();expect(h).not.toBeNull();expect(t).not.toBeNull();
+   expect(t!.x).toBeGreaterThanOrEqual(h!.x);expect(t!.y+t!.height).toBeLessThanOrEqual(h!.y+h!.height);
+   const nav=await page.locator('.app-nav').boundingBox();expect(nav).not.toBeNull();
+   expect(nav!.x+nav!.width<=h!.x || nav!.y>=h!.y+h!.height || nav!.y+nav!.height<=h!.y).toBeTruthy();
+   await testInfo.attach(`home-${width}`,{body:await page.screenshot({fullPage:true}),contentType:'image/png'});
   });
-
-  test('each tab displays its own content area', async ({ page }) => {
-    await completeProfile(page);
-    for (const [label, section] of [[/Home/i, 'home'], [/Food studio/i, 'food'], [/Exercise/i, 'move'], [/Journey/i, 'journey'], [/Plan & reports/i, 'plan']] as const) {
-      await openTab(page, label);
-      await expect(page.locator(`[data-ng-tab="${section}"]:visible`).first()).toBeVisible();
-      await expect(page.locator(`[data-ng-tab]:visible`).count()).toBeGreaterThan(0);
-    }
+ }
+ for(const width of [320,390,768]){
+  test(`${width}px: login content stays within viewport`,async({page})=>{
+   await page.setViewportSize({width,height:844});await page.route('**/api/me',r=>r.fulfill({json:{authenticated:false,user:null}}));await page.goto('/legacy');
+   await expect(page.locator('#appAuthGate')).toBeVisible();
+   expect(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth)).toBeLessThanOrEqual(1);
+   for(const sel of ['.auth-gate-art h1','#gateEmail','#gatePassword','#gateSubmit']){
+    const b=await page.locator(sel).boundingBox();expect(b).not.toBeNull();expect(b!.x).toBeGreaterThanOrEqual(0);expect(b!.x+b!.width).toBeLessThanOrEqual(width+1);
+   }
   });
-
-  test('mobile layout does not create horizontal page overflow', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await completeProfile(page);
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
-    expect(overflow).toBeFalsy();
+ }
+ test('labels and text contrast are readable in light cards',async({page})=>{
+  await completeProfile(page);
+  const contrast=await page.locator('#form label').first().evaluate(el=>{
+   const rgb=(v:string)=>v.match(/[\d.]+/g)!.slice(0,3).map(Number).map(x=>{x/=255;return x<=.04045?x/12.92:((x+.055)/1.055)**2.4});
+   const l=(v:number[])=>v[0]*.2126+v[1]*.7152+v[2]*.0722;
+   const foreground=l(rgb(getComputedStyle(el).color));return (1.05)/(foreground+.05);
   });
+  expect(contrast,'label contrast against white card').toBeGreaterThanOrEqual(4.5);
+ });
 });
