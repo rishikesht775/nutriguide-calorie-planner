@@ -76,3 +76,7 @@ npx playwright test tests/e2e/backend.spec.ts tests/e2e/database.spec.ts
 npx playwright test tests/e2e/security.spec.ts tests/e2e/performance.spec.ts
 npx playwright test --grep "@regression"
 ```
+
+## Automatic test server
+
+Playwright starts the local app automatically when you run any test command. You do not need to run `npm.cmd run dev` first. The config waits for `http://127.0.0.1:5173/legacy` and reuses an existing server if one is already running.
