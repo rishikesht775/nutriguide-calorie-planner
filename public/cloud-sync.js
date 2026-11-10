@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   // Versioned, explicit allowlist: never upload auth credentials or arbitrary storage.
-  const keys = ['profile','selectedGuide','proteinItems','proteinTarget','journal','reminders','steps','water','weights','grocery','foodLogs','exerciseLogs','nutritionLog','journeyStep','journeyMode','ngMeals','ngGroceries','ngTrainerHistory','ngFavouriteMeals','ngHabits','ngMeasurements','ngFasting','ngPreferences','ngPantry','ngLessonState','ngCoachHistory','ngRecipes','ngMealArchive','ngRecipeDraft','ngPlanSettings','ngWeeklyPlans','ngDailyStats','ngAutoGroceries','ngLogDate'];
+  const keys = ['profile','selectedGuide','proteinItems','proteinTarget','journal','reminders','steps','water','weights','grocery','foodLogs','exerciseLogs','nutritionLog','journeyStep','journeyMode','ngMeals','ngGroceries','ngTrainerHistory','ngFavouriteMeals','ngHabits','ngMeasurements','ngFasting','ngPreferences','ngPantry','ngLessonState','ngCoachHistory','ngRecipes','ngMealArchive','ngRecipeDraft','ngPlanSettings','ngWeeklyPlans','ngDailyStats','ngAutoGroceries','ngLogDate','ngPersonalSettings','ngPlanContext'];
   const ownerKey = '_ngCloudOwner';
   let user = null, ready = false, busy = false, queued = false, acknowledged = '', metaKey = '', reading = false, pendingWithoutAck = false;
   const parse = (value, fallback) => { try { return JSON.parse(value); } catch { return fallback; } };

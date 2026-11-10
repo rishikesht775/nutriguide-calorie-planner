@@ -89,3 +89,7 @@ Send the TXT files here after testing. For overlap/layout failures, also send th
 New product modules are in `public/app/`; the main page is `public/legacy.html`. The active sync implementation is `public/cloud-sync.js` (the duplicate root-level legacy copy was removed). API routes are under `app/api/`. See `docs/COMPETITOR-AND-ARCHITECTURE-REVIEW.md` for the feature comparison, implementation boundaries and remaining work.
 
 After pulling this release, use `npm.cmd run test:release`. The new meal-plan/recovery/barcode UI cases are included in `test:all` and `test:functional`. The secure sign-in tests now check the platform account handoff instead of the removed unused password form.
+
+## Shared profile defaults and journey guide
+
+The latest release automatically fills every tab from the saved profile while preserving explicit edits. Use `npm.cmd run test:personalization` for the focused Playwright suite. See `docs/PROFILE-DEFAULTS-AND-GUIDE.md` for default-versus-custom behavior, guide actions and implementation boundaries.

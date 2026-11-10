@@ -1,22 +1,15 @@
-# Current stability release validation — 10 November 2026
+# Profile defaults and journey-guide validation — 10 November 2026
 
-## Completed
+- **117 Node contract checks passed**, including profile calculation/override policy, calorie+protein recipe planning, journey progress and the real personal-plan controller with a small explicit DOM adapter. This adapter is not browser/layout verification.
+- Full application TypeScript and Playwright TypeScript checks passed.
+- Playwright collection: **216 executions in 29 files** (108 cases × desktop/mobile), including 7 new shared-profile scenarios.
+- Production build and JS syntax checks passed for this release.
+- Existing automatic TXT reporting remains enabled under `test-reports/`.
 
-- Node contracts exercise actual state/barcode route exports, actual SQL migration with SQLite, cloud-client sync behavior, meal planning and backup validation. See `test-reports/contracts-latest.txt` for the exact run count/status.
-- JS syntax checks for all new client modules and inline scripts.
-- TypeScript application and Playwright checks.
-- Playwright test collection: 202 executions in 28 spec files before any later additions.
-- Browser preview: secure sign-in layout and successful script initialization inspected. No password is collected; no app login was bypassed for QA.
+## Not claimed as passing
 
-## Verification boundaries
+The full signed-in Playwright suite still needs execution in Kiro or GitHub Actions. This environment previously blocked direct Chromium launch; the shared browser preview does not supply a signed-in test session. SQLite, VM and stubbed-provider checks do not certify production identity-provider behavior, actual multi-device D1, physical device speech/camera, or pixel-perfect responsive layout.
 
-- Authenticated full-browser flows were not executed here. The cloud preview is at the sign-in gate, and direct Playwright Chromium launch was previously blocked by workspace socket permissions. Run the release suite in Kiro or GitHub Actions.
-- The local HTTP backend attempt using the managed preview URL could not reach that URL from the test runner; report startup failure is retained, not classified as an app assertion failure.
-- Barcode provider behavior is tested with mocked upstream responses; a real package lookup depends on provider/network availability. Camera and speech permissions require physical browser/device testing.
-- The production identity provider, actual multi-device D1 data, wearable providers and AI services were not certified by local SQLite or mocked tests.
+## Behavior guarded by tests
 
-## Defects repaired
-
-Hidden tab ancestry, duplicate trainer completion, mismatched session block durations, unsafe HTML rendering in user-text paths, quantity/profile validation, grocery removal indexing, missing cloud keys, overlapping saves, successful-save acknowledgments, missing accessible labels/dialog focus, and private-response caching.
-
-Existing tests remain strict. Do not skip failures to obtain a green report. Further browser findings should be reproduced and fixed before asserting full stability.
+Saved profiles seed all tabs; manual targets apply everywhere; manual meal/workout plans survive profile changes; reset uses the latest profile and keeps logs; readiness can soften auto training; suggested meals never become consumed-food records; real logs advance the guide; impossible protein targets show an explicit gap. A controller test caught and fixed a first-session feedback null-state crash before publication.

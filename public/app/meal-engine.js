@@ -18,20 +18,44 @@
   {id:'dalia',name:'Vegetable dalia',meal:'Breakfast',cal:340,p:12,c:59,fat:8,f:10,cost:25,diets:['vegan','vegetarian','jain'],ingredients:{dalia:70,peas:50,tomato:70},why:'Broken wheat and vegetables offer fibre for a filling start.'},
   {id:'wrap',name:'Paneer salad wrap',meal:'Lunch',cal:520,p:30,c:54,fat:22,f:8,cost:70,diets:['vegetarian','jain'],ingredients:{paneer:130,'whole wheat flour':70,cucumber:100},why:'An easy portable lunch with a clear protein source.'}
  ];
- function buildPlan({target=1800,budget=200,diet='vegetarian',highProtein=false,startDay=NG.day()}={}){
+ function buildPlan({target=1800,budget=200,diet='vegetarian',highProtein=false,proteinTarget=0,startDay=NG.day()}={}){
   if(!['vegetarian','vegan','jain'].includes(diet))diet='vegetarian';
   target=Math.max(1200,Math.min(3500,Number(target)||1800));budget=Math.max(80,Number(budget)||200);
   const eligible=recipes.filter(r=>r.diets.includes(diet));
   return Array.from({length:7},(_,day)=>{
-   const items=['Breakfast','Lunch','Snack','Dinner'].map((slot,i)=>{
-    let pool=eligible.filter(r=>r.meal===slot).sort((a,b)=>highProtein?(b.p/b.cal-a.p/a.cal):a.cost-b.cost);
-    const affordable=pool.filter(r=>r.cost<=budget*[.23,.32,.15,.3][i]);if(affordable.length)pool=affordable;
-    const r=pool[day%pool.length];return {...r,servings:1};
-   });
-   const base=items.reduce((a,r)=>a+r.cal,0),factor=Math.max(.6,Math.min(3,target/base));
-   const scaled=items.map(r=>({...r,servings:Math.round(factor*100)/100}));
+   const slots=['Breakfast','Lunch','Snack','Dinner'];
+   const pools=slots.map(slot=>eligible.filter(r=>r.meal===slot));
+   const wanted=Number.isFinite(Number(proteinTarget))?Math.max(0,Number(proteinTarget)):0;
+   const portion=(items)=>{
+    const base=items.reduce((a,r)=>a+r.cal,0),factor=Math.max(.6,Math.min(3,target/base));
+    const values=items.map(r=>({...r,servings:factor}));
+    // Transfer calories from lower- to higher-protein meals while retaining
+    // total energy and sensible serving bounds. Never invent nutrient values.
+    if(wanted>0)for(let pass=0;pass<16;pass++){
+     const current=values.reduce((a,r)=>a+r.p*r.servings,0);if(current>=wanted)break;
+     const ranked=[...values].sort((a,b)=>a.p/a.cal-b.p/b.cal);
+     const donor=ranked.find(r=>r.servings>.6001),receiver=[...ranked].reverse().find(r=>r.servings<2.9999);
+     if(!donor||!receiver||donor===receiver)break;
+     const density=receiver.p/receiver.cal-donor.p/donor.cal;if(density<=0)break;
+     const transfer=Math.min((wanted-current)/density,(donor.servings-.6)*donor.cal,(3-receiver.servings)*receiver.cal);
+     if(transfer<.01)break;donor.servings-=transfer/donor.cal;receiver.servings+=transfer/receiver.cal;
+    }
+    return values.map(r=>({...r,servings:Math.round(r.servings*100)/100}));
+   };
+   let scaled;
+   if(wanted>0){
+    let best=Infinity;
+    for(const breakfast of pools[0])for(const lunch of pools[1])for(const snack of pools[2])for(const dinner of pools[3]){
+     const combo=[breakfast,lunch,snack,dinner],values=portion(combo),p=values.reduce((a,r)=>a+r.p*r.servings,0),cost=values.reduce((a,r)=>a+r.cost*r.servings,0);
+     const variation=combo.reduce((a,r,i)=>a+(pools[i][day%pools[i].length].id===r.id?0:1),0);
+     const score=Math.max(0,wanted-p)/Math.max(1,wanted)*20+Math.abs(p-wanted)/Math.max(1,wanted)*.1+Math.max(0,cost-budget)/budget*.5+variation*.035+cost/budget*.02;
+     if(score<best){best=score;scaled=values;}
+    }
+   }else{
+    const items=pools.map((raw,i)=>{let pool=[...raw].sort((a,b)=>highProtein?b.p/b.cal-a.p/a.cal:a.cost-b.cost);const affordable=pool.filter(r=>r.cost<=budget*[.23,.32,.15,.3][i]);if(affordable.length)pool=affordable;return pool[day%pool.length]});scaled=portion(items);
+   }
    const date=new Date(startDay+'T12:00:00');date.setDate(date.getDate()+day);
-   return {date:`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`,items:scaled,cal:Math.round(scaled.reduce((a,r)=>a+r.cal*r.servings,0)),p:Math.round(scaled.reduce((a,r)=>a+r.p*r.servings,0)),cost:Math.round(scaled.reduce((a,r)=>a+r.cost*r.servings,0))};
+   return {date:`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`,items:scaled,cal:Math.round(scaled.reduce((a,r)=>a+r.cal*r.servings,0)),p:Math.round(scaled.reduce((a,r)=>a+r.p*r.servings,0)),proteinTarget:wanted,proteinGap:Math.max(0,Math.round(wanted-scaled.reduce((a,r)=>a+r.p*r.servings,0))),cost:Math.round(scaled.reduce((a,r)=>a+r.cost*r.servings,0))};
   });
  }
  function grocery(plan,people=1){people=Number.isFinite(Number(people))?Math.max(1,Math.min(10,Number(people))):1;const map={};plan.forEach(d=>d.items.forEach(r=>Object.entries(r.ingredients).forEach(([name,g])=>map[name]=(map[name]||0)+g*r.servings*people)));return Object.entries(map).map(([name,g])=>({name,grams:Math.round(g)}))}

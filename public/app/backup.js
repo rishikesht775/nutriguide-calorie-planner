@@ -1,6 +1,6 @@
 (() => {
  const arrays=['proteinItems','journal','reminders','weights','grocery','nutritionLog','ngMeals','ngGroceries','ngTrainerHistory','ngFavouriteMeals','ngMeasurements','ngPantry','ngCoachHistory','ngWeeklyPlans','ngAutoGroceries','ngRecipeDraft'];
- const objects=['profile','ngHabits','ngFasting','ngPreferences','ngLessonState','ngPlanSettings','ngDailyStats'];
+ const objects=['profile','ngHabits','ngFasting','ngPreferences','ngLessonState','ngPlanSettings','ngDailyStats','ngPersonalSettings','ngPlanContext'];
  const isObject=x=>x&&typeof x==='object'&&!Array.isArray(x);
  const text=x=>typeof x==='string'&&x.length<=10000;
  const number=x=>typeof x==='number'&&Number.isFinite(x)&&x>=0;

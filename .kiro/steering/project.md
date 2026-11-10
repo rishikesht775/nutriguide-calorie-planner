@@ -22,3 +22,6 @@ NutriGuide is a public, mobile-friendly calorie, food, exercise, journey, and we
 - `backup.js`: validates account-data restore.
 - `/api/foods/barcode`: authenticated Open Food Facts proxy with fixed upstream and timeout.
 - See `docs/COMPETITOR-AND-ARCHITECTURE-REVIEW.md` for delivered features and remaining provider/architecture limits.
+
+## Personal plan policy
+Use `NGPersonalCore` for calorie/protein/BMI estimates. `personal-plan.js` owns the default/override bridge. Profile changes must not overwrite manual meal/workout choices or active sessions. Suggested plans must never create actual daily logs. Keep `ngPersonalSettings` and `ngPlanContext` in cloud/backup allowlists.

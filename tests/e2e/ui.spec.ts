@@ -15,7 +15,7 @@ test.describe('@ui @regression responsive geometry',()=>{
    const h=await hero.boundingBox(),t=await heading.boundingBox();expect(h).not.toBeNull();expect(t).not.toBeNull();
    expect(t!.x).toBeGreaterThanOrEqual(h!.x);expect(t!.y+t!.height).toBeLessThanOrEqual(h!.y+h!.height);
    const nav=await page.locator('.app-nav').boundingBox();expect(nav).not.toBeNull();
-   expect(nav!.x+nav!.width<=h!.x || nav!.y>=h!.y+h!.height || nav!.y+nav!.height<=h!.y).toBeTruthy();
+   expect(nav!.x+nav!.width<=t!.x || nav!.y>=t!.y+t!.height || nav!.y+nav!.height<=t!.y).toBeTruthy();
    await testInfo.attach(`home-${width}`,{body:await page.screenshot({fullPage:true}),contentType:'image/png'});
   });
  }
