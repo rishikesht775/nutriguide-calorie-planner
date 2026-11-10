@@ -41,3 +41,13 @@ test.describe('@functional @integration @regression shared profile defaults',()=
   await page.locator('.ng-guide-options summary').click();await page.locator('#ngPersonalProtein').fill('140');await page.getByRole('button',{name:'Save shared targets',exact:true}).click();await page.getByRole('button',{name:'Use profile targets',exact:true}).click();await expect(page.locator('#proteinTarget')).toHaveValue('98');await expect(page.locator('#nutritionCalTotal')).toHaveText('116');
  });
 });
+
+test('@regression Home calculation replaces fixed 125g on results and every tab',async({page})=>{
+ await completeProfile(page);await openTab(page,/Food studio/i);
+ await page.locator('#proteinTarget').fill('125');await page.locator('#proteinTarget').press('Tab');
+ await openTab(page,/Home/i);await expect(page.locator('#protein')).toHaveText('125 g');
+ await page.locator('#weight').fill('70');await page.getByRole('button',{name:'Calculate my plan',exact:true}).click();
+ await expect(page.locator('#protein')).toHaveText('98 g');
+ for(const tab of [/Home/i,/Food studio/i,/Exercise/i,/Journey/i,/Plan & reports/i]){await openTab(page,tab);await expect(page.locator('#ngSharedTargets')).toContainText('98 g protein');}
+ await page.reload();await openTab(page,/Home/i);await expect(page.locator('#protein')).toHaveText('98 g');
+});

@@ -34,8 +34,8 @@ test('profile submit updates auto defaults and the shared protein target',()=>{
 test('existing manual meal plan survives first-load migration and profile submit',()=>{
  const saved=[{date:'2030-01-01',items:[],cal:1600,p:80,cost:100}];const f=fixture({ngWeeklyPlans:JSON.stringify(saved)});f.nodes.get('weight').value='75';f.submit();assert.equal(f.storage.get('ngWeeklyPlans'),JSON.stringify(saved));assert.equal(JSON.parse(f.storage.get('ngPersonalSettings')).food.mode,'custom');
 });
-test('saving a shared target updates profile-independent values',()=>{
- const f=fixture();f.nodes.get('ngPersonalCalories').value='2100';f.nodes.get('ngPersonalProtein').value='130';f.click('data-personal-action',{personalAction:'save-targets'});assert.equal(f.context.ngPersonalPlan.calories,2100);assert.equal(f.context.ngPersonalPlan.protein,130);f.nodes.get('weight').value='75';f.submit();assert.equal(f.context.ngPersonalPlan.protein,130);
+test('custom targets apply until Home calculation refreshes protein',()=>{
+ const f=fixture();f.nodes.get('ngPersonalCalories').value='2100';f.nodes.get('ngPersonalProtein').value='130';f.click('data-personal-action',{personalAction:'save-targets'});assert.equal(f.context.ngPersonalPlan.calories,2100);assert.equal(f.context.ngPersonalPlan.protein,130);f.nodes.get('weight').value='75';f.submit();assert.equal(f.context.ngPersonalPlan.protein,105);assert.equal(f.context.ngPersonalPlan.proteinSource,'profile');
 });
 test('low energy changes an automatic recommendation without creating a completed session',()=>{
  const f=fixture();f.click('data-readiness',{readiness:'tired'});assert.equal(f.context.ngPersonalPlan.training.goal,'mobility');assert.equal(f.storage.has('ngTrainerHistory'),false);assert.equal(f.nodes.get('ngTrainerDuration').value,'10');
@@ -57,4 +57,10 @@ test('different Home weights update the target in shared context rather than ret
 });
 test('explicit 125g shared custom target remains editable and reset restores profile estimate',()=>{
  const f=fixture({proteinTarget:'125',ngPersonalSettings:JSON.stringify({version:1,targets:{protein:125}})});assert.equal(f.context.ngPersonalPlan.protein,125);assert.equal(f.context.ngPersonalPlan.proteinSource,'custom');f.click('data-personal-action',{personalAction:'reset-targets'});assert.equal(f.context.ngPersonalPlan.protein,118);assert.equal(f.context.ngPersonalPlan.proteinSource,'profile');
+});
+
+test('Home recalculation replaces an existing shared 125g override on the results card and all-tab target',()=>{
+ const f=fixture({proteinTarget:'125',ngPersonalSettings:JSON.stringify({version:1,targets:{protein:125}})});assert.equal(f.nodes.get('protein').textContent,'125 g');
+ f.nodes.get('weight').value='70';f.submit();assert.equal(f.nodes.get('protein').textContent,'98 g');assert.equal(f.context.proteinTarget,98);assert.equal(f.storage.get('proteinTarget'),'98');assert.match(f.nodes.get('ngSharedTargets').innerHTML,/98 g protein/);assert.equal(f.context.ngPersonalPlan.proteinSource,'profile');
+ f.nodes.get('goal').value='gain';f.submit();assert.equal(f.nodes.get('protein').textContent,'112 g');
 });

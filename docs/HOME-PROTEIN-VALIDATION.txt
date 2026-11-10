@@ -1,0 +1,9 @@
+NutriGuide Home protein recalculation - 11 November 2026
+FIX: submitting Calculate my plan clears an existing protein override and derives
+protein from the submitted Home profile. Updates results card and shared context.
+Custom protein values can be saved afterward and survive reload until recalculation.
+PASS existing 125g shared override -> 70kg loss Home calculation -> 98g;
+then gain goal -> 112g. Tracker/shared ribbon match the new target.
+PASS all 176 contracts and TypeScript.
+ADDED Playwright scenario: override 125, calculate Home, verify every tab/reload.
+PENDING execution of the new browser scenario and full browser regression.

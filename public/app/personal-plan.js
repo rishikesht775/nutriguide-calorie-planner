@@ -152,7 +152,7 @@
   $('stripFood').textContent=foods.length;$('stripExercise').textContent=workouts.length;$('weekDots').innerHTML=dates.map((d,i)=>`<i class="${foods.some(x=>x.date===d)||workouts.some(x=>core.localDay(x.date)===d)||recoveries.some(x=>x.date===d)?'done':''}" title="${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]} ${d}: ${foods.some(x=>x.date===d)||workouts.some(x=>core.localDay(x.date)===d)||recoveries.some(x=>x.date===d)?'activity logged':'no activity logged'}"></i>`).join('');
  };
  const profileForm=$('form');profileForm.addEventListener('submit',()=>{
-  if(!profileForm.checkValidity())return;const p=profileFromForm();if(p){localStorage.setItem('profile',JSON.stringify(p));applyDefaults();window.dispatchEvent(new Event('ng:data-changed'))}
+  if(!profileForm.checkValidity())return;const p=profileFromForm();if(p){localStorage.setItem('profile',JSON.stringify(p));const s=settings();s.targets={...s.targets};delete s.targets.protein;persistSettingsSilent(s);applyDefaults();window.dispatchEvent(new Event('ng:data-changed'))}
  });
  const setTabBase=window.setTab;window.setTab=tab=>{setTabBase(tab);renderGuide()};
  const startBase=window.startTrainerSession;window.startTrainerSession=()=>{startBase();window.dispatchEvent(new Event('ng:session-changed'));renderGuide()};

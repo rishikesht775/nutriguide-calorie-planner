@@ -45,3 +45,7 @@ Useful future upgrades are professionally reviewed form videos, an optional qual
 ## Protein target provenance
 
 A legacy proteinTarget cache (including 125 g) does not establish a custom target. On first migration the app derives the automatic target from the saved Home profile. Only an explicit ngPersonalSettings.targets.protein value overrides that estimate. Existing shared custom settings remain preserved; use Personalize your plan > Use profile targets to remove them. Weight/goal changes refresh automatic protein targets across shared context and the tracker; other profile fields affect calorie/BMI estimates according to the documented policy.
+
+## Home recalculation behavior
+
+Submitting valid Home details with Calculate my plan resets any saved protein override, including an existing 125 g custom value, and updates the Home protein card, tracker and shared targets from that submitted profile. Custom protein edits made afterward remain shared and survive reload until the next Home calculation or explicit reset. This exception takes precedence over earlier general statements about preserving targets through profile edits. Food logs and deliberate meal/workout choices are retained.
