@@ -1,0 +1,20 @@
+NUTRIGUIDE ACCOUNT VALIDATION - 2026-11-10
+
+PASS: 161 backend/database contract tests (44 new email account tests).
+PASS: TypeScript check and production build.
+PASS: Playwright discovery: 228 executions across desktop/mobile, 29 files.
+
+BROWSER EXECUTION BLOCKED: nine targeted auth UI tests could not launch because
+this environment lacks the required Playwright Chromium executable. The attempted
+browser download returned invalid/truncated archives. No UI assertion ran; this
+is not a passing browser test result. Run npm.cmd run test:install-browsers and
+npm.cmd run test:security in the Windows Kiro checkout.
+
+PROVIDER STATUS: Supabase is not connected/configured. Email registration,
+verification, login, reset and logout code is implemented but feature-gated OFF.
+Contract tests mock provider SDK responses. Real account creation, email delivery,
+provider settings and full end-to-end sessions are NOT yet verified.
+See EMAIL-ACCOUNTS.md for activation and required real-provider checks.
+
+Detailed automatic reports: test-reports/contracts-latest.txt and
+ test-reports/playwright-latest.txt (generated locally, intentionally gitignored).

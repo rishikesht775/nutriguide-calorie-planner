@@ -7,7 +7,7 @@ export async function GET() {
   return Response.json({
     authenticated: Boolean(user),
     user: user
-      ? { id: user.userId, email: user.email, name: user.displayName }
+      ? { id: user.userId, email: user.email, name: user.displayName, authProvider: user.authProvider || "connected" }
       : null,
     signInUrl: chatGPTSignInPath("/legacy.html"),
     signOutUrl: chatGPTSignOutPath("/legacy.html"),

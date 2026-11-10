@@ -1,0 +1,51 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+import ts from 'typescript';
+const compile=path=>ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+const route=compile('app/api/account/[action]/route.ts');
+function fixture({enabled=true,error=null,confirmed=true,source='email',user={email:'a@example.com',displayName:'A'},throws=false}={}){
+ const calls=[],exports={};const auth={};for(const method of ['signUp','signInWithPassword','resetPasswordForEmail','updateUser','signOut'])auth[method]=async(...args)=>{calls.push({method,args});if(throws)throw Error('private-provider-secret');return {error,data:{user:{email_confirmed_at:confirmed?'yes':null},session:{access_token:'private-token'}}}};
+ const deps={accountConfig:()=>enabled?{site:'https://app.test'}:null,emailAuthClient:async()=>({auth}),accountSource:async()=>source,getEmailAccount:async()=>user,setAccountSource:async mode=>calls.push({mode}),privateJSON:(v,status=200)=>Response.json(v,{status,headers:{'cache-control':'private, no-store'}})};
+ vm.runInNewContext(route,{exports,require:()=>deps,Response,URL,Request,TextDecoder,Uint8Array,Error});
+ return {calls,get:action=>exports.GET(new Request('https://app.test/api/account/'+action)),post:(action,body={},headers={})=>exports.POST(new Request('https://app.test/api/account/'+action,{method:'POST',headers:{origin:'https://app.test','content-type':'application/json',...headers},body:typeof body==='string'?body:JSON.stringify(body)}))};
+}
+const valid={email:'a@example.com',password:'a-long-password-123',confirmPassword:'a-long-password-123',name:'Alice'};
+test('disabled provider never presents account capability or contacts SDK',async()=>{const f=fixture({enabled:false});assert.deepEqual(await(await f.get('config')).json(),{emailPasswordEnabled:false});assert.equal((await f.post('sign-up',valid)).status,503);assert.equal(f.calls.length,0)});
+for(const origin of ['https://evil.test','null',''])test('reject cross-origin account mutation '+origin,async()=>{const f=fixture();assert.equal((await f.post('sign-in',valid,{origin})).status,403);assert.equal(f.calls.length,0)});
+test('reject wrong media type',async()=>assert.equal((await fixture().post('sign-in',valid,{'content-type':'text/plain'})).status,415));
+for(const body of ['{','[]','null','"hello"'])test('malformed object body '+body,async()=>assert.equal((await fixture().post('sign-up',body)).status,400));
+test('oversized stream bounded before SDK',async()=>{const f=fixture();assert.equal((await f.post('sign-up',{...valid,name:'x'.repeat(9000)})).status,413);assert.equal(f.calls.length,0)});
+for(const changes of [{email:'bad'},{password:'short',confirmPassword:'short'},{confirmPassword:'different'},{name:''},{name:'x'.repeat(121)}])test('invalid signup rejected '+JSON.stringify(changes),async()=>{const f=fixture();assert.equal((await f.post('sign-up',{...valid,...changes})).status,400);assert.equal(f.calls.length,0)});
+test('signup invokes real SDK contract with fixed confirmation redirect and no token response',async()=>{const f=fixture();const r=await f.post('sign-up',valid);assert.equal(r.status,202);assert.equal(f.calls[0].method,'signUp');assert.equal(f.calls[0].args[0].options.emailRedirectTo,'https://app.test/account/callback');assert.doesNotMatch(await r.text(),/private-token|access_token/)});
+test('existing account registration has same generic outcome',async()=>{const a=await fixture().post('sign-up',valid),b=await fixture({error:{code:'user_already_exists'}}).post('sign-up',valid);assert.equal(a.status,b.status);assert.equal(await a.text(),await b.text())});
+test('verified login selects email identity and exposes no session tokens',async()=>{const f=fixture();const r=await f.post('sign-in',valid);assert.equal(r.status,200);assert.equal(f.calls.at(-1).mode,'email');assert.deepEqual(await r.json(),{signedIn:true})});
+for(const options of [{confirmed:false},{error:{status:400}}])test('unverified or invalid login remains unauthenticated '+JSON.stringify(options),async()=>{const f=fixture(options);assert.equal((await f.post('sign-in',valid)).status,401);assert.equal(f.calls.some(x=>x.mode),false)});
+for(const action of ['sign-in','sign-up','request-reset'])test('provider rate limits preserved '+action,async()=>assert.equal((await fixture({error:{status:429}}).post(action,valid)).status,429));
+test('reset uses fixed recovery callback and generic account-existence response',async()=>{const f=fixture();const r=await f.post('request-reset',valid);assert.equal(r.status,200);assert.equal(f.calls[0].args[1].redirectTo,'https://app.test/account/callback?intent=recovery');assert.match((await r.json()).message,/If an account exists/)});
+for(const options of [{user:null},{source:'connected'}])test('password changes require verified native session '+JSON.stringify(options),async()=>assert.equal((await fixture(options).post('update-password',valid)).status,401));
+test('password update revokes provider sessions',async()=>{const f=fixture();assert.equal((await f.post('update-password',valid)).status,200);assert.equal(f.calls[0].method,'updateUser');assert.equal(f.calls[1].method,'signOut');assert.equal(f.calls[1].args[0].scope,'global')});
+test('logout clears local provider session and prevents connected identity fallback',async()=>{const f=fixture();assert.equal((await f.post('logout')).status,200);assert.equal(f.calls[0].args[0].scope,'local');assert.equal(f.calls[1].mode,'email')});
+test('provider exception is contained',async()=>{const r=await fixture({throws:true}).post('sign-in',valid);assert.equal(r.status,503);assert.doesNotMatch(await r.text(),/private-provider-secret/)});
+test('session response omits IDs and private credentials',async()=>{const r=await fixture().get('session');assert.deepEqual(await r.json(),{authenticated:true,user:{email:'a@example.com',name:'A'}});assert.match(r.headers.get('cache-control'),/no-store/)});
+test('unknown action rejected',async()=>assert.equal((await fixture().post('unknown')).status,404));
+
+const helper=compile('app/account-auth.ts');
+function identityFixture({confirmed=true,providerError=false,envOverrides={},cookieValues=[]}={}){
+ const env={NUTRIGUIDE_EMAIL_AUTH_ENABLED:'true',SUPABASE_URL:'https://project.supabase.co',SUPABASE_PUBLISHABLE_KEY:'public-key',AUTH_SITE_URL:'https://app.test',...envOverrides};
+ const exports={},calls=[],jar={get:name=>cookieValues.find(c=>c.name===name),getAll:()=>cookieValues,set:(...args)=>calls.push({cookie:args})};
+ vm.runInNewContext(helper,{exports,URL,Response,process:{env:{NODE_ENV:'production'}},AbortSignal,fetch,require(name){if(name==='cloudflare:workers')return {env};if(name==='next/headers')return {cookies:async()=>jar};if(name==='@supabase/ssr')return {createServerClient:(url,key,options)=>{calls.push({url,key,options});return {auth:{getUser:async()=>{calls.push({verified:true});return {error:providerError?Error('invalid'):null,data:{user:{id:'uuid',email:'a@example.com',email_confirmed_at:confirmed?'yes':null,user_metadata:{full_name:'Alice'}}}}}}}}};throw Error(name)}});
+ return {api:exports,calls};
+}
+test('email identity is verified remotely and namespaced by project',async()=>{const f=identityFixture();const u=await f.api.getEmailAccount();assert.equal(u.userId,'email:project.supabase.co:uuid');assert.equal(f.calls.at(-1).verified,true);assert.equal(u.authProvider,'email')});
+for(const opts of [{confirmed:false},{providerError:true}])test('invalid provider user cannot access app '+JSON.stringify(opts),async()=>assert.equal(await identityFixture(opts).api.getEmailAccount(),null));
+for(const envOverrides of [{NUTRIGUIDE_EMAIL_AUTH_ENABLED:'false'},{SUPABASE_URL:'https://evil.test'},{AUTH_SITE_URL:'https://app.test/path'},{SUPABASE_PUBLISHABLE_KEY:''}])test('bad provider configuration stays disabled '+JSON.stringify(envOverrides),()=>assert.equal(identityFixture({envOverrides}).api.accountConfig(),null));
+test('SDK cookie adapter forces HttpOnly Secure SameSite policy',async()=>{const f=identityFixture();await f.api.emailAuthClient();f.calls[0].options.cookies.setAll([{name:'session',value:'secret',options:{httpOnly:false,secure:false}}]);const o=f.calls[1].cookie[2];assert.equal(o.httpOnly,true);assert.equal(o.secure,true);assert.equal(o.sameSite,'lax');assert.equal(o.path,'/')});
+test('source cookie prevents automatic connected-account fallback',async()=>{const f=identityFixture({cookieValues:[{name:'ng-account-source',value:'email'}]});assert.equal(await f.api.accountSource(),'email')});
+test('SDK session cookie retains native identity when selector expired',async()=>{const f=identityFixture({cookieValues:[{name:'sb-project-auth-token.0',value:'opaque'}]});assert.equal(await f.api.accountSource(),'email')});
+const callback=compile('app/account/callback/route.ts');
+function callbackFixture({error=false}={}){const exports={},codes=[];vm.runInNewContext(callback,{exports,Response,URL,Error,require:()=>({accountConfig:()=>({site:'https://app.test'}),emailAuthClient:async()=>({auth:{exchangeCodeForSession:async code=>{codes.push(code);return {error,data:{user:{email_confirmed_at:true}}}}}}),setAccountSource:async()=>{}})});return {codes,get:query=>exports.GET(new Request('https://app.test/account/callback'+query))}}
+test('PKCE callback uses fixed app redirect ignoring arbitrary next URL',async()=>{const f=callbackFixture(),r=await f.get('?code=one-time-code&next=https://evil.test');assert.equal(r.status,303);assert.equal(r.headers.get('location'),'https://app.test/legacy.html');assert.equal(f.codes[0],'one-time-code');assert.match(r.headers.get('cache-control'),/no-store/)});
+test('recovery callback opens only dedicated reset page',async()=>assert.equal((await callbackFixture().get('?code=code&intent=recovery')).headers.get('location'),'https://app.test/account-reset.html'));
+test('expired PKCE callback returns safe failure page',async()=>assert.equal((await callbackFixture({error:true}).get('?code=expired')).headers.get('location'),'https://app.test/legacy.html?account=link-error'));

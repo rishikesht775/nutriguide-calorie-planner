@@ -18,9 +18,9 @@ test.describe('@security storage and auth boundaries',()=>{
   await expect(page.locator(`${container} img`)).toHaveCount(0);expect(await page.evaluate(()=>(window as any).__xss)).toBeUndefined();
  });
  test('no password is collected during auth handoff',async({page})=>{
-  await page.route('**/api/me',r=>r.fulfill({json:{authenticated:false,user:null}}));await page.route('**/signin-with-chatgpt**',r=>r.fulfill({status:200,body:'Test auth handoff'}));
-  await page.goto('/legacy');await expect(page.locator('input[type=password]')).toHaveCount(0);
-  const req=page.waitForRequest('**/signin-with-chatgpt**');await page.locator('#gateSubmit').click();const r=await req;
+  await page.route('**/api/me',r=>r.fulfill({json:{authenticated:false,user:null}}));await page.route('**/account/connected**',r=>r.fulfill({status:200,body:'Test auth handoff'}));
+  await page.goto('/legacy');await page.route('**/api/account/config',r=>r.fulfill({json:{emailPasswordEnabled:false}}));await page.reload();await expect(page.locator('#emailAccountUI')).toBeHidden();
+  const req=page.waitForRequest('**/account/connected**');await page.locator('#gateSubmit').click();const r=await req;
   expect(r.url()).not.toMatch(/password|token|secret/);expect(r.postData()).toBeNull();
  });
 });
