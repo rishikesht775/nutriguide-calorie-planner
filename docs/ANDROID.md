@@ -1,52 +1,62 @@
-# NutriGuide Android APK
+# NutriGuide native Android app
 
-## First Android version
+## Native version 0.2.0
 
-This is an installable Android launcher using AndroidX Browser Custom Tabs. It opens the existing responsive NutriGuide site at its fixed HTTPS /legacy URL. The browser toolbar remains visible. A compatible browser (Chrome recommended) and internet are required. Browser login, cookies, cloud sync, downloads and browser permissions remain browser-managed. No credentials or wellness data are copied into native Android storage. The app requests no native camera, microphone, fitness or location permission.
+This replaces the earlier browser-backed launcher. MainActivity renders native Android controls and screens. There is no WebView, Custom Tab, or website-launch intent in the native experience. Home, Food, Move, Journey, Reports, profile setup and email sign-in are implemented inside the APK.
 
-This is not a native offline rewrite. Fitbit/Health Connect integration, native reminders and Play Store release signing are not added. Existing website features and limitations still apply, including the pending publication of the latest web target fixes. The APK uses the current live website; it does not contain the newer unpublished web source.
+Core logging works on-device without an account or internet. Guest and each verified account have separate private on-device snapshots. A guest profile is never copied into a signed-in account. No 1,800 kcal / 100 g personal fallback is supplied; a valid profile is required for personal targets. The Java profile policy matches the web calculation. Saved shared custom targets persist; explicit profile recalculation refreshes protein.
 
-Package: com.rishikesht775.nutriguide. Minimum Android 8.0 (API 26). Target/compile SDK 35. Java 17, Android Gradle plugin 8.9.2, Gradle 8.11.1 and AndroidX Browser 1.8.0 are pinned.
+## Implemented native features
+
+| Screen | Native behavior |
+| --- | --- |
+| Home / Profile | Validated profile, calorie/protein estimates, editable shared targets, water, manual steps and guide selection |
+| Food | Searchable 27-food catalogue, weighed portions, custom serving nutrition, daily calorie/protein/carbs/fat/fibre totals, removal of own food logs |
+| Move | Six exercise instruction cards, monotonic active-time timer, pause/resume/discard, real duration history; backgrounding pauses the timer |
+| Journey | Sleep, mood, stress, reflection and recovery history |
+| Reports | Seven-day real food/recovery/workout summaries and native document-picker CSV export |
+| Account | Native email/password registration/sign-in calls to existing HTTPS API, explicit manual Sync, local sign-out and per-owner pending state |
+
+Daily water, steps and independent protein items roll over by local date, preserving previous-day stats. Suggested exercise instructions are never recorded as completed sessions unless the user runs and saves a timer; the completed-session habit requires at least one active minute.
+
+## Account and cloud contract
+
+NativeApi calls only fixed same-origin /api/ routes over HTTPS and sends the Origin required by the existing backend. Credentials are entered in native fields and are not persisted. Session cookies are stored separately using AES-GCM and an Android Keystore key; native backup is disabled. Health logs are private application data under Android's app sandbox, not individually encrypted by this client.
+
+The native cookie jar is separate from Chrome. Browser login is not inherited. A verified /api/me user ID selects the local account. NativeStore switches owner before loading that account and does not adopt guest data. Every sync verifies the account identity, reads cloud state first, overlays only locally dirty top-level keys, and posts only after a successful read. Unknown web fields are preserved. A failed fetch never uploads a blind snapshot. If a local edit occurs during a sync, it remains pending for another Sync. Concurrent edits to the same array/key on two devices remain last-write-wins, matching the backend's whole-state model.
+
+Email confirmation must be completed using the received email before native sign-in. Real Supabase confirmation/signup and session refresh acceptance still require device/provider testing; compilation, local policy tests and the guest emulator scenario do not prove them. Connected ChatGPT login, native password-recovery callbacks and background automatic sync are not implemented. A previously copied cloud record is not deleted automatically.
+
+## Current scope
+
+This is a first native version, not full parity with every website tool. Camera/photo logging, barcode scanning, native notifications/calendar reminders, Health Connect/Fitbit integration, animated guide artwork and automatic meal-plan generation are not included. The browser-backed APK is superseded. Native profile/target behavior is packaged in this APK and does not require publication of the corresponding website UI changes. Account/cloud endpoints still require internet and the existing live backend.
+
+Package: com.rishikesht775.nutriguide. Android 8.0+ (API 26); target/compile SDK 35. Java 17, AGP 8.9.2 and Gradle 8.11.1. Version code 2 / version name 0.2.0-native. AndroidX Browser dependency has been removed.
 
 ## Download and install
 
-1. In this repository, open Actions -> NutriGuide Android APK -> the successful run.
-2. Download NutriGuide-Android-APK and unzip it.
-3. Transfer NutriGuide-Android-Test.apk to the Android phone, open it in Files, and allow installation from that source when Android asks.
-4. Open NutriGuide. It launches the mobile wellness site in the browser. Sign in with the same account used on the website. Returning to the launcher offers a button to reopen the site.
+1. Open Actions -> NutriGuide Android APK -> the successful native build.
+2. Download NutriGuide-Native-Android-APK and extract it.
+3. Open NutriGuide-Native-Android.apk on your phone and allow installation from Files if asked.
+4. If the previous debug APK has a different signing certificate, uninstall that old launcher first. Do not clear your browser data; the native app is independent.
+5. Open NutriGuide: native Home appears with an unset profile. Set up your own profile, or choose Account for native email sign-in.
 
-This is a debug-signed test build, not a Play Store release. Each fresh runner may use a different debug signing key; if Android rejects an update because signatures differ, uninstall the old launcher and install the new APK. Browser-held account data is separate from this launcher. Do not uninstall or clear the browser to update the launcher. Production signing must use a stable privately managed release key; no signing secrets are committed.
+This is a debug-signed test APK, not a Play Store release. Fresh CI runs can use different debug keys. A production release requires a stable privately managed signing key. No signing secrets are committed.
 
-## Kiro / Android Studio
+## Kiro / local build
 
-Pull main, then open the android directory in Android Studio. Install SDK 35 and use JDK 17. The project does not check in a Gradle wrapper binary; use a locally installed Gradle 8.11.1 or configure Android Studio to use that distribution.
+Pull main, then open android/ in Android Studio or use installed Gradle 8.11.1 with JDK 17 and SDK 35:
 
-```powershell
-git pull --ff-only origin main
-gradle -p android assembleDebug lintDebug
-```
+    git pull --ff-only origin main
+    gradle -p android assembleDebug testDebugUnitTest lintDebug
+    gradle -p android connectedDebugAndroidTest
 
-Local APK: android/app/build/outputs/apk/debug/app-debug.apk. GitHub Actions builds it independently without requiring Android tools on the user's laptop. CI builds/lints; it does not prove real-phone login acceptance.
+The last command requires a running emulator/device. The project has no checked-in wrapper binary. Generated output, local.properties, caches and signing keys are ignored. APK output is android/app/build/outputs/apk/debug/app-debug.apk.
 
-## Android acceptance cases
+## Validation and phone acceptance
 
-| ID | Check | Expected |
-| --- | --- | --- |
-| APK-01 | Install and launch on Samsung S21 FE | NutriGuide icon and mobile site open; browser toolbar visible |
-| APK-02 | Email sign-in, confirmation and recovery | Browser-backed site flow completes; no separate native password handling |
-| APK-03 | Existing browser login | Site can use that browser's session; different browsers can have different sessions |
-| APK-04 | New test account and existing account | Existing website account isolation/target behavior applies; confirm deployed web version first |
-| APK-05 | Food, Exercise, Journey, Plan & Reports | Existing responsive tabs and logs remain usable |
-| APK-06 | Android Back and reopen | Browser returns to launcher; Open my wellness space reopens the site without an automatic loop |
-| APK-07 | Rotate, enlarge text, gesture navigation | Launcher content scrolls and avoids system bars/cutouts |
-| APK-08 | No internet or browser disabled | Browser displays its network state; launcher provides a no-browser message if none can open |
-| APK-09 | Download/export | Browser handles files; verify download permission/availability on the device |
-| APK-10 | Second device login | Website/cloud implementation supplies data; APK adds no cross-device datastore |
+The workflow assembles the APK, runs seven JVM policy tests and Android lint, then runs a native Espresso flow on an API 30 emulator before uploading the APK. The instrumented flow verifies no WebView in the native view hierarchy, empty-profile setup, 1,950 kcal estimate for a synthetic profile, correct Paneer logging, 1,685 kcal remaining, persistence through Activity recreation and native Journey/Reports navigation.
 
-Build and lint results must come from the actual Android workflow run. Physical-phone acceptance is pending until installed and tested by the owner.
+Physical Samsung S21 FE acceptance remains required: installation, profile/target edits, food/custom portions, timer pause on background, day rollover, recovery, CSV export, native email confirmation/login, two-account isolation, explicit cloud sync and offline edits/retry. These must not be reported as passed until actually executed.
 
-The SDK setup explicitly installs platform-tools instead of the action's obsolete default tools package. The first CI attempt failed during that SDK setup before compilation; the workflow was corrected and rebuilt.
-
-## Verified build — 11 November 2026
-
-GitHub Android workflow run 42908566596 completed successfully for source commit b67142f16fe41282333f7ee916921cfc306bd587. assembleDebug and lintDebug passed, and the 1.1 MB ZIP contains NutriGuide-Android-Test.apk, SHA256SUMS.txt and installation/limitations instructions. Download: https://github.com/rishikesht775/nutriguide-calorie-planner/actions/runs/42908566596/artifacts/13805977431 . The APK and lint report are retained as GitHub artifacts for 30 days; the workflow can regenerate them. No emulator or physical-device installation/sign-in result is claimed.
+The earlier browser-backed build/run 42908566596 is historical and must not be used as the native download. Actual native build/run evidence is recorded after the new workflow completes.

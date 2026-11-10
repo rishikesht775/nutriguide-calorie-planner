@@ -26,17 +26,28 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
-      - name: Build and lint test APK
-        run: gradle -p android --no-daemon assembleDebug lintDebug
+      - name: Build, unit test and lint native APK
+        run: gradle -p android --no-daemon assembleDebug testDebugUnitTest lintDebug
+      - name: Enable Android emulator acceleration
+        run: sudo chmod 666 /dev/kvm
+      - name: Verify native screens in Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          arch: x86_64
+          target: default
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: gradle -p android --no-daemon connectedDebugAndroidTest
       - name: Package APK and checksums
         run: |
           mkdir -p android-output
-          cp android/app/build/outputs/apk/debug/app-debug.apk android-output/NutriGuide-Android-Test.apk
-          sha256sum android-output/NutriGuide-Android-Test.apk > android-output/SHA256SUMS.txt
+          cp android/app/build/outputs/apk/debug/app-debug.apk android-output/NutriGuide-Native-Android.apk
+          sha256sum android-output/NutriGuide-Native-Android.apk > android-output/SHA256SUMS.txt
           cp docs/ANDROID.md android-output/INSTALL-AND-LIMITATIONS.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: NutriGuide-Android-APK
+          name: NutriGuide-Native-Android-APK
           path: android-output/
           retention-days: 30
       - uses: actions/upload-artifact@v4

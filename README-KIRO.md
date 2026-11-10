@@ -2,7 +2,7 @@
 
 ## Android APK
 
-The android/ directory is the browser-backed Android launcher. GitHub Actions -> NutriGuide Android APK builds a downloadable debug APK and runs Android lint. See docs/ANDROID.md for installation, local Gradle 8.11.1 / JDK 17 / SDK 35 setup, and ten phone acceptance cases. The APK opens the currently published website; it does not include unpublished web changes. No local Android setup is required to download a successful CI APK.
+The android/ directory now contains native Android screens, not the superseded browser launcher. GitHub Actions -> NutriGuide Android APK builds/tests/lints the native app and exercises an Android emulator before uploading NutriGuide-Native-Android-APK. See docs/ANDROID.md for offline features, account/cloud limits and phone testing. Native source is packaged in the APK; no web UI publication is needed for native target fixes.
 
 ## Fresh-account target fix (11 November 2026)
 
