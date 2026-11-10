@@ -16,7 +16,7 @@ export default defineConfig({
   // become unresponsive when every project starts at once. Override with
   // PLAYWRIGHT_WORKERS when the environment can handle more concurrency.
   workers,
-  reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['json', { outputFile: 'test-results/results.json' }]],
+  reporter: [['./tests/reporters/text-reporter.mjs'], ['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['json', { outputFile: 'test-results/results.json' }]],
   use: {
     baseURL,
     trace: 'retain-on-failure',

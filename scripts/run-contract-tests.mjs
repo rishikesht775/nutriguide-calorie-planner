@@ -1,0 +1,16 @@
+import { spawn } from 'node:child_process';
+import { mkdirSync, readdirSync, writeFileSync, appendFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { randomUUID } from 'node:crypto';
+const directory=resolve('test-reports');mkdirSync(directory,{recursive:true});
+const started=new Date();
+const files=[resolve(directory,'contracts-latest.txt'),resolve(directory,`contracts-${started.toISOString().replace(/[:.]/g,'-')}-${randomUUID().slice(0,8)}.txt`)];
+for(const file of files)writeFileSync(file,`NUTRIGUIDE BACKEND / DATABASE CONTRACT REPORT\nStarted: ${started.toISOString()}\nRuntime: ${process.version} / ${process.platform}\n\n`);
+const write=text=>{for(const file of files)appendFileSync(file,String(text).replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,''));};
+const tests=readdirSync('tests/contracts').filter(name=>name.endsWith('.test.mjs')).sort().map(name=>resolve('tests/contracts',name));
+const child=spawn(process.execPath,['--test','--test-reporter=spec',...tests],{stdio:['inherit','pipe','pipe'],env:{...process.env,FORCE_COLOR:'0'}});
+child.stdout.setEncoding('utf8');child.stderr.setEncoding('utf8');
+child.stdout.on('data',data=>{process.stdout.write(data);write(data)});
+child.stderr.on('data',data=>{process.stderr.write(data);write(data)});
+child.on('error',error=>{write(`RUNNER ERROR: ${error.message}\n`);process.exitCode=1});
+child.on('close',(code,signal)=>{write(`\nFINAL SUMMARY\nExit code: ${code ?? 'none'}\nSignal: ${signal || 'none'}\nFinished: ${new Date().toISOString()}\n`);process.exitCode=code ?? 1});

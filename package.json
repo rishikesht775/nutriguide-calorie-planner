@@ -35,11 +35,12 @@
     "test:edge": "playwright test tests/e2e/edge-cases.spec.ts tests/e2e/validation.spec.ts",
     "test:database": "playwright test tests/e2e/database.spec.ts",
     "test:journey": "playwright test tests/e2e/journey.spec.ts",
-    "test:contracts": "node --test tests/contracts/*.test.mjs",
+    "test:contracts": "node scripts/run-contract-tests.mjs",
     "test:release": "npm run test:contracts && playwright test",
     "test:list": "playwright test --list",
     "test:desktop": "playwright test --project=chromium",
-    "test:mobile": "playwright test --project=mobile-chrome"
+    "test:mobile": "playwright test --project=mobile-chrome",
+    "test:reporter": "node --test tests/reporting/*.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

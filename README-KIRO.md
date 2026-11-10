@@ -68,3 +68,18 @@ The GitHub Actions workflow runs contracts plus desktop/mobile tests on pushes a
 See `tests/e2e/TEST-MATRIX.md` for coverage and manual checks; `tests/VALIDATION-STATUS.md` for what has actually run and known concerns. A red test can indicate a real current product defect. Unimplemented AI/scanner/wearable features are not claimed as working.
 
 If pull fails because of local edits, run `git status` and resolve them before pulling; do not reset or discard work blindly.
+
+## Automatic TXT reports — send these for fixes
+
+Every normal Playwright test command automatically writes `test-reports/playwright-latest.txt`, including individual categories, headed runs and failures. Backend/database contract runs also write `test-reports/contracts-latest.txt`. `test:release` runs both, so send both TXT files after a full release run.
+
+Timestamped copies in the same folder preserve earlier runs. Reports contain test/project names, attempts, duration, errors, stack traces, stdout/stderr, attachment paths and a final summary. A partially completed run is labelled RUNNING until FINAL SUMMARY appears. Runner/startup errors are included when Playwright invokes the reporter; errors before Playwright can load its configuration and abrupt process termination may only appear in the terminal. `test:list` lists tests and does not constitute a test run. Reporter output can be overridden by an explicit `--reporter` CLI option; use the normal npm commands to keep automatic TXT reporting.
+
+Open the latest report in Windows:
+
+```powershell
+notepad test-reports\playwright-latest.txt
+notepad test-reports\contracts-latest.txt
+```
+
+Send the TXT files here after testing. For overlap/layout failures, also send the screenshot or trace named in the report. Text reports are ignored by Git and included in CI artifacts, so test logs do not enter the source repository.
