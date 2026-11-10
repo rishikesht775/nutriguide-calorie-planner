@@ -4,7 +4,8 @@
  const local=['localhost','127.0.0.1','[::1]'].includes(location.hostname);
  connected.href=local?'https://nutriguide-calorie-planner.rishikesht775.chatgpt.site/account/connected':'/account/connected';
  let enabled=false,mode='sign-in',busy=false,checking=false;
- function setMode(next){mode=next;const signup=mode==='sign-up',reset=mode==='request-reset';$('emailNameWrap').hidden=!signup;$('emailName').disabled=!signup;$('emailName').required=signup;$('emailConfirmWrap').hidden=!signup;$('emailConfirm').disabled=!signup;$('emailConfirm').required=signup;$('emailPasswordWrap').hidden=reset;$('emailPassword').disabled=reset;$('emailPassword').required=!reset;$('emailPassword').minLength=signup?12:1;$('emailPassword').autocomplete=signup?'new-password':'current-password';$('emailSubmit').textContent=signup?'Create account':reset?'Send reset link':'Sign in';$('gateTitle').textContent=signup?'Create your NutriGuide account':reset?'Reset your password':'Welcome to NutriGuide';$('gateSubtitle').textContent=signup?'Save your nutrition, movement and recovery in your own account.':reset?'Enter your email to request a secure password reset link.':'Sign in to continue your personal wellness journey.';$('emailSignIn').classList.toggle('active',mode==='sign-in');$('emailSignUp').classList.toggle('active',signup);status.textContent='';}
+ function setMode(next){if(busy)return;mode=next;$('emailConfirmation').hidden=true;form.hidden=false;$('emailForgot').hidden=false;const signup=mode==='sign-up',reset=mode==='request-reset';$('emailNameWrap').hidden=!signup;$('emailName').disabled=!signup;$('emailName').required=signup;$('emailConfirmWrap').hidden=!signup;$('emailConfirm').disabled=!signup;$('emailConfirm').required=signup;$('emailPasswordWrap').hidden=reset;$('emailPassword').disabled=reset;$('emailPassword').required=!reset;$('emailPassword').minLength=signup?12:1;$('emailPassword').autocomplete=signup?'new-password':'current-password';$('emailSubmit').textContent=signup?'Create account':reset?'Send reset link':'Sign in';$('gateTitle').textContent=signup?'Create your NutriGuide account':reset?'Reset your password':'Welcome to NutriGuide';$('gateSubtitle').textContent=signup?'Save your nutrition, movement and recovery in your own account.':reset?'Enter your email to request a secure password reset link.':'Sign in to continue your personal wellness journey.';$('emailSignIn').classList.toggle('active',mode==='sign-in');$('emailSignUp').classList.toggle('active',signup);status.textContent='';}
+ $('emailContinue').onclick=()=>setMode('sign-in');$('emailChange').onclick=()=>setMode('sign-up');
  $('emailSignIn').onclick=()=>setMode('sign-in');$('emailSignUp').onclick=()=>setMode('sign-up');$('emailForgot').onclick=()=>setMode('request-reset');
  form.onsubmit=async event=>{
   event.preventDefault();if(busy||!enabled||!form.checkValidity())return;
@@ -16,7 +17,10 @@
    if(!response.ok)throw Error(data.error||'This request could not be completed.');
    $('emailPassword').value='';$('emailConfirm').value='';
    if(data.signedIn){location.replace('/legacy.html');return}
-   status.textContent=data.message||'Please check your email for the next step.';
+   form.hidden=true;$('emailForgot').hidden=true;$('emailConfirmation').hidden=false;
+   $('gateTitle').textContent='Check your email';$('gateSubtitle').textContent=mode==='sign-up'?'Confirm your email address to finish registration.':'Follow the email instructions to reset your password.';
+   $('emailConfirmationText').textContent=data.message||'Please check your email for the next step.';status.textContent='';
+   $('emailConfirmationTitle').focus({preventScroll:true});$('emailConfirmation').scrollIntoView({block:'center',behavior:'instant'});
   }catch(error){status.textContent=error.name==='TimeoutError'?'The account service timed out. Please try again.':error.message}
   finally{busy=false;$('emailSubmit').disabled=false}
  };

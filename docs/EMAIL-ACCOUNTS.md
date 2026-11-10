@@ -1,6 +1,6 @@
 # NutriGuide email accounts
 
-Status: implemented, provider activation pending. Existing connected-account login remains available. The UI only shows email Sign in / Create account when the server reports a valid enabled provider configuration. Never enable this as a cosmetic-only change.
+Status: provider connected and email accounts enabled. Brevo SMTP is configured; the user reported receiving the registration email. Full confirmation, login and reset verification remains pending. Existing connected-account login remains available. The UI only shows email Sign in / Create account when the server reports a valid enabled provider configuration. Never enable this as a cosmetic-only change.
 
 ## Activation
 1. Connect a Supabase project. Configure Email/Password Auth with email confirmation enabled and password minimum length 12.

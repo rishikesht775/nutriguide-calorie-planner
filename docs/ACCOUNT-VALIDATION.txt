@@ -1,20 +1,22 @@
 NUTRIGUIDE ACCOUNT VALIDATION - 2026-11-10
 
-PASS: 161 backend/database contract tests (44 new email account tests).
-PASS: TypeScript check and production build.
-PASS: Playwright discovery: 228 executions across desktop/mobile, 29 files.
+PASS: 166 contract tests, including 5 new account confirmation UI state tests.
+PASS: TypeScript check, JavaScript syntax check and production build.
 
-BROWSER EXECUTION BLOCKED: nine targeted auth UI tests could not launch because
-this environment lacks the required Playwright Chromium executable. The attempted
-browser download returned invalid/truncated archives. No UI assertion ran; this
-is not a passing browser test result. Run npm.cmd run test:install-browsers and
-npm.cmd run test:security in the Windows Kiro checkout.
+CONFIRMATION FIX: A successful registration API response hides the form, focuses
+and scrolls to a Check your email panel, and provides Continue to sign in and
+Use a different email controls. Failure retains the form and displays an error.
+No extra email request is made by changing modes. Server-side generic wording
+for existing accounts is preserved.
 
-PROVIDER STATUS: Supabase is not connected/configured. Email registration,
-verification, login, reset and logout code is implemented but feature-gated OFF.
-Contract tests mock provider SDK responses. Real account creation, email delivery,
-provider settings and full end-to-end sessions are NOT yet verified.
-See EMAIL-ACCOUNTS.md for activation and required real-provider checks.
+PROVIDER STATUS: Supabase and Brevo SMTP are configured; email accounts enabled.
+User reported receiving a real registration email. Full email confirmation,
+signed-in cloud isolation, password reset and cross-device sessions remain
+pending real-provider verification. No passwords or SMTP keys are stored here.
 
-Detailed automatic reports: test-reports/contracts-latest.txt and
- test-reports/playwright-latest.txt (generated locally, intentionally gitignored).
+TEST LIMIT: UI state tests use a small DOM adapter and mocked HTTP responses;
+they do not verify layout or actual email delivery. The updated Playwright
+registration/reset cases were not executed here because Chromium installation
+was previously blocked by failed downloads.
+
+Automatic detailed TXT reports are generated under test-reports/.
