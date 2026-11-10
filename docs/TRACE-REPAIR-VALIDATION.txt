@@ -1,0 +1,11 @@
+NutriGuide trace repair validation - 11 November 2026
+INPUT: supplied Windows smoke trace and full Playwright TXT report.
+PREVIOUS RUN: 228 executed; 161 passed; 45 failed; 22 timed out; 0 skipped.
+All 18 mocked account UI tests passed. Real account email acceptance is separate.
+CONFIRMED: three inline syntax errors reproduced from captured response HTML.
+CONFIRMED: GitHub page had truncated fragments in food, downloads, nutrition
+markup and trainer progress. Local canonical copy retains complete fragments.
+PASS: restored page inline JavaScript syntax gate.
+PASS: all 172 Node contracts, including new whole-page script parsing test.
+Browser rerun on Windows remains required. No full-browser pass claimed.
+NEXT: git pull --ff-only origin main; npm.cmd run test:smoke; then test:all.

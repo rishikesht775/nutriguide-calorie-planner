@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "5acded8204884a15789c2d57e77d3b744e9bf70ecac3aeccb6e4402065c90f27",
+  "sourceDigest": "ae00ddba3978e48f157be499701d50360c883d58f4f68821ffea930e7e252311",
   "files": {
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
     ".github/workflows/playwright.yml": "6097bdecc620b679ebf77087717d17b63702983047eebc70572bff7ec0f5e01b",
@@ -81,7 +81,7 @@
     "components/ui/tooltip.tsx": "a0784eb77831a799fad7991df4f1b666f876201565a80175e1aa68733574a2e4",
     "db/schema.ts": "433a7f9a630470ddb6e26e9b164e2b37d18c6a2067feb3019d10ad38325503f8",
     "docs/ACCOUNT-FLOW.md": "b85086d0010a7f713ca1fcc0926822535ff5919ec3d63e92aae47b8adcba012d",
-    "docs/APPLICATION.md": "25c03c23cb23b68303058df598c3b08007168d8a286c5749439a3792e0e7e86d",
+    "docs/APPLICATION.md": "b0c560c6f279eb15f02f50e112df0a6983163ac714bc34c91708d7d9085475ce",
     "docs/DOCUMENTATION.md": "65dc6ad7789229d1b42029dfe7386ced2425b96ca6112e1d9b5206eed3b7d962",
     "docs/EMAIL-ACCOUNTS.md": "8ec7bad82243f35996be01e313656595f5f78138ea5f194e56c63d33e2935e36",
     "docs/PROFILE-DEFAULTS-AND-GUIDE.md": "ce2c0d65adcda244885e50e1d4e1396af7d63c7c262ddeed8497de9c0d726609",
@@ -135,6 +135,7 @@
     "tests/contracts/cloud-sync.test.mjs": "b13e321cd5b59ef826ff2e09711dcd70764f058e4cec5515317d60df3506df38",
     "tests/contracts/dev-server.test.mjs": "03c48787273967987f3c33f710e43d6f04cb506fc1219e9dfe824c5f26cba109",
     "tests/contracts/email-account.test.mjs": "1d1c608427c71d6e9ba036a98141d410e2d92d3aa5ecbef447f694be7991e4d6",
+    "tests/contracts/legacy-syntax.test.mjs": "749943b92ece4c109103cc818e1dffcfcb7a87bb90a939bedca19a8da0ed928d",
     "tests/contracts/meal-engine.test.mjs": "ae683168d0429dc031dd1dbac8a3f610bb92d9d18a0070b816e4aa1ad1003839",
     "tests/contracts/personal-plan-ui.test.mjs": "548f922ad5bbb78e3db86ee60fd3093823dc92c2dc125acdb0ce6966f6fda1a9",
     "tests/contracts/personal-plan.test.mjs": "fb29c11f118b69ae8e9b4e49b1f22825527a1a7e92f006fb20b9ecffa0679fe1",
