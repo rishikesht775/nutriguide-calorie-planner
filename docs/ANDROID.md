@@ -46,3 +46,7 @@ Local APK: android/app/build/outputs/apk/debug/app-debug.apk. GitHub Actions bui
 Build and lint results must come from the actual Android workflow run. Physical-phone acceptance is pending until installed and tested by the owner.
 
 The SDK setup explicitly installs platform-tools instead of the action's obsolete default tools package. The first CI attempt failed during that SDK setup before compilation; the workflow was corrected and rebuilt.
+
+## Verified build — 11 November 2026
+
+GitHub Android workflow run 42908566596 completed successfully for source commit b67142f16fe41282333f7ee916921cfc306bd587. assembleDebug and lintDebug passed, and the 1.1 MB ZIP contains NutriGuide-Android-Test.apk, SHA256SUMS.txt and installation/limitations instructions. Download: https://github.com/rishikesht775/nutriguide-calorie-planner/actions/runs/42908566596/artifacts/13805977431 . The APK and lint report are retained as GitHub artifacts for 30 days; the workflow can regenerate them. No emulator or physical-device installation/sign-in result is claimed.
