@@ -4,7 +4,7 @@
 
 The suite targets `public/legacy.html`, its cloud-sync client, `/api/me`, `/api/state`, and the current SQLite migration. It replaces the removed festival/upgrade runtime selectors. Browser contexts are isolated; authenticated UI tests mock identity and state endpoints, while backend tests call real local HTTP routes anonymously. These are different layers and are not evidence of a real identity-provider login or production D1 integration.
 
-There are 108 browser/API cases, run in two Playwright projects (216 executions), and 117 Node contract/database cases. Projects are desktop Chromium and Pixel 7 emulation, not physical device or cross-browser certification.
+There are 110 browser/API cases, run in two Playwright projects (220 executions), and 117 Node contract/database cases. Projects are desktop Chromium and Pixel 7 emulation, not physical device or cross-browser certification.
 
 | Category | Files | Assertions / negative cases |
 | --- | --- | --- |
@@ -48,3 +48,5 @@ Barcode scanning, AI photo recognition, voice, AI coaching, wearables, family pl
 Current feature additions: `wellness-features.spec.ts` covers weekly plans, household ingredients, favourites, recipes, recovery, barcode fallback, rule-guide scope and export downloads. Contract tests also cover barcode provider failure cases, sync races/retries and bounded state request streams.
 
 Shared-profile release: `personal-plan.spec.ts` adds seven cases (14 desktop/mobile executions): automatic shared defaults, cross-tab target edits, reload persistence, manual plan/workout preservation, reset, readiness and real-log guide progression. Node `personal-plan.test.mjs` and `personal-plan-ui.test.mjs` cover pure policy and the actual controller using an explicitly stubbed DOM (not layout tests).
+
+Account-flow clarification: fake sign-in/sign-up modes were removed; auth tests cover a real top-level provider anchor, accurate local-preview copy, safe return path, failed identity check/retry and JavaScript-disabled link visibility.
