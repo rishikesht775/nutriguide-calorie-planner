@@ -2,6 +2,8 @@
 
 The maintained source is APPLICATION.md. GENERATED-INVENTORY.md contains generated route/module/test file inventory. source-manifest.json fingerprints the app, tests, build/configuration and documentation maintenance inputs. None contains credentials.
 
+The fresh-account target acceptance guide is UNCONFIGURED-TARGETS.md. TARGETS-VALIDATION.txt records the corresponding executed checks and publication limits. Both are included in the documentation fingerprint check.
+
 ## Every change
 
 Review the actual code and update affected requirements, architecture, data flows, UI behavior, limitations and the revision log. Then run:

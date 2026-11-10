@@ -1,0 +1,15 @@
+NutriGuide fresh-account target validation — 11 November 2026
+
+Implemented: no personal calorie/protein targets without a completed valid profile; setup prompts replace numeric fallbacks; empty disabled protein target and zero progress without setup; personal meal generation requires targets; profile hydration preserves explicit shared targets; intentional Home recalculation refreshes protein. Menu/sidebar/setup navigation rules are unchanged.
+
+Executed: 185 Node contract checks passed, zero failures.
+Executed: TypeScript no-emit check passed.
+Executed: production build passed.
+Executed: six focused desktop/mobile fresh-account, calculated-target and account-switch browser cases passed before the hydration follow-up.
+Executed: expanded personal-plan, fresh-account and account-isolation browser regression — 22 passed, zero failed, Desktop Chrome and Pixel 7 emulation. The Windows dev-server helper required stopping the owned server after all test bodies completed; the runner then produced its final passed summary.
+
+Automated accounts/state are mocked. Real Supabase signup/confirmation and cross-device acceptance remain external checks. Already contaminated cloud records are not deleted.
+
+Publication limit: the Sites source Git host could not be reached from this environment. The live Site remains version 82 until the new source can be published. GitHub synchronization uses the connected GitHub API. Kiro receives the changes through git pull --ff-only origin main; existing local user changes must be preserved.
+
+Automatic timestamped TXT reports remain in test-reports. See docs/UNCONFIGURED-TARGETS.md and README-KIRO.md for focused commands and expected outcomes. The documentation workflow generates the Word snapshot from the maintained source after GitHub synchronization.

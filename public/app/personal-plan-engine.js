@@ -40,5 +40,10 @@
  }
  function localDay(value){const d=new Date(value);return Number.isNaN(d.getTime())?'':`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
  function stage(startDay,today){const start=new Date(startDay+'T12:00:00'),now=new Date(today+'T12:00:00');const days=Math.max(0,Math.round((now-start)/86400000)||0),week=Math.min(4,Math.floor(days/7)+1);return {week,title:['Learn your routine','Repeat what works','Build consistency','Review and adjust'][week-1],day:days+1}}
- window.NGPersonalCore={validProfile,derive,progress,localDay,stage};
+ // A cached widget or generic meal-engine default is not a personal target.
+ function targets(profile,plan){
+  if(!validProfile(profile)||!plan||!positive(plan.calories,1200,5000)||!positive(plan.protein,20,300))return {ready:false,cal:0,p:0};
+  return {ready:true,cal:Number(plan.calories),p:Number(plan.protein)};
+ }
+ window.NGPersonalCore={validProfile,derive,progress,localDay,stage,targets};
 })();

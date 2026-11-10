@@ -22,7 +22,7 @@
  let nextAction={tab:'food',target:'nutritionFood'};
  function snapshot(){return core.progress({today:day(),food:nutritionLog,history:read('ngTrainerHistory',[]),measurements:read('ngMeasurements',[]),settings:settings()})}
  function applyDefaults({forceFood=false,forceTraining=false}={}){
-  if(applying)return;const profile=currentProfile();if(!profile){window.ngPersonalPlan=null;guide.hidden=true;return}applying=true;
+  if(applying)return;const profile=currentProfile();if(!profile){window.ngPersonalPlan=null;proteinTarget=0;guide.hidden=true;$('cal').textContent='—';$('protein').textContent='—';$('bmi').textContent='—';if(window.ngRefreshWellness)window.ngRefreshWellness();renderProtein();return}applying=true;
   try{
    let s=settings();if(!s.startedOn)s.startedOn=day();
    // A cached legacy widget value is not evidence of a deliberate custom target.
@@ -143,16 +143,16 @@
   const s=settings();s.training={mode:'custom',goal:$('ngTrainerGoal').value,setting:$('ngTrainerSetting').value,duration:$('ngTrainerDuration').value};persistSettingsSilent(s);applyDefaults();window.dispatchEvent(new Event('ng:data-changed'));
  }));
  // A shared protein target replaces the independent legacy 100 g default.
- window.saveProteinTarget=()=>{const value=Number($('proteinTarget').value);if(!Number.isFinite(value)||value<20||value>300){$('proteinTarget').value=window.ngPersonalPlan?.protein||100;return}const s=settings();s.targets={...s.targets,protein:value};persistSettingsSilent(s);applyDefaults();window.dispatchEvent(new Event('ng:data-changed'))};
+ window.saveProteinTarget=()=>{if(!planNow()){$('proteinTarget').value='';return}const value=Number($('proteinTarget').value);if(!Number.isFinite(value)||value<20||value>300){$('proteinTarget').value=window.ngPersonalPlan?.protein||'';return}const s=settings();s.targets={...s.targets,protein:value};persistSettingsSilent(s);applyDefaults();window.dispatchEvent(new Event('ng:data-changed'))};
  const saveProteinBase=window.saveProtein;window.saveProtein=()=>{saveProteinBase();window.dispatchEvent(new Event('ng:data-changed'))};
- const renderProteinBase=window.renderProtein;window.renderProtein=()=>{renderProteinBase();const food=nutritionLog.filter(x=>!x.date||x.date===day()).reduce((a,x)=>a+Number(x.p||0),0),only=proteinItems.reduce((a,x)=>a+Number(x.g||0),0),sum=food+only;$('proteinTotal').textContent=sum.toFixed(1)+' g';$('proteinBar').style.width=Math.min(100,sum/(window.ngPersonalPlan?.protein||proteinTarget)*100)+'%'};
+ const renderProteinBase=window.renderProtein;window.renderProtein=()=>{renderProteinBase();const food=nutritionLog.filter(x=>!x.date||x.date===day()).reduce((a,x)=>a+Number(x.p||0),0),only=proteinItems.reduce((a,x)=>a+Number(x.g||0),0),sum=food+only;$('proteinTotal').textContent=sum.toFixed(1)+' g';const target=planNow()?.protein||0;$('proteinTarget').value=target||'';$('proteinTarget').disabled=!target;$('proteinTarget').placeholder='Complete your profile';$('proteinBar').style.width=(target?Math.min(100,sum/target*100):0)+'%'};
  const weeklyBase=window.updateWeeklyStrip;window.updateWeeklyStrip=()=>{
   weeklyBase();const start=new Date();start.setDate(start.getDate()-(start.getDay()+6)%7);const dates=Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(d.getDate()+i);return core.localDay(d)});
   const foods=nutritionLog.filter(x=>dates.includes(x.date)),workouts=read('ngTrainerHistory',[]).filter(x=>Number(x.actualSeconds)>=60&&dates.includes(core.localDay(x.date))),recoveries=read('ngMeasurements',[]).filter(x=>dates.includes(x.date));
   $('stripFood').textContent=foods.length;$('stripExercise').textContent=workouts.length;$('weekDots').innerHTML=dates.map((d,i)=>`<i class="${foods.some(x=>x.date===d)||workouts.some(x=>core.localDay(x.date)===d)||recoveries.some(x=>x.date===d)?'done':''}" title="${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]} ${d}: ${foods.some(x=>x.date===d)||workouts.some(x=>core.localDay(x.date)===d)||recoveries.some(x=>x.date===d)?'activity logged':'no activity logged'}"></i>`).join('');
  };
  const profileForm=$('form');profileForm.addEventListener('submit',()=>{
-  if(!profileForm.checkValidity())return;const p=profileFromForm();if(p){localStorage.setItem('profile',JSON.stringify(p));const s=settings();s.targets={...s.targets};delete s.targets.protein;persistSettingsSilent(s);applyDefaults();window.dispatchEvent(new Event('ng:data-changed'))}
+  if(!profileForm.checkValidity())return;const p=profileFromForm();if(p){localStorage.setItem('profile',JSON.stringify(p));const s=settings();s.targets={...s.targets};if(!window.ngRestoringProfile)delete s.targets.protein;persistSettingsSilent(s);applyDefaults();window.dispatchEvent(new Event('ng:data-changed'))}
  });
  const setTabBase=window.setTab;window.setTab=tab=>{setTabBase(tab);renderGuide()};
  const startBase=window.startTrainerSession;window.startTrainerSession=()=>{startBase();window.dispatchEvent(new Event('ng:session-changed'));renderGuide()};
@@ -162,6 +162,6 @@
  window.addEventListener('ng:data-changed',()=>{if(applying)return;clearTimeout(refreshTimer);refreshTimer=setTimeout(()=>{if(currentProfile()){window.ngPersonalPlan=planNow();renderProtein();renderGuide()}},40)});
  window.addEventListener('pagehide',()=>window.speechSynthesis?.cancel());
  // Restore local profile without relying on a cloud request succeeding.
- const savedProfile=read('profile',{});if(core.validProfile(savedProfile)&&!document.body.classList.contains('post-profile')){for(const key of ['age','sex','height','weight','activity','goal'])$(key).value=savedProfile[key];profileForm.requestSubmit()}
+ const savedProfile=read('profile',{});if(core.validProfile(savedProfile)&&!document.body.classList.contains('post-profile')){for(const key of ['age','sex','height','weight','activity','goal'])$(key).value=savedProfile[key];window.ngRestoringProfile=true;try{profileForm.requestSubmit()}finally{window.ngRestoringProfile=false}}
  applyDefaults();setInterval(renderLiveCompanion,1000);
 })();

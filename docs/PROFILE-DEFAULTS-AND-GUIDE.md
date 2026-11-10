@@ -49,3 +49,7 @@ A legacy proteinTarget cache (including 125 g) does not establish a custom targe
 ## Home recalculation behavior
 
 Submitting valid Home details with Calculate my plan resets any saved protein override, including an existing 125 g custom value, and updates the Home protein card, tracker and shared targets from that submitted profile. Custom protein edits made afterward remain shared and survive reload until the next Home calculation or explicit reset. This exception takes precedence over earlier general statements about preserving targets through profile edits. Food logs and deliberate meal/workout choices are retained.
+# Unconfigured target clarification — 11 November 2026
+
+A fresh/incomplete profile has no calorie or protein target. Dashboard and food-tracker setup prompts replace numeric fallback values; generating a personal meal plan requires a valid shared target. After setup, calculated targets and explicit custom overrides work as described below. A legitimate custom 1,800 kcal / 100 g target is retained. Menu/sidebar/setup navigation rules are unchanged. See UNCONFIGURED-TARGETS.md for acceptance cases and Kiro commands.
+

@@ -35,7 +35,7 @@
     try { if (typeof journal !== 'undefined') journal = parse(get('journal') || '[]', []); } catch {}
     try { if (typeof reminders !== 'undefined') reminders = parse(get('reminders') || '[]', []); } catch {}
     try { if (typeof proteinItems !== 'undefined') proteinItems = parse(get('proteinItems') || '[]', []); } catch {}
-    try { if (typeof proteinTarget !== 'undefined') proteinTarget = Number(get('proteinTarget') || 100); } catch {}
+    try { if (typeof proteinTarget !== 'undefined') proteinTarget = Number(get('proteinTarget') || 0); } catch {}
     try { if (typeof nutritionLog !== 'undefined') nutritionLog = parse(get('nutritionLog') || '[]', []); } catch {}
     try { if (typeof journeyModeKey !== 'undefined') journeyModeKey = get('journeyMode') || ''; } catch {}
     try { if (typeof journeyStep !== 'undefined') journeyStep = Number(get('journeyStep') || 0); } catch {}
@@ -57,7 +57,8 @@
       for (const key of ['age','sex','height','weight','activity','goal']) {
         const el = document.getElementById(key); if (el && profile[key] !== undefined) el.value = profile[key];
       }
-      try { document.getElementById('form').requestSubmit(); } catch {}
+      window.ngRestoringProfile=true;
+      try { document.getElementById('form').requestSubmit(); } catch {} finally { window.ngRestoringProfile=false; }
     }
     window.dispatchEvent(new Event('ng:cloud-hydrated'));
   };

@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 1.8 | Reviewed 11 November 2026 | Owner Rishikesh Tiwari
+Version 1.9 | Reviewed 11 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
@@ -402,6 +402,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 11 November 2026 | 1.9 | Removed automatic 1,800 kcal / 100 g dashboard targets for accounts without a completed profile. Shared target policy rejects missing/incomplete profiles and stale plans; unset dashboard/food tracker states show setup prompts, and meal generation requires personal targets. Menu and setup navigation rules explicitly preserved. Added five target-policy/hydration contracts and desktop/mobile target browser cases; expanded account-switch assertions. All 185 contracts, 22 focused browser regressions, TypeScript and production build pass. See docs/UNCONFIGURED-TARGETS.md and docs/TARGETS-VALIDATION.txt for acceptance and actual check status. |
 | 11 November 2026 | 1.8 | Fixed unowned browser data being adopted by a new account. On owner change, preserve prior pending state under its own owner (or quarantine unassigned state), clear active profile/logs, and restore only the verified account snapshot. Gate waits for matching account-ready signal. Reset planner render models and personal-plan context. Four isolation/gate contracts added; 180 contracts and TypeScript pass. Browser switching regression added; real-provider acceptance remains pending. |
 | 11 November 2026 | 1.7 | Unified companion selection and introduction in one card; removed duplicate mascot gallery. First visit opens the six-character chooser; selecting a guide reveals its introduction and Start my journey. Change guide from any tab opens the same chooser on Home. Selected name and symbol persist across tabs/reload. Added two browser scenarios; local fixture interaction verified, full browser suite pending. |
 | 11 November 2026 | 1.6 | Home Calculate my plan now resets the protein override and recalculates the Home results card, tracker and all-tab shared target from the submitted profile. Custom protein edits remain available afterward and survive refresh until the next Home calculation. Added existing-125 override regression and browser scenario; 176 contracts pass. |
@@ -421,6 +422,10 @@ Operational observations recorded in this project session include Supabase email
 Earlier specialist documents and test notes are useful context but cannot override current route code or the explicit status catalogue above. Competitor feature research describes public product behavior only; it does not establish access to competitors' internal architecture, database, security controls or test results.
 
 ### Account isolation and legacy local data
+
+Fresh-account targets are unset until a valid profile has been calculated. Dashboard calories remaining shows an em dash and a profile-setup prompt instead of falling back to 1,800 kcal. Protein logged is displayed independently, without a fabricated 100 g target. The Food protein-target input is empty/disabled without a profile, and the target bar is zero. Meal generation is blocked until a personal target exists. Valid profile-derived and deliberate shared custom targets still apply across tabs. A user-selected 1,800 kcal / 100 g remains allowed. Sidebar/menu/setup visibility rules are unchanged. Detailed acceptance scenarios and Kiro commands are in docs/UNCONFIGURED-TARGETS.md.
+
+Automatic restoration marks its form submission as hydration, preserving saved explicit target overrides. Only deliberate Home recalculation clears the protein override and re-estimates from the profile. This distinction applies to local startup and cloud profile restoration; neither restoration path should reset an intentional protein target.
 
 The active browser wellness keys belong to `_ngCloudOwner`, using the verified server user ID. On any owner mismatch, including a missing legacy owner, cloud-sync preserves prior pending data under that owner or `_ngUnassignedState`, clears active wellness keys and resets visible profile/model state. Only the incoming account’s own pending snapshot and server state can be restored. Account-gate keeps the application hidden until cloud-sync signals the matching identity is ready. A failed state fetch never uploads unread remote state; the isolated account can use its own local data while synchronization retries.
 

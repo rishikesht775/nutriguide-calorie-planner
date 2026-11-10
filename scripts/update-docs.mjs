@@ -5,7 +5,7 @@ const check=process.argv.includes('--check');
 const walk=dir=>existsSync(dir)?readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name,'en')).flatMap(e=>e.isDirectory()?walk(join(dir,e.name)):[join(dir,e.name).replaceAll('\\','/')]):[];
 const roots=['app','public','worker','db','drizzle','lib','hooks','components','tests','scripts','docs/assets','.github/workflows'];
 const include=p=>/\.(?:[cm]?js|tsx?|css|html|sql|json|ya?ml|py|txt|dot)$/.test(p)&&!p.includes('__pycache__');
-const paths=[...roots.flatMap(walk).filter(include),...['package.json','package-lock.json','vite.config.ts','next.config.ts','playwright.config.ts','tsconfig.json','.openai/hosting.json','AGENTS.md','README-KIRO.md','docs/APPLICATION.md','docs/DOCUMENTATION.md','docs/EMAIL-ACCOUNTS.md','docs/ACCOUNT-FLOW.md','docs/PROFILE-DEFAULTS-AND-GUIDE.md']].filter(p=>existsSync(p)).sort();
+const paths=[...roots.flatMap(walk).filter(include),...['package.json','package-lock.json','vite.config.ts','next.config.ts','playwright.config.ts','tsconfig.json','.openai/hosting.json','AGENTS.md','README-KIRO.md','docs/APPLICATION.md','docs/DOCUMENTATION.md','docs/EMAIL-ACCOUNTS.md','docs/ACCOUNT-FLOW.md','docs/PROFILE-DEFAULTS-AND-GUIDE.md','docs/UNCONFIGURED-TARGETS.md','docs/TARGETS-VALIDATION.txt']].filter(p=>existsSync(p)).sort();
 const hash=s=>createHash('sha256').update(s).digest('hex');
 const files=Object.fromEntries([...new Set(paths)].map(p=>[p,hash(readFileSync(p))]));
 const digest=hash(JSON.stringify(files));

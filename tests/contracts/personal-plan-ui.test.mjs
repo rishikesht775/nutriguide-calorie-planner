@@ -26,7 +26,7 @@ function fixture(initial={}){
  return {context,nodes,storage,events,profile,submit(){byId('form').requestSubmit()},flush(){for(const fn of timers.splice(0))fn()},click(selector,dataset){const button={dataset,closest:q=>q.includes(selector)?button:null};for(const fn of events['doc:click']||[])fn({target:{closest:q=>q.includes(selector)?button:null}})}};
 }
 test('real personal module initializes profile targets and seeds a week without diary logs',()=>{
- const f=fixture();assert.equal(f.context.ngPersonalPlan.calories,1950);assert.equal(f.nodes.get('proteinTarget')?.value,undefined);assert.equal(f.context.proteinTarget,118);assert.equal(JSON.parse(f.storage.get('ngWeeklyPlans')).length,7);assert.deepEqual(f.context.nutritionLog,[]);assert.equal(f.nodes.get('ngJourneyGuide').hidden,false);
+ const f=fixture();assert.equal(f.context.ngPersonalPlan.calories,1950);assert.equal(f.nodes.get('proteinTarget')?.value,'118');assert.equal(f.context.proteinTarget,118);assert.equal(JSON.parse(f.storage.get('ngWeeklyPlans')).length,7);assert.deepEqual(f.context.nutritionLog,[]);assert.equal(f.nodes.get('ngJourneyGuide').hidden,false);
 });
 test('profile submit updates auto defaults and the shared protein target',()=>{
  const f=fixture();f.nodes.get('weight').value='75';f.nodes.get('goal').value='gain';f.submit();assert.equal(f.context.ngPersonalPlan.protein,120);assert.equal(f.storage.get('proteinTarget'),'120');assert.equal(f.context.ngPersonalPlan.training.goal,'strength');
@@ -63,4 +63,11 @@ test('Home recalculation replaces an existing shared 125g override on the result
  const f=fixture({proteinTarget:'125',ngPersonalSettings:JSON.stringify({version:1,targets:{protein:125}})});assert.equal(f.nodes.get('protein').textContent,'125 g');
  f.nodes.get('weight').value='70';f.submit();assert.equal(f.nodes.get('protein').textContent,'98 g');assert.equal(f.context.proteinTarget,98);assert.equal(f.storage.get('proteinTarget'),'98');assert.match(f.nodes.get('ngSharedTargets').innerHTML,/98 g protein/);assert.equal(f.context.ngPersonalPlan.proteinSource,'profile');
  f.nodes.get('goal').value='gain';f.submit();assert.equal(f.nodes.get('protein').textContent,'112 g');
+});
+
+test('automatic profile hydration preserves explicit targets while a deliberate Home calculation refreshes protein',()=>{
+ const f=fixture({ngPersonalSettings:JSON.stringify({version:1,targets:{calories:2100,protein:125}})});
+ f.context.ngRestoringProfile=true;f.submit();f.context.ngRestoringProfile=false;
+ assert.equal(f.context.ngPersonalPlan.calories,2100);assert.equal(f.context.ngPersonalPlan.protein,125);
+ f.submit();assert.equal(f.context.ngPersonalPlan.calories,2100);assert.equal(f.context.ngPersonalPlan.protein,118);
 });

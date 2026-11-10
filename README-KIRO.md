@@ -1,5 +1,17 @@
 # NutriGuide testing in Kiro (Windows)
 
+## Fresh-account target fix (11 November 2026)
+
+The menu and its setup rules are unchanged. New accounts show setup prompts instead of automatic 1,800 kcal / 100 g targets. Pull main before testing. Run the focused checks after the setup commands below:
+
+```powershell
+npm.cmd run test:contracts
+npx.cmd playwright test tests/e2e/unconfigured-targets.spec.ts tests/e2e/account-isolation.spec.ts tests/e2e/personal-plan.spec.ts
+npm.cmd run docs:check
+```
+
+See docs/UNCONFIGURED-TARGETS.md for expected results and docs/TARGETS-VALIDATION.txt for executed checks. Automatic TXT reports remain under test-reports. Existing downloaded Word documents are snapshots; the Documentation workflow creates the updated export from docs/APPLICATION.md.
+
 Open your actual repository folder, for example:
 
 ```powershell
