@@ -13,7 +13,7 @@ class NativeFlowTest {
     @Test fun dailySummaryAndBottomNavigationAreNativeCompose() {
         rule.onNodeWithText("A little better, every day.").assertIsDisplayed()
         rule.onNodeWithText("Set up profile").performClick()
-        rule.onNodeWithText("Today").assertIsDisplayed()
+        rule.onNodeWithText("Your daily wellness space").assertIsDisplayed()
         rule.onNodeWithText("Food").performClick()
         rule.onNodeWithText("Food diary").assertIsDisplayed()
         rule.onNodeWithText("Move").performClick()
