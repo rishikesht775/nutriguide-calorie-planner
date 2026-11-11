@@ -1,5 +1,11 @@
 # NutriGuide native Android app
 
+## Native UI redesign — 11 November 2026
+
+The Android app is being rebuilt around Jetpack Compose and Material 3. The redesign uses an app-level `Scaffold`, a Material 3 bottom navigation bar, feature-oriented screens, a ViewModel-owned UI state, and a repository boundary for persistence and sync. The current UI direction follows established nutrition-app patterns: a Today diary as the first screen, direct meal logging, visible calorie/macro summaries, quick actions, workout cards and weekly reports. It retains NutriGuide’s green visual language and account-isolation behavior.
+
+This redesign is intentionally separate from the website DOM. The Android app is not a WebView wrapper and does not copy a website layout into native views.
+
 ## Native version 0.2.0
 
 This replaces the earlier browser-backed launcher. MainActivity renders native Android controls and screens. There is no WebView, Custom Tab, or website-launch intent in the native experience. Home, Food, Move, Journey, Reports, profile setup and email sign-in are implemented inside the APK.

@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 2.1 | Reviewed 11 November 2026 | Owner Rishikesh Tiwari
+Version 2.2 | Reviewed 11 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
@@ -404,6 +404,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 11 November 2026 | 2.2 | Started the native UI architecture redesign with Jetpack Compose and Material 3: Scaffold + bottom navigation, Today/Food/Move/Journey/Reports feature surfaces, ViewModel UI state, and a repository boundary for future persistence/sync. Native UI test migrated to Compose navigation checks. Product direction follows documented nutrition-app patterns while preserving NutriGuide branding and account isolation. Full APK/emulator validation is pending for this redesign commit. |
 | 11 November 2026 | 2.1 | Replaced browser launcher with native Android views, offline per-owner data, profile targets, food/custom nutrition, timed workouts, recovery, reports/CSV and native email API/manual cloud sync. Session cookies use Android Keystore encryption. Removed AndroidX Browser. Seven JVM tests, APK/instrumentation compilation, Android lint and the Android 11 native Espresso flow passed in run 42913202451 (source 5e99d529). Provider/physical-device acceptance and full web parity are not claimed. See docs/ANDROID.md. |
 | 11 November 2026 | 2.0 | Added an Android browser-backed launcher using Custom Tabs, pinned SDK/build inputs and a GitHub Actions debug APK/lint workflow. The app reuses the published responsive website and browser sessions; no offline/native health integration or release signing is implied. Added Android build/install/Kiro instructions and ten physical-device acceptance cases in docs/ANDROID.md. Android workflow run 42908566596 successfully built the debug APK and passed lint for b67142f; download and verification are in docs/ANDROID.md. Physical-phone acceptance remains pending. |
 | 11 November 2026 | 1.9 | Removed automatic 1,800 kcal / 100 g dashboard targets for accounts without a completed profile. Shared target policy rejects missing/incomplete profiles and stale plans; unset dashboard/food tracker states show setup prompts, and meal generation requires personal targets. Menu and setup navigation rules explicitly preserved. Added five target-policy/hydration contracts and desktop/mobile target browser cases; expanded account-switch assertions. All 185 contracts, 22 focused browser regressions, TypeScript and production build pass. See docs/UNCONFIGURED-TARGETS.md and docs/TARGETS-VALIDATION.txt for acceptance and actual check status. |

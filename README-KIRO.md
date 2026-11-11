@@ -1,5 +1,9 @@
 # NutriGuide testing in Kiro (Windows)
 
+## Native Android UI redesign
+
+The Android module is moving to Jetpack Compose + Material 3. Test the native app through its Today, Food, Move, Journey and Reports tabs; do not compare it with the website DOM. The native UI test asserts the Compose navigation flow. Run the Android workflow after pulling the redesign commit; a successful workflow is required before treating the new APK as ready for phone installation.
+
 ## Android APK
 
 The android/ directory now contains native Android screens, not the superseded browser launcher. GitHub Actions -> NutriGuide Android APK builds/tests/lints the native app and exercises an Android emulator before uploading NutriGuide-Native-Android-APK. See docs/ANDROID.md for offline features, account/cloud limits and phone testing. Native source is packaged in the APK; no web UI publication is needed for native target fixes.
