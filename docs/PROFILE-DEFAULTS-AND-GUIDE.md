@@ -52,4 +52,3 @@ Submitting valid Home details with Calculate my plan resets any saved protein ov
 # Unconfigured target clarification — 11 November 2026
 
 A fresh/incomplete profile has no calorie or protein target. Dashboard and food-tracker setup prompts replace numeric fallback values; generating a personal meal plan requires a valid shared target. After setup, calculated targets and explicit custom overrides work as described below. A legitimate custom 1,800 kcal / 100 g target is retained. Menu/sidebar/setup navigation rules are unchanged. See UNCONFIGURED-TARGETS.md for acceptance cases and Kiro commands.
-
