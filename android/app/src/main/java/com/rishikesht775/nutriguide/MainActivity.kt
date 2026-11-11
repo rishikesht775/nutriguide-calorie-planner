@@ -14,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -58,7 +59,7 @@ class MainActivity : ComponentActivity() {
         Scaffold(
             containerColor = Soft,
             topBar = { CenterAlignedTopAppBar(title = { Text("NutriGuide", fontWeight = FontWeight.Bold) }, actions = { IconButton(onClick = {}) { Icon(Icons.Default.Person, "Account") } }) },
-            bottomBar = { NavigationBar(containerColor = Color.White) { AppTab.entries.forEach { tab -> NavigationBarItem(selected = ui.tab == tab, onClick = { vm.select(tab) }, icon = { Icon(tabIcon(tab), tab.label) }, label = { Text(tab.label) }) } } },
+            bottomBar = { NavigationBar(containerColor = Color.White) { AppTab.entries.forEach { tab -> NavigationBarItem(modifier = Modifier.testTag("nav_${tab.label.lowercase()}"), selected = ui.tab == tab, onClick = { vm.select(tab) }, icon = { Icon(tabIcon(tab), tab.label) }, label = { Text(tab.label) }) } } },
             floatingActionButton = { if (ui.tab == AppTab.TODAY || ui.tab == AppTab.FOOD) FloatingActionButton(onClick = { vm.addFood("Quick add", 100, 5.0) }, containerColor = Green) { Icon(Icons.Default.Add, "Quick add") } }
         ) { padding -> Box(Modifier.padding(padding).fillMaxSize()) { when (ui.tab) { AppTab.TODAY -> TodayScreen(ui, vm); AppTab.FOOD -> FoodScreen(ui, vm); AppTab.MOVE -> MoveScreen(); AppTab.JOURNEY -> JourneyScreen(); AppTab.REPORTS -> ReportsScreen(ui) } } }
     }

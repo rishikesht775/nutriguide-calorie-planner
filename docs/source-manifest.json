@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "a8f3ea6945468dac1b80b0147a8daa795c5064d3846579536b9125620ff06767",
+  "sourceDigest": "841b35ffd49cec47d538c1f0c49a298b775e9c783e0c48f41d68d1acf18c57a0",
   "files": {
     ".github/workflows/android.yml": "44978e3028eb245862c5776f89fea0210d3e738c5ccb241ab0a9172ed9bd448b",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
@@ -9,10 +9,10 @@
     "AGENTS.md": "82f80eecc0af9cdda7ac76580f21d1577e18de1ba3ae190803400fcb0b5b08ec",
     "README-KIRO.md": "bd6143c2d13c57ffe856660662103f2c87f7b8a7283cd3003e2f9a61f4c6388b",
     "android/app/build.gradle": "447ab09adcab2171f993724ab4bede8f611691ac3612dc71546736af49895f71",
-    "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "a90c00ac28171df9fa7619c7a1b878b9a3d8e0145b60c1330ce258a8e5e93203",
+    "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "4a47a95d77586e4306380433722377f1e2c6fa81869b6eea5b9a86416cd077d0",
     "android/app/src/main/AndroidManifest.xml": "86159d4a78b356bddd310fe551018c2c0e22a90894aacdf28a67958946c52adc",
     "android/app/src/main/java/com/rishikesht775/nutriguide/FoodCatalog.java": "e8276e89f4c174ba0c707227c9e6e9a9b3e21f25c9b51ed205aca1a18f833652",
-    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "c438e928b7fdfa92fb38af4ad831b00dafe535a817322ba4c2f7be7f59497991",
+    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "2f024f40b115289b82de9bceb5eabb4bf669745257c0b6d85e9e77e859609902",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeApi.java": "acae2545de4065c72605d04c521e985bfb16e2e2fef82a6f48fb1c689232f965",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeStore.java": "c5f4be47192513549511ba71169637b6ea87b2d2a656e210be9fd1ca35570811",
     "android/app/src/main/java/com/rishikesht775/nutriguide/StateMerge.java": "2d3a372b61934b7272a3e9615dee3ddf0181150a908d523cf34d3457c86b909e",

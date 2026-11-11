@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import org.junit.Rule
 import org.junit.Test
@@ -13,15 +14,15 @@ class NativeFlowTest {
 
     @Test fun dailySummaryAndBottomNavigationAreNativeCompose() {
         rule.onNodeWithText("A little better, every day.").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Food").performClick()
+        rule.onNodeWithTag("nav_food").performClick()
         rule.onNodeWithText("Food diary").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Move").performClick()
+        rule.onNodeWithTag("nav_move").performClick()
         rule.onNodeWithText("Choose a session that fits your energy today.").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Journey").performClick()
+        rule.onNodeWithTag("nav_journey").performClick()
         rule.onNodeWithText("Today's check-in").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Reports").performClick()
+        rule.onNodeWithTag("nav_reports").performClick()
         rule.onNodeWithText("Your wellness rhythm this week.").assertIsDisplayed()
-        rule.onNodeWithContentDescription("Today").performClick()
+        rule.onNodeWithTag("nav_today").performClick()
         rule.onNodeWithText("Your daily wellness space").assertIsDisplayed()
     }
 }
