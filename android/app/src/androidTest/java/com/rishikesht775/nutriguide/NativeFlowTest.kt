@@ -12,15 +12,15 @@ class NativeFlowTest {
 
     @Test fun dailySummaryAndBottomNavigationAreNativeCompose() {
         rule.onNodeWithText("A little better, every day.").assertIsDisplayed()
-        rule.onNodeWithText("Set up profile").performClick()
-        rule.onNodeWithText("Your daily wellness space").assertIsDisplayed()
-        rule.onNodeWithText("Food").performClick()
+        rule.onNodeWithContentDescription("Food").performClick()
         rule.onNodeWithText("Food diary").assertIsDisplayed()
-        rule.onNodeWithText("Move").performClick()
+        rule.onNodeWithContentDescription("Move").performClick()
         rule.onNodeWithText("Choose a session that fits your energy today.").assertIsDisplayed()
-        rule.onNodeWithText("Journey").performClick()
-        rule.onNodeWithText("Today’s check-in").assertIsDisplayed()
-        rule.onNodeWithText("Reports").performClick()
+        rule.onNodeWithContentDescription("Journey").performClick()
+        rule.onNodeWithText("Today's check-in").assertIsDisplayed()
+        rule.onNodeWithContentDescription("Reports").performClick()
         rule.onNodeWithText("Your wellness rhythm this week.").assertIsDisplayed()
+        rule.onNodeWithContentDescription("Today").performClick()
+        rule.onNodeWithText("Your daily wellness space").assertIsDisplayed()
     }
 }
