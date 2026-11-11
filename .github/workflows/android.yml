@@ -57,4 +57,4 @@ jobs:
           path: android/app/build/reports/lint-results-debug.*
           if-no-files-found: ignore
 
-# Compose redesign validation follows the final source tree. 
+# Compose redesign validation follows the final source tree.
