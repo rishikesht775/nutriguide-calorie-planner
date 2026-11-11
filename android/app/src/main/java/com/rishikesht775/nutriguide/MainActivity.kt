@@ -51,6 +51,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState); setContent { NutriGuideApp() } }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable fun NutriGuideApp(vm: NativeViewModel = viewModel()) {
     val ui = vm.ui
     MaterialTheme(colorScheme = lightColorScheme(primary = Green, onPrimary = Color.White, background = Soft, surface = Color.White, onSurface = Ink)) {
@@ -83,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable private fun JourneyScreen() { LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) { item { Text("Journey", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold); Text("Recovery and reflection belong beside food and movement.", color = Color(0xff536f67)) }; item { Card { Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) { Text("Today’s check-in", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold); OutlinedTextField(value = "", onValueChange = {}, label = { Text("How are you feeling?") }, modifier = Modifier.fillMaxWidth()); Button(onClick = {}) { Text("Save check-in") } } } } }
 
-@Composable private fun ReportsScreen(ui: NativeUiState) { LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) { item { Text("Reports", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold); Text("Your wellness rhythm this week.", color = Color(0xff536f67)) }; item { Card { Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { Text("This week", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold); Text("Food logged: ${ui.foods.size}"); Text("Current protein: ${ui.protein.toInt()} g"); Text("Water today: ${ui.water} glasses") } } } }
+@Composable private fun ReportsScreen(ui: NativeUiState) { LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) { item { Text("Reports", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold); Text("Your wellness rhythm this week.", color = Color(0xff536f67)) }; item { Card { Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { Text("This week", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold); Text("Food logged: ${ui.foods.size}"); Text("Current protein: ${ui.protein.toInt()} g"); Text("Water today: ${ui.water} glasses") } } } } }
 
 @Composable private fun MetricCard(title: String, value: String, icon: androidx.compose.ui.graphics.vector.ImageVector, modifier: Modifier) { Card(modifier = modifier, shape = RoundedCornerShape(18.dp)) { Column(Modifier.padding(14.dp)) { Icon(icon, null, tint = Green); Text(title, color = Color(0xff536f67)); Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) } } }
 
