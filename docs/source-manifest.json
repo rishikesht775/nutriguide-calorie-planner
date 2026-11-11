@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "3181ce70d81bbe351503ee2e37adfb8a89dd84470504f9a3feb456174f09a90a",
+  "sourceDigest": "a2b7a4ab5d49905b7639e2a44ff9506c8e5b403d7290a3ead852cf64459fa34c",
   "files": {
     ".github/workflows/android.yml": "a0b8e336abfc60a112617dbdcb87b926b3d9b84101d7db16f85682ae9ab16c7a",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
@@ -9,8 +9,10 @@
     "AGENTS.md": "82f80eecc0af9cdda7ac76580f21d1577e18de1ba3ae190803400fcb0b5b08ec",
     "README-KIRO.md": "bd6143c2d13c57ffe856660662103f2c87f7b8a7283cd3003e2f9a61f4c6388b",
     "android/app/build.gradle": "d83297be279706324784ddcbd9c07b198532af9e4a673b7eaad0cbb37186b542",
+    "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "e42979482fca9fe375e208626ff7f7d9f781814f81aee4cf7083dc5cc02410a1",
     "android/app/src/main/AndroidManifest.xml": "86159d4a78b356bddd310fe551018c2c0e22a90894aacdf28a67958946c52adc",
     "android/app/src/main/java/com/rishikesht775/nutriguide/FoodCatalog.java": "e8276e89f4c174ba0c707227c9e6e9a9b3e21f25c9b51ed205aca1a18f833652",
+    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "23ec022b67e7dec68e2807af55ad1b1e0b3b02e00395931c64c6e6842f77d1ed",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeApi.java": "acae2545de4065c72605d04c521e985bfb16e2e2fef82a6f48fb1c689232f965",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeStore.java": "c5f4be47192513549511ba71169637b6ea87b2d2a656e210be9fd1ca35570811",
     "android/app/src/main/java/com/rishikesht775/nutriguide/StateMerge.java": "2d3a372b61934b7272a3e9615dee3ddf0181150a908d523cf34d3457c86b909e",
@@ -144,7 +146,7 @@
     "scripts/run-framework.mjs": "4d1b0af511b18ac51828dbd20dc93c9d2df60bfd888102abf0c3a6bfacfccfab",
     "scripts/sites-env.mjs": "21d7bde6acb9f716287e652c1b0e43ae4803d79be367ca2192fcba14740b5338",
     "scripts/tool-environment.mjs": "6da99286e0eb7905595ca851e68983bedf94a0f93814819d61f2b1f3a0342ba2",
-    "scripts/update-docs.mjs": "1dffca81a0ea43d2a6eeb5b14951210898b9b4cec970cb4d018843aabb54ba0d",
+    "scripts/update-docs.mjs": "6bcc3be0ab0008d99750a6277f75ebc936acf27e24eda5bd187ae42e7d1fed6d",
     "scripts/vite/connector-preview-plugin.mjs": "a6a9fe2086e302f94a3f91e3c1a68a45bb3aa07d4a79faf01b14732191eb4e80",
     "scripts/vite/sites-vite-plugin.ts": "07af20e7097d9ed1d76f7c446d02997550b8fc5ca89668b249e25eabd62c6834",
     "tests/contracts/account-gate.test.mjs": "88e5389ccfa71a4186d7649dece7c0909a81861397df6fc938ac9100151cc83a",
