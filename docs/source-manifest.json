@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "48c667b3144dd022e183e931b92baf840fc502f3a76044a3764b68396b15c038",
+  "sourceDigest": "8b4e4bd9d7412df998eb10d1b1ddc453007e705b7b96f68b19de40b3add2fc40",
   "files": {
     ".github/workflows/android.yml": "44978e3028eb245862c5776f89fea0210d3e738c5ccb241ab0a9172ed9bd448b",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
@@ -12,7 +12,7 @@
     "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "e42979482fca9fe375e208626ff7f7d9f781814f81aee4cf7083dc5cc02410a1",
     "android/app/src/main/AndroidManifest.xml": "86159d4a78b356bddd310fe551018c2c0e22a90894aacdf28a67958946c52adc",
     "android/app/src/main/java/com/rishikesht775/nutriguide/FoodCatalog.java": "e8276e89f4c174ba0c707227c9e6e9a9b3e21f25c9b51ed205aca1a18f833652",
-    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "6dc78cc45666b9d2536ed36cab07c91508089e9a8edf005b8f2a735d638565ab",
+    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "c438e928b7fdfa92fb38af4ad831b00dafe535a817322ba4c2f7be7f59497991",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeApi.java": "acae2545de4065c72605d04c521e985bfb16e2e2fef82a6f48fb1c689232f965",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeStore.java": "c5f4be47192513549511ba71169637b6ea87b2d2a656e210be9fd1ca35570811",
     "android/app/src/main/java/com/rishikesht775/nutriguide/StateMerge.java": "2d3a372b61934b7272a3e9615dee3ddf0181150a908d523cf34d3457c86b909e",
