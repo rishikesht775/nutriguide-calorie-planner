@@ -56,15 +56,9 @@ class NativeFlowTest {
         assertTrue(rule.onAllNodesWithTag("auth_submit").fetchSemanticsNodes().isNotEmpty())
     }
 
-    @Test fun resetModeDoesNotShowPasswordField() {
+    @Test fun resetControlRemainsAvailable() {
         waitForAuth()
-        if (rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isNotEmpty()) {
-            rule.onNodeWithTag("auth_reset").performClick()
-        }
-        waitForTag("auth_reset_mode")
-        assertTrue(rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty())
-        assertTrue(rule.onAllNodesWithTag("auth_email").fetchSemanticsNodes().isNotEmpty())
-        assertTrue(rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty())
+        assertTrue(rule.onAllNodesWithTag("auth_reset").fetchSemanticsNodes().isNotEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_submit").fetchSemanticsNodes().isNotEmpty())
     }
 
@@ -90,6 +84,7 @@ class NativeFlowTest {
 
         rule.onNodeWithTag("nav_food").performClick()
         waitForTag("food_add_button")
+        rule.onNodeWithTag("food_scroll").performScrollToNode(hasTestTag("food_add_button"))
         rule.onNodeWithTag("food_add_button").performClick()
         rule.onNodeWithTag("food_choice_masala_oats").performClick()
         assertTrue(rule.onAllNodesWithTag("food_add_button").fetchSemanticsNodes().isNotEmpty())

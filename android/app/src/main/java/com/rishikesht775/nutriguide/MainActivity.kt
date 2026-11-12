@@ -425,7 +425,7 @@ private fun FoodScreen(ui: NativeUiState, vm: NativeViewModel) {
     val meals = listOf("Breakfast", "Lunch", "Dinner", "Snacks")
     var selectedDate by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
     val day = runCatching { LocalDate.parse(selectedDate) }.getOrElse { LocalDate.now() }
-    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    LazyColumn(modifier = Modifier.testTag("food_scroll"), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Food diary", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Log your meals and build balanced habits", color = Muted) }
         item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = { selectedDate = day.minusDays(1).toString() }) { Icon(Icons.Default.ChevronLeft, "Previous day", tint = DarkTeal) }; Column(horizontalAlignment = Alignment.CenterHorizontally) { Text(if (day == LocalDate.now()) "Today" else day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()), color = Muted, style = MaterialTheme.typography.labelMedium); Text(day.format(DateTimeFormatter.ofPattern("MMM d", Locale.getDefault())), fontWeight = FontWeight.Bold, color = DarkTeal) }; IconButton(onClick = { selectedDate = day.plusDays(1).toString() }) { Icon(Icons.Default.ChevronRight, "Next day", tint = DarkTeal) } } } }
         meals.forEach { meal -> item { MealRow(meal, ui.foods.filter { it.date == selectedDate && it.meal == meal }) } }

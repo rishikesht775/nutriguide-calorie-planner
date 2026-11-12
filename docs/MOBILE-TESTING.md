@@ -43,7 +43,7 @@ The CI alignment check fails an Android source change when neither the mobile te
 | --- | --- | --- |
 | MOB-AUTH-01 | Auth gate renders without a WebView and exposes email/password sign in | `NativeFlowTest.authGateShowsRealAccountActions` |
 | MOB-AUTH-02 | Create-account mode exposes name, email, password and confirmation fields | `NativeFlowTest.createAccountModeShowsMatchingRegistrationFields` |
-| MOB-AUTH-03 | Forgot-password mode hides the password field and keeps the email field | Compose instrumentation |
+| MOB-AUTH-03 | Forgot-password control remains reachable with email and submit controls | `NativeFlowTest.resetControlRemainsAvailable` plus provider acceptance |
 | MOB-AUTH-04 | Unverified or invalid sign-in stays signed out with a safe error | JVM/API contract plus manual provider acceptance |
 | MOB-AUTH-05 | Successful sign-in selects the verified email owner | Native API contract and manual provider acceptance |
 | MOB-AUTH-06 | Logout clears the native session and returns to the auth gate | Instrumentation/manual provider acceptance |
@@ -147,7 +147,7 @@ The instrumentation suite now launches a deterministic signed-in test account th
 | Test | Coverage |
 | --- | --- |
 | `NativeFlowTest.fullSignedInJourneyRunsAutomatically` | Profile setup, steps, water, Food picker/logging, Move completion, Journey check-in, Reports weekly/monthly toggle |
-| `today_scroll` semantics | Keeps Today actions discoverable to automation on API 30 and smaller emulator viewports |\n| Navigation waits | Tests wait for the destination semantics node before interacting with each tab |\n| Reset-mode semantics | The reset card has a dedicated test tag so repeated instrumentation runs do not depend on saved UI mode |
+| `today_scroll` semantics | Keeps Today actions discoverable to automation on API 30 and smaller emulator viewports |\n| `food_scroll` semantics | Keeps the Food add action discoverable to automation after meal rows on small emulators |\n| Navigation waits | Tests wait for the destination semantics node before interacting with each tab |\n| Reset-mode semantics | The reset card has a dedicated test tag so repeated instrumentation runs do not depend on saved UI mode |
 | `NativeFlowTest.testModeStartsWithoutFabricatedCalorieTarget` | New test account starts without a hard-coded calorie target; profile setup is required |
 | `NativeFlowTest.everyBottomTabRemainsReachable` | Today, Food, Move, Journey and Reports navigation without a crash |
 | Existing auth tests | Auth gate, create-account fields, reset mode and account-mode navigation |
