@@ -8,7 +8,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
-class NativeFlowTest {
+class NativeFlowTest {\n    // Functional tests run against the deterministic signed-in test account.
     @get:Rule val rule = createAndroidComposeRule<MainActivity>()
 
     private fun waitForAuth() {

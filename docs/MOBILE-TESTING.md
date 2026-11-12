@@ -151,7 +151,7 @@ The instrumentation suite now launches a deterministic signed-in test account th
 | `NativeFlowTest.everyBottomTabRemainsReachable` | Today, Food, Move, Journey and Reports navigation without a crash |
 | Existing auth tests | Auth gate, create-account fields, reset mode and account-mode navigation |
 
-The release command must run unit tests, lint, build and connected instrumentation together. A failure in any stage blocks the APK artifact:
+The release command must run unit tests, lint, build and connected instrumentation together. The Android source, instrumentation test and this matrix are committed together for each release-gate change. A failure in any stage blocks the APK artifact:
 ```powershell
 gradle -p android testDebugUnitTest lintDebug assembleDebug connectedDebugAndroidTest
 ```
