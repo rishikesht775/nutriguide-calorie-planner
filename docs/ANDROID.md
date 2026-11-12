@@ -10,6 +10,16 @@ The Android app is being rebuilt around Jetpack Compose and Material 3. The rede
 
 This redesign is intentionally separate from the website DOM. The Android app is not a WebView wrapper and does not copy a website layout into native views.
 
+## Flutter decision
+
+The current Android client uses Kotlin, Jetpack Compose and AndroidX because this release targets Android first and needs direct control over Android system insets, lifecycle, keyboard behavior, offline storage, secure cookies, device permissions and Samsung acceptance. The existing native implementation, instrumentation tests and CI workflow are built around that choice.
+
+Flutter would be a good choice when the product needs Android and iOS from one shared UI codebase, the team can maintain Dart and Flutter tooling, and platform-specific behavior can be isolated behind plugins or platform channels. It can also be considered for a future cross-platform redesign when feature parity, accessibility, performance and device integrations are revalidated on both platforms.
+
+Flutter is not used for this release because switching would be a rewrite rather than a drop-in replacement. It would require rebuilding the screens, state and persistence boundaries, authentication/device integrations, CI packaging, manual device cases and the related architecture documents. The automated Flutter layers would need to move to flutter_test and integration_test. Flutter would still require the Android SDK, Java and an emulator or physical device for Android builds.
+
+Do not mix Flutter widgets into the current Compose application. If a Flutter migration is approved later, create a separately scoped migration plan, preserve the mobile case IDs, map every case to Flutter tests, and compare the native and Flutter builds on Samsung hardware before replacing the Android client.
+
 ## Native version 0.2.0
 
 This replaces the earlier browser-backed launcher. MainActivity renders native Android controls and screens. There is no WebView, Custom Tab, or website-launch intent in the native experience. Home, Food, Move, Journey, Reports, profile setup and email sign-in are implemented inside the APK.

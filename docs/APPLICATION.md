@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 2.3 | Reviewed 12 November 2026 | Owner Rishikesh Tiwari
+Version 2.4 | Reviewed 12 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
@@ -64,6 +64,13 @@ The user checks remaining calories and protein, logs foods and servings, records
 The user records sleep, mood, stress and optional measurements, reviews progress and prepares reminders. Available exports include CSV, text shopping and family-plan files, JSON backup and browser print or Save as PDF. These are user-controlled downloads; they are not automatic clinical reports or scheduled email summaries.
 
 ## 3 System architecture
+
+### Android framework decision
+
+The mobile release uses Kotlin with Jetpack Compose and AndroidX. This gives the Android-first product direct control over status and navigation insets, Activity lifecycle, keyboard behavior, local persistence, secure session cookies, permissions and Samsung device acceptance. The native test suite and Android workflow are aligned to this framework.
+
+Flutter is appropriate when Android and iOS need a shared Dart UI layer and the team accepts Flutter tooling, plugin and platform-channel maintenance. Flutter is deferred here because it would require a full migration of the screens, state, storage, account/device integrations, CI, manual acceptance matrix and automated tests. The Flutter test layers would use flutter_test and integration_test. Flutter would still require the Android SDK, Java and device/emulator setup. Any future migration must preserve mobile case IDs, map them to Flutter tests, and complete Android and iOS parity validation before replacing the Compose client.
+
 
 ![NutriGuide system architecture](assets/architecture.dot)
 
@@ -404,6 +411,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 12 November 2026 | 2.4 | Documented the Kotlin/Jetpack Compose decision, the circumstances where Flutter would be appropriate, and the migration/test scope required before changing mobile frameworks. |
 | 12 November 2026 | 2.3 | Added a separate native Android mobile test strategy and case matrix covering authentication, safe areas, lifecycle, Today, Food date isolation, Move, Journey, Reports, network failures, privacy and Samsung S21 FE acceptance. Added Compose auth instrumentation expansion, JVM date/duplicate-entry policy checks, and an Android CI alignment guard requiring Android behavior changes to update both tests and mobile documentation. The native APK build/lint/emulator gate remains the release evidence; provider and physical-device cases remain explicitly pending. |\n| 11 November 2026 | 2.2 | Started the native UI architecture redesign with Jetpack Compose and Material 3: Scaffold + bottom navigation, Today/Food/Move/Journey/Reports feature surfaces, ViewModel UI state, and a repository boundary for future persistence/sync. Native UI test migrated to Compose navigation checks. Product direction follows documented nutrition-app patterns while preserving NutriGuide branding and account isolation. Full APK/emulator validation is pending for this redesign commit. |
 | 11 November 2026 | 2.1 | Replaced browser launcher with native Android views, offline per-owner data, profile targets, food/custom nutrition, timed workouts, recovery, reports/CSV and native email API/manual cloud sync. Session cookies use Android Keystore encryption. Removed AndroidX Browser. Seven JVM tests, APK/instrumentation compilation, Android lint and the Android 11 native Espresso flow passed in run 42913202451 (source 5e99d529). Provider/physical-device acceptance and full web parity are not claimed. See docs/ANDROID.md. |
 | 11 November 2026 | 2.0 | Added an Android browser-backed launcher using Custom Tabs, pinned SDK/build inputs and a GitHub Actions debug APK/lint workflow. The app reuses the published responsive website and browser sessions; no offline/native health integration or release signing is implied. Added Android build/install/Kiro instructions and ten physical-device acceptance cases in docs/ANDROID.md. Android workflow run 42908566596 successfully built the debug APK and passed lint for b67142f; download and verification are in docs/ANDROID.md. Physical-phone acceptance remains pending. |

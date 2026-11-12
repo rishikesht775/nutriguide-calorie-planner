@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "cdd1a2e5e0560c56084288ff1df538667a1ae5470111ab52cb870334b45ff047",
+  "sourceDigest": "6a4409aa9ff24f0318ea3e17709d61f48f0269d3777ae0a3e8d6a799df8a6e4a",
   "files": {
     ".github/workflows/android.yml": "6d2cb9a50ccc593300f197b13fd6f29646b8936993c678fb2eaafeff7b02f761",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
@@ -99,8 +99,8 @@
     "components/ui/tooltip.tsx": "a0784eb77831a799fad7991df4f1b666f876201565a80175e1aa68733574a2e4",
     "db/schema.ts": "433a7f9a630470ddb6e26e9b164e2b37d18c6a2067feb3019d10ad38325503f8",
     "docs/ACCOUNT-FLOW.md": "c6f147bd241250e12778b200a77efecb3433f69ad9f765a2a601ec3a99ad3634",
-    "docs/ANDROID.md": "22e2d92dd3dcc4924ef5fa3219560d2eebd2949f842b3e9f26e46766f6d3c670",
-    "docs/APPLICATION.md": "827e214b71f98e938bf134c068e376cbed09d5a18bfad5e3aebee550d5989127",
+    "docs/ANDROID.md": "861572b51aa44e67089966f324344e407a739895a7a3c1c7d235ca6663ca7571",
+    "docs/APPLICATION.md": "9fed2fe70bfdc1a7046580a3cfeb7fbb2deb02fdef196c7469df135b16884a86",
     "docs/DOCUMENTATION.md": "3143c2d85820f1d684f3742076978957f06e9f59654ad9e3fbcf3af902f3cc72",
     "docs/EMAIL-ACCOUNTS.md": "8ec7bad82243f35996be01e313656595f5f78138ea5f194e56c63d33e2935e36",
     "docs/PROFILE-DEFAULTS-AND-GUIDE.md": "5c3d28e94163cc647b2b3e7466a2b5d0d86d63cbf365d1b196e5216eeffd0cca",
