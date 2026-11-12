@@ -133,12 +133,13 @@ class MainActivity : ComponentActivity() {
 fun NutriGuideApp(vm: NativeViewModel = viewModel()) {
     val ui = vm.ui
     var showProfile by rememberSaveable { mutableStateOf(false) }
+    var showNotifications by rememberSaveable { mutableStateOf(false) }
     MaterialTheme(
         colorScheme = lightColorScheme(primary = Teal, onPrimary = Color.White, background = Cream, surface = Color.White, onSurface = DarkTeal)
     ) {
         Scaffold(
             containerColor = Cream,
-            topBar = { AppHeader(tab = ui.tab, onProfile = { showProfile = true }) },
+            topBar = { AppHeader(tab = ui.tab, onProfile = { showProfile = true }, onNotifications = { showNotifications = true }) },
             bottomBar = {
                 NavigationBar(containerColor = DarkTeal) {
                     AppTab.entries.forEach { tab ->
@@ -171,11 +172,19 @@ fun NutriGuideApp(vm: NativeViewModel = viewModel()) {
             }
         }
         if (showProfile) ProfileDialog(ui, vm) { showProfile = false }
+        if (showNotifications) {
+            AlertDialog(
+                onDismissRequest = { showNotifications = false },
+                title = { Text("Notifications") },
+                text = { Text("No new notifications.") },
+                confirmButton = { TextButton(onClick = { showNotifications = false }) { Text("Close") } }
+            )
+        }
     }
 }
 
 @Composable
-private fun AppHeader(tab: AppTab, onProfile: () -> Unit) {
+private fun AppHeader(tab: AppTab, onProfile: () -> Unit, onNotifications: () -> Unit) {
     Surface(color = Cream) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("🍃", style = MaterialTheme.typography.titleLarge)
@@ -184,7 +193,7 @@ private fun AppHeader(tab: AppTab, onProfile: () -> Unit) {
                 Text("NutriGuide", color = DarkTeal, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
                 Text(tab.label, color = Muted, style = MaterialTheme.typography.labelMedium)
             }
-            IconButton(onClick = {}) { Icon(Icons.Default.NotificationsNone, "Notifications", tint = DarkTeal) }
+            IconButton(onClick = onNotifications) { Icon(Icons.Default.NotificationsNone, "Notifications", tint = DarkTeal) }
             IconButton(onClick = onProfile) { Icon(Icons.Default.AccountCircle, "Profile", tint = Teal) }
         }
     }
@@ -305,7 +314,7 @@ private fun MoveScreen(ui: NativeUiState, vm: NativeViewModel) {
             WellnessCard(if (name == "Full Body Basics") Coral else Sage) {
                 Text(name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Text(detail, color = Muted)
-                Button(onClick = { started = name; vm.completeWorkout(name) }, modifier = Modifier.testTag("workout_${name.lowercase().replace(" ", "_")}")) {
+                Button(onClick = { if (started != name) { started = name; vm.completeWorkout(name) } }, modifier = Modifier.testTag("workout_${name.lowercase().replace(" ", "_")}")) {
                     Icon(if (started == name) Icons.Default.Check else Icons.Default.PlayArrow, null)
                     Spacer(Modifier.width(6.dp))
                     Text(if (started == name) "Completed" else "Start session")
