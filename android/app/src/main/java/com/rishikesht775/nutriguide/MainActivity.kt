@@ -51,6 +51,8 @@ enum class AppTab(val title: String) { TODAY("Today"), FOOD("Food"), MOVE("Move"
 enum class AuthStatus { CHECKING, SIGNED_OUT, SIGNED_IN }
 data class FoodEntry(val name: String, val meal: String, val calories: Int, val protein: Double, val date: String = LocalDate.now().toString())
 data class Workout(val name: String, val detail: String, val category: String, val tone: Color)
+internal fun safeFinite(value: Double, fallback: Double = 0.0): Double = if (value.isFinite()) value else fallback
+internal fun safeLocalDate(value: String): String = runCatching { LocalDate.parse(value) }.getOrElse { LocalDate.now() }.toString()
 data class NativeUiState(
     val auth: AuthStatus = AuthStatus.CHECKING, val authEmail: String = "", val authBusy: Boolean = false,
     val tab: AppTab = AppTab.TODAY, val profileReady: Boolean = false, val name: String = "",
@@ -81,35 +83,61 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun openAccount(email: String, displayName: String) {
         if (email.isBlank()) { ui = ui.copy(auth = AuthStatus.SIGNED_OUT, message = "The account session did not include an email address."); return }
-        store.switchOwner("email:$email", email)
+        val normalizedEmail = email.trim().lowercase(Locale.ROOT)
+        store.switchOwner("email:$normalizedEmail", normalizedEmail)
         val saved = store.snapshot()
         val foods = mutableListOf<FoodEntry>()
         val array = saved.optJSONArray("foods") ?: JSONArray()
         for (i in 0 until array.length()) {
             val item = array.optJSONObject(i) ?: continue
-            foods += FoodEntry(item.optString("name"), item.optString("meal"), item.optInt("calories"), item.optDouble("protein"), item.optString("date", LocalDate.now().toString()))
+            val foodName = item.optString("name").trim()
+            if (foodName.isBlank()) continue
+            foods += FoodEntry(
+                foodName,
+                item.optString("meal", "Snacks"),
+                item.optInt("calories", 0).coerceAtLeast(0),
+                safeFinite(item.optDouble("protein", 0.0)).coerceAtLeast(0.0),
+                safeLocalDate(item.optString("date", LocalDate.now().toString()))
+            )
         }
         ui = NativeUiState(
-            auth = AuthStatus.SIGNED_IN, authEmail = email, name = saved.optString("name", displayName),
+            auth = AuthStatus.SIGNED_IN, authEmail = normalizedEmail, name = saved.optString("name", displayName),
             tab = runCatching { AppTab.valueOf(saved.optString("tab", AppTab.TODAY.name)) }.getOrDefault(AppTab.TODAY),
-            profileReady = saved.optBoolean("profileReady"), calorieTarget = saved.optInt("calorieTarget"),
-            proteinTarget = saved.optInt("proteinTarget"), caloriesLogged = saved.optInt("caloriesLogged"),
-            proteinLogged = saved.optDouble("proteinLogged"), foods = foods, workoutsCompleted = saved.optInt("workoutsCompleted"),
+            profileReady = saved.optBoolean("profileReady"), calorieTarget = saved.optInt("calorieTarget", 0).coerceAtLeast(0),
+            proteinTarget = saved.optInt("proteinTarget", 0).coerceAtLeast(0), caloriesLogged = saved.optInt("caloriesLogged", 0).coerceAtLeast(0),
+            proteinLogged = safeFinite(saved.optDouble("proteinLogged", 0.0)).coerceAtLeast(0.0), foods = foods, workoutsCompleted = saved.optInt("workoutsCompleted", 0).coerceAtLeast(0),
             mood = saved.optString("mood"), recoveryNote = saved.optString("recoveryNote"),
-            steps = saved.optInt("steps"), water = saved.optInt("water")
+            steps = saved.optInt("steps", 0).coerceAtLeast(0), water = saved.optInt("water", 0).coerceAtLeast(0)
         )
     }
 
     private fun persist(next: NativeUiState, message: String = "") {
-        ui = next.copy(message = message)
-        if (next.auth != AuthStatus.SIGNED_IN) return
-        store.put("tab", next.tab.name); store.put("profileReady", next.profileReady); store.put("name", next.name)
-        store.put("calorieTarget", next.calorieTarget); store.put("proteinTarget", next.proteinTarget)
-        store.put("caloriesLogged", next.caloriesLogged); store.put("proteinLogged", next.proteinLogged)
-        store.put("workoutsCompleted", next.workoutsCompleted); store.put("mood", next.mood)
-        store.put("recoveryNote", next.recoveryNote); store.put("steps", next.steps); store.put("water", next.water)
+        val safeFoods = next.foods.mapNotNull { food ->
+            val name = food.name.trim()
+            if (name.isBlank()) null else food.copy(
+                name = name,
+                calories = food.calories.coerceAtLeast(0),
+                protein = safeFinite(food.protein).coerceAtLeast(0.0),
+                date = safeLocalDate(food.date)
+            )
+        }
+        val normalized = next.copy(
+            caloriesLogged = next.caloriesLogged.coerceAtLeast(0),
+            proteinLogged = safeFinite(next.proteinLogged).coerceAtLeast(0.0),
+            workoutsCompleted = next.workoutsCompleted.coerceAtLeast(0),
+            steps = next.steps.coerceAtLeast(0),
+            water = next.water.coerceAtLeast(0),
+            foods = safeFoods
+        )
+        ui = normalized.copy(message = message)
+        if (normalized.auth != AuthStatus.SIGNED_IN) return
+        store.put("tab", normalized.tab.name); store.put("profileReady", normalized.profileReady); store.put("name", normalized.name)
+        store.put("calorieTarget", normalized.calorieTarget); store.put("proteinTarget", normalized.proteinTarget)
+        store.put("caloriesLogged", normalized.caloriesLogged); store.put("proteinLogged", normalized.proteinLogged)
+        store.put("workoutsCompleted", normalized.workoutsCompleted); store.put("mood", normalized.mood)
+        store.put("recoveryNote", normalized.recoveryNote); store.put("steps", normalized.steps); store.put("water", normalized.water)
         val foods = JSONArray()
-        next.foods.forEach { f -> foods.put(JSONObject().put("name", f.name).put("meal", f.meal).put("calories", f.calories).put("protein", f.protein).put("date", f.date)) }
+        normalized.foods.forEach { f -> foods.put(JSONObject().put("name", f.name).put("meal", f.meal).put("calories", f.calories).put("protein", f.protein).put("date", f.date)) }
         store.put("foods", foods)
     }
 
@@ -123,13 +151,19 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
 
     fun signIn(email: String, password: String) {
         if (email.isBlank() || password.isBlank()) { ui = ui.copy(message = "Enter your email and password."); return }
+        val requestedEmail = email.trim().lowercase(Locale.ROOT)
+        api.clear()
         ui = ui.copy(authBusy = true, message = "")
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) { api.request("/api/account/sign-in", JSONObject().put("email", email.trim()).put("password", password)) }
+                withContext(Dispatchers.IO) { api.request("/api/account/sign-in", JSONObject().put("email", requestedEmail).put("password", password)) }
                 val session = withContext(Dispatchers.IO) { api.request("/api/account/session", null) }
                 val user = session.optJSONObject("user")
-                openAccount(user?.optString("email").orEmpty().ifBlank { email.trim().lowercase() }, user?.optString("name").orEmpty())
+                val sessionEmail = user?.optString("email").orEmpty().trim().lowercase(Locale.ROOT)
+                if (!session.optBoolean("authenticated") || sessionEmail.isBlank() || sessionEmail != requestedEmail) {
+                    throw Exception("The server returned a different account session. Please sign in again.")
+                }
+                openAccount(sessionEmail, user?.optString("name").orEmpty())
             } catch (e: Exception) { ui = ui.copy(authBusy = false, message = e.message ?: "Sign-in failed. Check your credentials and confirm your email.") }
         }
     }
@@ -138,6 +172,7 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
         if (name.isBlank() || email.isBlank() || password.length !in 12..128 || password != confirm) {
             ui = ui.copy(message = "Enter your name and matching passwords of 12–128 characters."); return
         }
+        api.clear()
         ui = ui.copy(authBusy = true, message = "")
         viewModelScope.launch {
             try {
@@ -369,7 +404,7 @@ private fun FoodScreen(ui: NativeUiState, vm: NativeViewModel) {
     var showPicker by rememberSaveable { mutableStateOf(false) }
     val meals = listOf("Breakfast", "Lunch", "Dinner", "Snacks")
     var selectedDate by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
-    val day = LocalDate.parse(selectedDate)
+    val day = runCatching { LocalDate.parse(selectedDate) }.getOrElse { LocalDate.now() }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Food diary", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Log your meals and build balanced habits", color = Muted) }
         item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = { selectedDate = day.minusDays(1).toString() }) { Icon(Icons.Default.ChevronLeft, "Previous day", tint = DarkTeal) }; Column(horizontalAlignment = Alignment.CenterHorizontally) { Text(if (day == LocalDate.now()) "Today" else day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()), color = Muted, style = MaterialTheme.typography.labelMedium); Text(day.format(DateTimeFormatter.ofPattern("MMM d", Locale.getDefault())), fontWeight = FontWeight.Bold, color = DarkTeal) }; IconButton(onClick = { selectedDate = day.plusDays(1).toString() }) { Icon(Icons.Default.ChevronRight, "Next day", tint = DarkTeal) } } } }

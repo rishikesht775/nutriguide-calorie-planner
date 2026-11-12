@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 2.4 | Reviewed 12 November 2026 | Owner Rishikesh Tiwari
+Version 2.5 | Reviewed 12 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
@@ -411,6 +411,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 12 November 2026 | 2.5 | Fixed the native Android account/session blocker: clear the prior encrypted cookie jar before sign-in/sign-up, verify the returned email owner, and normalize malformed legacy numeric/date values before tab persistence. Added regression cases for second-account isolation and tab-safe legacy state. |
 | 12 November 2026 | 2.4 | Documented the Kotlin/Jetpack Compose decision, the circumstances where Flutter would be appropriate, and the migration/test scope required before changing mobile frameworks. |
 | 12 November 2026 | 2.3 | Added a separate native Android mobile test strategy and case matrix covering authentication, safe areas, lifecycle, Today, Food date isolation, Move, Journey, Reports, network failures, privacy and Samsung S21 FE acceptance. Added Compose auth instrumentation expansion, JVM date/duplicate-entry policy checks, and an Android CI alignment guard requiring Android behavior changes to update both tests and mobile documentation. The native APK build/lint/emulator gate remains the release evidence; provider and physical-device cases remain explicitly pending. |\n| 11 November 2026 | 2.2 | Started the native UI architecture redesign with Jetpack Compose and Material 3: Scaffold + bottom navigation, Today/Food/Move/Journey/Reports feature surfaces, ViewModel UI state, and a repository boundary for future persistence/sync. Native UI test migrated to Compose navigation checks. Product direction follows documented nutrition-app patterns while preserving NutriGuide branding and account isolation. Full APK/emulator validation is pending for this redesign commit. |
 | 11 November 2026 | 2.1 | Replaced browser launcher with native Android views, offline per-owner data, profile targets, food/custom nutrition, timed workouts, recovery, reports/CSV and native email API/manual cloud sync. Session cookies use Android Keystore encryption. Removed AndroidX Browser. Seven JVM tests, APK/instrumentation compilation, Android lint and the Android 11 native Espresso flow passed in run 42913202451 (source 5e99d529). Provider/physical-device acceptance and full web parity are not claimed. See docs/ANDROID.md. |

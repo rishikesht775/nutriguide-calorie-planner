@@ -24,7 +24,7 @@ Do not mix Flutter widgets into the current Compose application. If a Flutter mi
 
 This replaces the earlier browser-backed launcher. MainActivity renders native Android controls and screens. There is no WebView, Custom Tab, or website-launch intent in the native experience. Home, Food, Move, Journey, Reports, profile setup and email sign-in are implemented inside the APK.
 
-Core logging works on-device without an account or internet. Guest and each verified account have separate private on-device snapshots. A guest profile is never copied into a signed-in account. No 1,800 kcal / 100 g personal fallback is supplied; a valid profile is required for personal targets. The Java profile policy matches the web calculation. Saved shared custom targets persist; explicit profile recalculation refreshes protein.
+Core logging works on-device without an account or internet. Guest and each verified account have separate private on-device snapshots. A guest profile is never copied into a signed-in account. Native auth now clears the previous encrypted session before sign-in/sign-up and verifies that the returned session email matches the requested credential. Legacy numeric/date values are normalized before tab persistence so Food, Reports and the other tabs remain usable even when older local state is malformed. No 1,800 kcal / 100 g personal fallback is supplied; a valid profile is required for personal targets. The Java profile policy matches the web calculation. Saved shared custom targets persist; explicit profile recalculation refreshes protein.
 
 ## Implemented native features
 

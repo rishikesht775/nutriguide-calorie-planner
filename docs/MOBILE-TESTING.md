@@ -51,6 +51,8 @@ The CI alignment check fails an Android source change when neither the mobile te
 | MOB-AUTH-08 | Passwords and session tokens are not persisted in app state or logs | Native policy review; provider response contract |
 | MOB-AUTH-09 | Auth mode controls remain reachable after switching between registration and reset | Compose instrumentation: `NativeFlowTest.accountModesRemainReachableAfterNavigation` |
 | MOB-AUTH-10 | Reset mode keeps the email and submit controls available | Compose instrumentation: `NativeFlowTest.resetModeDoesNotShowPasswordField` plus manual verification that password input is hidden |
+| MOB-AUTH-11 | Sign-in replaces any prior native session and opens the requested email owner | Native session reset and response identity check; second-account manual/provider acceptance |
+| MOB-AUTH-12 | Create-account flow cannot reuse a previous account cookie | Native session reset before sign-up; second-account manual/provider acceptance |
 
 ### Safe area, device and lifecycle
 
@@ -124,6 +126,7 @@ The CI alignment check fails an Android source change when neither the mobile te
 | MOB-NAV-01 | Visit all five tabs repeatedly | Content remains isolated and no crash occurs |
 | MOB-NAV-02 | Bottom navigation on small display | Labels and hit targets remain usable |
 | MOB-NAV-03 | Account logout from any tab | Auth gate returns and previous account data is not visible |
+| MOB-NAV-04 | Switching tabs with legacy or malformed local values | Tab navigation remains usable; numeric/date state is normalized before persistence |
 
 ### Network, privacy and failure handling
 

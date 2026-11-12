@@ -24,4 +24,14 @@ class NativeMobilePolicyTest {
         )
         assertEquals(2, entries.count { it.name == "Fruit bowl" && it.date == today })
     }
+
+    @Test fun malformedLegacyNumbersAreSafeForTabPersistence() {
+        assertEquals(0.0, safeFinite(Double.NaN), 0.0)
+        assertEquals(0.0, safeFinite(Double.POSITIVE_INFINITY), 0.0)
+        assertEquals(12.5, safeFinite(12.5), 0.0)
+    }
+
+    @Test fun invalidLegacyFoodDateFallsBackToToday() {
+        assertEquals(LocalDate.now().toString(), safeLocalDate("not-a-date"))
+    }
 }
