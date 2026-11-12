@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "301e04f19200d7659255891335fe56e5e5af0b4e560466dcd75b53e578cb3e12",
+  "sourceDigest": "d7e617b43e5c5c5ca3680663f8558d92d7daf1b015a9f8448fbd5364ed1d2f19",
   "files": {
     ".github/workflows/android.yml": "6d2cb9a50ccc593300f197b13fd6f29646b8936993c678fb2eaafeff7b02f761",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
@@ -8,8 +8,8 @@
     ".openai/hosting.json": "264fe98d68f46295988a7010abfc2d3b38777ae9fb9a3408c9663c7e09f623f7",
     "AGENTS.md": "82f80eecc0af9cdda7ac76580f21d1577e18de1ba3ae190803400fcb0b5b08ec",
     "README-KIRO.md": "bd6143c2d13c57ffe856660662103f2c87f7b8a7283cd3003e2f9a61f4c6388b",
-    "android/app/build.gradle": "af07b0172b8f07b843b650abd42c3ba0a3d48bc004af44b641d38f1671a4e48f",
-    "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "e569351264e2184dfe81a12e0b29bb603b8092aef570685a4ab9d469dd9ba42f",
+    "android/app/build.gradle": "a97c8627caaeeed1906cb899eb3c09c662bc721f76388fe1fb99daa7949500bd",
+    "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "d9512b96fbb8451a0f2774bba3ab56298ba5898b29bb2a28f48023c296c333bc",
     "android/app/src/main/AndroidManifest.xml": "86159d4a78b356bddd310fe551018c2c0e22a90894aacdf28a67958946c52adc",
     "android/app/src/main/java/com/rishikesht775/nutriguide/FoodCatalog.java": "e8276e89f4c174ba0c707227c9e6e9a9b3e21f25c9b51ed205aca1a18f833652",
     "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "56993c7f638e67319df7cb7d271e4313ca83f18934757a0d93ccfe9079040ab5",
