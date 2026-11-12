@@ -56,6 +56,12 @@ class NativeFlowTest {
         assertTrue(rule.onAllNodesWithTag("auth_submit").fetchSemanticsNodes().isNotEmpty())
     }
 
+    @Test fun testModeStartsWithoutFabricatedCalorieTarget() {
+        enableTestMode()
+        assertTrue(rule.onAllNodesWithTag("today_setup_profile").fetchSemanticsNodes().isNotEmpty())
+        assertTrue(rule.onAllNodesWithTag("profile_save").fetchSemanticsNodes().isEmpty())
+    }
+
     @Test fun fullSignedInJourneyRunsAutomatically() {
         enableTestMode()
 
