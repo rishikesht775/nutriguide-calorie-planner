@@ -75,7 +75,7 @@ The last command requires a running emulator/device. The project has no checked-
 
 ## Validation and phone acceptance
 
-The workflow assembles the APK, runs JVM policy tests and Android lint, then runs native Jetpack Compose instrumentation on an API 30 emulator before uploading the APK. The instrumented flow verifies no WebView in the native view hierarchy, empty-profile setup, 1,950 kcal estimate for a synthetic profile, correct Paneer logging, 1,685 kcal remaining, persistence through Activity recreation and native Journey/Reports navigation.
+The workflow assembles the APK, runs JVM policy tests and Android lint, then runs native Jetpack Compose instrumentation on an API 30 emulator before uploading the APK. For local Android 17/API 37 emulators, the instrumentation dependencies use AndroidX Test Runner 1.7.0, JUnit extension 1.3.0 and Espresso 3.7.0. Espresso 3.6.1 used reflective `InputManager.getInstance`, which is unavailable on API 37; a local failure with that exception is a test-framework compatibility issue, not evidence that the APK crashed. CI remains configured on API 30 and local API 37 verification must be rerun after dependency updates. The instrumented flow verifies no WebView in the native view hierarchy, empty-profile setup, 1,950 kcal estimate for a synthetic profile, correct Paneer logging, 1,685 kcal remaining, persistence through Activity recreation and native Journey/Reports navigation.
 
 Physical Samsung S21 FE acceptance remains required: installation, profile/target edits, food/custom portions, timer pause on background, day rollover, recovery, CSV export, native email confirmation/login, two-account isolation, explicit cloud sync and offline edits/retry. These must not be reported as passed until actually executed.
 

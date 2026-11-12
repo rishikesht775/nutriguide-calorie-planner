@@ -168,3 +168,8 @@ The Android release is eligible for a test APK only when:
 - changed Android behavior has a matching case and document update
 - manual/provider cases are clearly marked pending rather than implied as passed
 - APK checksum and the current commit are recorded in the workflow artifact
+
+
+## Local Android 17/API 37 instrumentation compatibility
+
+The local `Medium_Phone_API_37.0` emulator requires AndroidX Test Runner 1.7.0, JUnit extension 1.3.0 and Espresso 3.7.0. Espresso 3.6.1 reflectively called `android.hardware.input.InputManager.getInstance`, which Android 17/API 37 no longer exposes; that failure occurs in Espresso idling before the app assertions run. Treat it as a test-framework compatibility failure, then rerun `gradle -p android connectedDebugAndroidTest` after pulling the dependency update. The CI release gate remains on API 30, so a passing CI run and a passing local API 37 run are separate evidence.
