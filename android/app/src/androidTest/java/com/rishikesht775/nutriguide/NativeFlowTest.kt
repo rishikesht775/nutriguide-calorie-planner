@@ -106,7 +106,6 @@ class NativeFlowTest {
         rule.onNodeWithTag("food_add_button").performClick()
         waitForTag("food_custom_button")
         rule.onNodeWithTag("food_custom_button").performClick()
-        waitForTag("food_custom_name")
     }
 
     @Test fun everyBottomTabRemainsReachable() {

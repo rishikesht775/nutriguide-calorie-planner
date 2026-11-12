@@ -181,7 +181,7 @@ The first parity batch is implemented in the native Compose app and is covered b
 
 - PARITY-FOOD-01: Food Studio opens with the same four meal buckets and an explicit day selector.
 - PARITY-FOOD-02: Food search and meal selection log exactly one deliberate item to the selected date; automation scrolls to the action on small screens.
-- PARITY-FOOD-03: Custom food accepts name, calories and protein with validation before persistence; the instrumentation test verifies the custom-food entry point and first field; the remaining dialog fields are covered by the manual matrix on small emulator viewports.
+- PARITY-FOOD-03: Custom food accepts name, calories and protein with validation before persistence; the instrumentation test verifies the custom-food entry point; all dialog fields and validation remain in the manual matrix because clipped dialog children are not exposed by the small emulator semantics tree.
 - PARITY-FOOD-04: Removing an entry changes only that selected entry and its totals.
 - PARITY-TODAY-01: Today counts and nutrition totals use today's entries only; historical food does not appear in the Today card.
 - PARITY-DATA-01: Entries remain owner-scoped through NativeStore; account switching does not reuse the previous owner's data.
