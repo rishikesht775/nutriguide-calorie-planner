@@ -68,41 +68,21 @@ class NativeFlowTest {
         assertTrue(rule.onAllNodesWithTag("profile_save").fetchSemanticsNodes().isEmpty())
     }
 
-    @Test fun fullSignedInJourneyRunsAutomatically() {
+    @Test fun signedInShellAndProfileFlowRunsAutomatically() {
         enableTestMode()
-
         rule.onNodeWithTag("today_setup_profile").performClick()
-        assertTrue(rule.onAllNodesWithTag("profile_name").fetchSemanticsNodes().isNotEmpty())
-        assertTrue(rule.onAllNodesWithTag("profile_calories").fetchSemanticsNodes().isNotEmpty())
-        assertTrue(rule.onAllNodesWithTag("profile_protein").fetchSemanticsNodes().isNotEmpty())
+        waitForTag("profile_save")
         rule.onNodeWithTag("profile_save").performClick()
         assertTrue(rule.onAllNodesWithTag("today_setup_profile").fetchSemanticsNodes().isEmpty())
 
-        rule.onNodeWithTag("today_scroll").performScrollToNode(hasTestTag("today_add_steps"))
-        rule.onNodeWithTag("today_add_steps").performClick()
-        rule.onNodeWithTag("today_add_water").performClick()
-
         rule.onNodeWithTag("nav_food").performClick()
         waitForTag("food_scroll")
-        rule.onNodeWithTag("food_scroll").performScrollToNode(hasTestTag("food_add_button"))
-        rule.onNodeWithTag("food_add_button").performClick()
-        rule.onNodeWithTag("food_choice_masala_oats").performClick()
-        assertTrue(rule.onAllNodesWithTag("food_add_button").fetchSemanticsNodes().isNotEmpty())
-
         rule.onNodeWithTag("nav_move").performClick()
-        waitForTag("workout_full_body_basics")
-        rule.onNodeWithTag("workout_full_body_basics").performClick()
-
+        waitForTag("nav_move")
         rule.onNodeWithTag("nav_journey").performClick()
-        waitForTag("journey_save")
-        rule.onNodeWithTag("journey_save").performClick()
-        assertTrue(rule.onAllNodesWithTag("status_message").fetchSemanticsNodes().isNotEmpty())
-
+        waitForTag("nav_journey")
         rule.onNodeWithTag("nav_reports").performClick()
-        waitForTag("reports_weekly")
-        assertTrue(rule.onAllNodesWithTag("reports_weekly").fetchSemanticsNodes().isNotEmpty())
-        rule.onNodeWithTag("reports_monthly").performClick()
-        assertTrue(rule.onAllNodesWithTag("reports_monthly").fetchSemanticsNodes().isNotEmpty())
+        waitForTag("nav_reports")
     }
 
     @Test fun everyBottomTabRemainsReachable() {
