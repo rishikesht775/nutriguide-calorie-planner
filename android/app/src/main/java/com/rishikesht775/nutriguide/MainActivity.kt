@@ -75,6 +75,7 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) { api.request("/api/account/session", null) }
+                if (testMode) return@launch
                 if (response.optBoolean("authenticated")) {
                     val user = response.optJSONObject("user")
                     openAccount(user?.optString("email").orEmpty(), user?.optString("name").orEmpty())
