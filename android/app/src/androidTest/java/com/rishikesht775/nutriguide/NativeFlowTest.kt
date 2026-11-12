@@ -106,10 +106,10 @@ class NativeFlowTest {
         rule.onNodeWithTag("food_add_button").performClick()
         waitForTag("food_custom_button")
         rule.onNodeWithTag("food_custom_button").performClick()
-        assertTrue(rule.onAllNodesWithTag("food_custom_name").fetchSemanticsNodes().isNotEmpty())
-        assertTrue(rule.onAllNodesWithTag("food_custom_calories").fetchSemanticsNodes().isNotEmpty())
-        assertTrue(rule.onAllNodesWithTag("food_custom_protein").fetchSemanticsNodes().isNotEmpty())
-        assertTrue(rule.onAllNodesWithTag("food_custom_save").fetchSemanticsNodes().isNotEmpty())
+        waitForTag("food_custom_name")
+        waitForTag("food_custom_calories")
+        waitForTag("food_custom_protein")
+        waitForTag("food_custom_save")
     }
 
     @Test fun everyBottomTabRemainsReachable() {
