@@ -88,7 +88,8 @@ class NativeFlowTest {
     @Test fun foodStudioLogsOneChosenFoodForTheSelectedDay() {
         enableTestMode()
         rule.onNodeWithTag("nav_food").performClick()
-        waitForTag("food_add_button")
+        waitForTag("food_scroll")
+        rule.onNodeWithTag("food_scroll").performScrollToNode(hasTestTag("food_add_button"))
         rule.onNodeWithTag("food_add_button").performClick()
         waitForTag("food_search")
         rule.onNodeWithTag("food_choice_masala_oats").performClick()
@@ -100,7 +101,8 @@ class NativeFlowTest {
     @Test fun customFoodControlsAreReachable() {
         enableTestMode()
         rule.onNodeWithTag("nav_food").performClick()
-        waitForTag("food_add_button")
+        waitForTag("food_scroll")
+        rule.onNodeWithTag("food_scroll").performScrollToNode(hasTestTag("food_add_button"))
         rule.onNodeWithTag("food_add_button").performClick()
         waitForTag("food_custom_button")
         rule.onNodeWithTag("food_custom_button").performClick()

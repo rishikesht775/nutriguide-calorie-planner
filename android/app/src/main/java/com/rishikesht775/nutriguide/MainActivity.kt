@@ -440,7 +440,7 @@ private fun ProfileDialog(ui: NativeUiState, vm: NativeViewModel, close: () -> U
 }
 
 @Composable
-// Web parity batch 1: date-safe Food Studio logging and deliberate entry actions.
+// Web parity batch 1: date-safe Food Studio logging, scroll-safe actions, and deliberate entry controls.
 private fun FoodScreen(ui: NativeUiState, vm: NativeViewModel) {
     var showPicker by rememberSaveable { mutableStateOf(false) }
     var selectedDate by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
