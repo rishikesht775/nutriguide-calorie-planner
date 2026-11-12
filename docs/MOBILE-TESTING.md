@@ -175,6 +175,19 @@ Run these on a test account and a separate second test account:
 
 Record device model, Android version, build commit, case ID, result, evidence and known limitation. Never use a real personal password or health record in a committed report.
 
+## Android/web parity implementation batches
+
+The first parity batch is implemented in the native Compose app and is covered by NativeFlowTest:
+
+- PARITY-FOOD-01: Food Studio opens with the same four meal buckets and an explicit day selector.
+- PARITY-FOOD-02: Food search and meal selection log exactly one deliberate item to the selected date.
+- PARITY-FOOD-03: Custom food accepts name, calories and protein with validation before persistence.
+- PARITY-FOOD-04: Removing an entry changes only that selected entry and its totals.
+- PARITY-TODAY-01: Today counts and nutrition totals use today's entries only; historical food does not appear in the Today card.
+- PARITY-DATA-01: Entries remain owner-scoped through NativeStore; account switching does not reuse the previous owner's data.
+
+The next batches must port the web behaviors in this order: Move detail/session state, Journey sleep and recovery metrics, Plans and Reports trend data, reminders/calendar, cloud sync/offline retry, then wearable and Diwali presentation features. Each batch adds a native Compose test and a corresponding row to this matrix before it is considered implemented.
+
 ## Release gate
 
 The Android release is eligible for a test APK only when:

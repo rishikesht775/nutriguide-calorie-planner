@@ -5,6 +5,7 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.performScrollToNode
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -83,6 +84,31 @@ class NativeFlowTest {
         waitForTag("nav_journey")
         rule.onNodeWithTag("nav_reports").performClick()
         waitForTag("nav_reports")
+    }
+    
+    @Test fun foodStudioLogsOneChosenFoodForTheSelectedDay() {
+        enableTestMode()
+        rule.onNodeWithTag("nav_food").performClick()
+        waitForTag("food_add_button")
+        rule.onNodeWithTag("food_add_button").performClick()
+        waitForTag("food_search")
+        rule.onNodeWithTag("food_choice_masala_oats").performClick()
+        waitForTag("food_entry_masala_oats")
+        assertTrue(rule.onAllNodesWithTag("food_entry_masala_oats").fetchSemanticsNodes().isNotEmpty())
+        assertTrue(rule.onAllNodesWithTag("food_remove_masala_oats").fetchSemanticsNodes().isNotEmpty())
+    }
+
+    @Test fun customFoodControlsAreReachable() {
+        enableTestMode()
+        rule.onNodeWithTag("nav_food").performClick()
+        waitForTag("food_add_button")
+        rule.onNodeWithTag("food_add_button").performClick()
+        waitForTag("food_custom_button")
+        rule.onNodeWithTag("food_custom_button").performClick()
+        assertTrue(rule.onAllNodesWithTag("food_custom_name").fetchSemanticsNodes().isNotEmpty())
+        assertTrue(rule.onAllNodesWithTag("food_custom_calories").fetchSemanticsNodes().isNotEmpty())
+        assertTrue(rule.onAllNodesWithTag("food_custom_protein").fetchSemanticsNodes().isNotEmpty())
+        assertTrue(rule.onAllNodesWithTag("food_custom_save").fetchSemanticsNodes().isNotEmpty())
     }
 
     @Test fun everyBottomTabRemainsReachable() {

@@ -163,7 +163,24 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
     fun saveProfile(name: String, calories: Int, protein: Int) = persist(ui.copy(profileReady = true, name = name.trim(), calorieTarget = calories, proteinTarget = protein), "Profile saved")
     fun addWater() = persist(ui.copy(water = (ui.water + 1).coerceAtMost(12)), "Water logged")
     fun addSteps() = persist(ui.copy(steps = ui.steps + 500), "500 steps added")
-    fun logFood(food: FoodEntry) = persist(ui.copy(foods = ui.foods + food, caloriesLogged = ui.caloriesLogged + food.calories, proteinLogged = ui.proteinLogged + food.protein), "${food.name} added to ${food.meal}")
+    fun logFood(food: FoodEntry, date: String = LocalDate.now().toString()) {
+        val dated = food.copy(date = safeLocalDate(date))
+        val existing = ui.foods.filter { it.date == dated.date }
+        persist(ui.copy(foods = ui.foods + dated, caloriesLogged = existing.sumOf { it.calories } + dated.calories, proteinLogged = existing.sumOf { it.protein } + dated.protein), "${dated.name} added to ${dated.meal}")
+    }
+    fun addCustomFood(name: String, meal: String, calories: Int, protein: Double, date: String) {
+        if (name.isBlank() || calories !in 0..5000 || !protein.isFinite() || protein < 0.0 || protein > 500.0) {
+            ui = ui.copy(message = "Enter a food name and valid nutrition values."); return
+        }
+        logFood(FoodEntry(name.trim(), meal, calories, protein), date)
+    }
+    fun removeFood(food: FoodEntry) {
+        val index = ui.foods.indexOfFirst { it == food }
+        if (index < 0) return
+        val remaining = ui.foods.toMutableList().also { it.removeAt(index) }
+        val todayFoods = remaining.filter { it.date == LocalDate.now().toString() }
+        persist(ui.copy(foods = remaining, caloriesLogged = todayFoods.sumOf { it.calories }, proteinLogged = todayFoods.sumOf { it.protein }), "${food.name} removed")
+    }
     fun completeWorkout(name: String) = persist(ui.copy(workoutsCompleted = ui.workoutsCompleted + 1), "${name} completed")
     fun saveRecovery(mood: String, note: String) = persist(ui.copy(mood = mood, recoveryNote = note.trim()), "Check-in saved")
 
@@ -354,8 +371,11 @@ private fun TodayScreen(ui: NativeUiState, vm: NativeViewModel, onProfile: () ->
         }
         item {
             PreviewCard(Coral) {
-                Text(if (ui.foods.isEmpty()) "No food logged yet" else "${ui.foods.size} food entries today", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal)
-                Text(if (ui.foods.isEmpty()) "Start your food diary to build healthy habits." else "${ui.caloriesLogged} kcal · ${ui.proteinLogged.toInt()} g protein logged", color = Muted)
+                val todayFoods = ui.foods.filter { it.date == LocalDate.now().toString() }
+                val todayCalories = todayFoods.sumOf { it.calories }
+                val todayProtein = todayFoods.sumOf { it.protein }
+                Text(if (todayFoods.isEmpty()) "No food logged yet" else "${todayFoods.size} food entries today", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal)
+                Text(if (todayFoods.isEmpty()) "Start your food diary to build healthy habits." else "${todayCalories} kcal · ${todayProtein.toInt()} g protein logged", color = Muted)
                 OutlinedButton(onClick = { vm.select(AppTab.FOOD) }, modifier = Modifier.testTag("today_add_food")) { Text("Add food") }
             }
         }
@@ -422,31 +442,108 @@ private fun ProfileDialog(ui: NativeUiState, vm: NativeViewModel, close: () -> U
 @Composable
 private fun FoodScreen(ui: NativeUiState, vm: NativeViewModel) {
     var showPicker by rememberSaveable { mutableStateOf(false) }
-    val meals = listOf("Breakfast", "Lunch", "Dinner", "Snacks")
     var selectedDate by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
     val day = runCatching { LocalDate.parse(selectedDate) }.getOrElse { LocalDate.now() }
-    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text("Food diary", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Log your meals and build balanced habits", color = Muted) }
-        item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = { selectedDate = day.minusDays(1).toString() }) { Icon(Icons.Default.ChevronLeft, "Previous day", tint = DarkTeal) }; Column(horizontalAlignment = Alignment.CenterHorizontally) { Text(if (day == LocalDate.now()) "Today" else day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()), color = Muted, style = MaterialTheme.typography.labelMedium); Text(day.format(DateTimeFormatter.ofPattern("MMM d", Locale.getDefault())), fontWeight = FontWeight.Bold, color = DarkTeal) }; IconButton(onClick = { selectedDate = day.plusDays(1).toString() }) { Icon(Icons.Default.ChevronRight, "Next day", tint = DarkTeal) } } } }
-        meals.forEach { meal -> item { MealRow(meal, ui.foods.filter { it.date == selectedDate && it.meal == meal }) } }
-        item { Button(onClick = { showPicker = true }, modifier = Modifier.fillMaxWidth().testTag("food_add_button"), shape = RoundedCornerShape(16.dp)) { Icon(Icons.Default.Add, null); Spacer(Modifier.width(8.dp)); Text("Add food") } }
+    LazyColumn(modifier = Modifier.testTag("food_scroll"), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        item {
+            Text("Food Studio", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal)
+            Text("Search Indian foods, choose a portion, and keep each meal separate.", color = Muted)
+        }
+        item {
+            PreviewCard(Color.White) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+                    IconButton(onClick = { selectedDate = day.minusDays(1).toString() }) { Icon(Icons.Default.ChevronLeft, "Previous day", tint = DarkTeal) }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(if (day == LocalDate.now()) "Today" else day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()), color = Muted, style = MaterialTheme.typography.labelMedium)
+                        Text(day.format(DateTimeFormatter.ofPattern("MMM d", Locale.getDefault())), fontWeight = FontWeight.Bold, color = DarkTeal)
+                    }
+                    IconButton(onClick = { selectedDate = day.plusDays(1).toString() }) { Icon(Icons.Default.ChevronRight, "Next day", tint = DarkTeal) }
+                }
+            }
+        }
+        listOf("Breakfast", "Lunch", "Dinner", "Snacks").forEach { meal ->
+            item { MealRow(meal, ui.foods.filter { it.date == selectedDate && it.meal == meal }, vm) }
+        }
+        item {
+            Button(onClick = { showPicker = true }, modifier = Modifier.fillMaxWidth().testTag("food_add_button"), shape = RoundedCornerShape(16.dp)) {
+                Icon(Icons.Default.Add, null); Spacer(Modifier.width(8.dp)); Text("Add food")
+            }
+        }
     }
-    if (showPicker) FoodPicker(vm) { showPicker = false }
+    if (showPicker) FoodPicker(vm, selectedDate) { showPicker = false }
 }
 
 @Composable
-private fun MealRow(meal: String, entries: List<FoodEntry>) {
+private fun MealRow(meal: String, entries: List<FoodEntry>, vm: NativeViewModel) {
     PreviewCard(if (meal == "Breakfast") Sage else Color.White) {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) { Text(meal, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = DarkTeal, modifier = Modifier.weight(1f)); Text(if (entries.isEmpty()) "No entries" else "${entries.size} item${if (entries.size == 1) "" else "s"}", color = Muted) }
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(meal, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = DarkTeal, modifier = Modifier.weight(1f))
+            Text(if (entries.isEmpty()) "No entries" else "${entries.size} item${if (entries.size == 1) "" else "s"}", color = Muted)
+        }
         if (entries.isEmpty()) Text("Tap Add food to log this meal.", color = Muted, style = MaterialTheme.typography.bodySmall)
-        entries.forEach { food -> Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) { Text(food.name, color = DarkTeal); Text("${food.calories} kcal · ${food.protein.toInt()} g", color = Muted, style = MaterialTheme.typography.bodySmall) } }
+        entries.forEach { food ->
+            Row(Modifier.fillMaxWidth().padding(top = 8.dp).testTag("food_entry_${food.name.lowercase().replace(" ", "_")}"), verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    Text(food.name, color = DarkTeal)
+                    Text("${food.calories} kcal · ${food.protein.toInt()} g protein", color = Muted, style = MaterialTheme.typography.bodySmall)
+                }
+                IconButton(onClick = { vm.removeFood(food) }, modifier = Modifier.testTag("food_remove_${food.name.lowercase().replace(" ", "_")}")) {
+                    Icon(Icons.Default.DeleteOutline, "Remove ${food.name}", tint = Color(0xffa13d3d))
+                }
+            }
+        }
     }
 }
 
 @Composable
-private fun FoodPicker(vm: NativeViewModel, close: () -> Unit) {
-    val choices = listOf(FoodEntry("Masala oats", "Breakfast", 220, 9.0), FoodEntry("Paneer bowl", "Lunch", 265, 18.0), FoodEntry("Dal rice", "Dinner", 390, 14.0), FoodEntry("Fruit bowl", "Snacks", 140, 2.0))
-    AlertDialog(onDismissRequest = close, title = { Text("Choose food") }, text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { choices.forEach { food -> OutlinedButton(onClick = { vm.logFood(food); close() }, modifier = Modifier.fillMaxWidth().testTag("food_choice_${food.name.lowercase().replace(" ", "_")}")) { Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) { Text(food.name, fontWeight = FontWeight.Bold, color = DarkTeal); Text("${food.meal} · ${food.calories} kcal · ${food.protein.toInt()} g protein", color = Muted, style = MaterialTheme.typography.bodySmall) } } } } }, confirmButton = { TextButton(onClick = close) { Text("Cancel") } })
+private fun FoodPicker(vm: NativeViewModel, selectedDate: String, close: () -> Unit) {
+    val choices = listOf(
+        FoodEntry("Masala oats", "Breakfast", 220, 9.0),
+        FoodEntry("Paneer bowl", "Lunch", 265, 18.0),
+        FoodEntry("Dal rice", "Dinner", 390, 14.0),
+        FoodEntry("Fruit bowl", "Snacks", 140, 2.0)
+    )
+    var meal by rememberSaveable { mutableStateOf("Breakfast") }
+    var query by rememberSaveable { mutableStateOf("") }
+    var custom by rememberSaveable { mutableStateOf(false) }
+    var customName by rememberSaveable { mutableStateOf("") }
+    var calories by rememberSaveable { mutableStateOf("") }
+    var protein by rememberSaveable { mutableStateOf("") }
+    val visible = choices.filter { query.isBlank() || it.name.contains(query, ignoreCase = true) }
+    AlertDialog(
+        onDismissRequest = close,
+        title = { Text(if (custom) "Add custom food" else "Choose food") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (!custom) {
+                    OutlinedTextField(query, { query = it }, label = { Text("Search foods") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("food_search"))
+                    Text("Meal", color = Muted, style = MaterialTheme.typography.labelMedium)
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                        listOf("Breakfast", "Lunch", "Dinner", "Snacks").forEach { option ->
+                            FilterChip(selected = meal == option, onClick = { meal = option }, label = { Text(option.take(1)) }, modifier = Modifier.testTag("food_meal_${option.lowercase()}"))
+                        }
+                    }
+                    visible.forEach { food ->
+                        OutlinedButton(onClick = { vm.logFood(food.copy(meal = meal), selectedDate); close() }, modifier = Modifier.fillMaxWidth().testTag("food_choice_${food.name.lowercase().replace(" ", "_")}")) {
+                            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
+                                Text(food.name, fontWeight = FontWeight.Bold, color = DarkTeal)
+                                Text("${food.calories} kcal · ${food.protein.toInt()} g protein · standard portion", color = Muted, style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
+                    OutlinedButton(onClick = { custom = true }, modifier = Modifier.fillMaxWidth().testTag("food_custom_button")) { Text("Add any food") }
+                } else {
+                    OutlinedTextField(customName, { customName = it }, label = { Text("Food name") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("food_custom_name"))
+                    OutlinedTextField(calories, { calories = it.filter(Char::isDigit) }, label = { Text("Calories per portion") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("food_custom_calories"))
+                    OutlinedTextField(protein, { protein = it.filter { ch -> ch.isDigit() || ch == '.' } }, label = { Text("Protein (g)") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("food_custom_protein"))
+                    Text("Meal: $meal", color = Muted)
+                    Button(onClick = { vm.addCustomFood(customName, meal, calories.toIntOrNull() ?: -1, protein.toDoubleOrNull() ?: -1.0, selectedDate); close() }, modifier = Modifier.fillMaxWidth().testTag("food_custom_save")) { Text("Save food") }
+                    TextButton(onClick = { custom = false }) { Text("Back to food search") }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = close) { Text("Cancel") } }
+    )
 }
 
 @Composable
