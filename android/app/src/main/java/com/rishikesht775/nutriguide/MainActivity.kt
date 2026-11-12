@@ -32,6 +32,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 private val Teal = Color(0xff177d72)
 private val DarkTeal = Color(0xff173f3d)
@@ -45,7 +49,7 @@ private val Muted = Color(0xff5b7470)
 
 enum class AppTab(val title: String) { TODAY("Today"), FOOD("Food"), MOVE("Move"), JOURNEY("Journey"), REPORTS("Reports") }
 enum class AuthStatus { CHECKING, SIGNED_OUT, SIGNED_IN }
-data class FoodEntry(val name: String, val meal: String, val calories: Int, val protein: Double)
+data class FoodEntry(val name: String, val meal: String, val calories: Int, val protein: Double, val date: String = LocalDate.now().toString())
 data class Workout(val name: String, val detail: String, val category: String, val tone: Color)
 data class NativeUiState(
     val auth: AuthStatus = AuthStatus.CHECKING, val authEmail: String = "", val authBusy: Boolean = false,
@@ -83,7 +87,7 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
         val array = saved.optJSONArray("foods") ?: JSONArray()
         for (i in 0 until array.length()) {
             val item = array.optJSONObject(i) ?: continue
-            foods += FoodEntry(item.optString("name"), item.optString("meal"), item.optInt("calories"), item.optDouble("protein"))
+            foods += FoodEntry(item.optString("name"), item.optString("meal"), item.optInt("calories"), item.optDouble("protein"), item.optString("date", LocalDate.now().toString()))
         }
         ui = NativeUiState(
             auth = AuthStatus.SIGNED_IN, authEmail = email, name = saved.optString("name", displayName),
@@ -105,7 +109,7 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
         store.put("workoutsCompleted", next.workoutsCompleted); store.put("mood", next.mood)
         store.put("recoveryNote", next.recoveryNote); store.put("steps", next.steps); store.put("water", next.water)
         val foods = JSONArray()
-        next.foods.forEach { f -> foods.put(JSONObject().put("name", f.name).put("meal", f.meal).put("calories", f.calories).put("protein", f.protein)) }
+        next.foods.forEach { f -> foods.put(JSONObject().put("name", f.name).put("meal", f.meal).put("calories", f.calories).put("protein", f.protein).put("date", f.date)) }
         store.put("foods", foods)
     }
 
@@ -364,10 +368,12 @@ private fun ProfileDialog(ui: NativeUiState, vm: NativeViewModel, close: () -> U
 private fun FoodScreen(ui: NativeUiState, vm: NativeViewModel) {
     var showPicker by rememberSaveable { mutableStateOf(false) }
     val meals = listOf("Breakfast", "Lunch", "Dinner", "Snacks")
+    var selectedDate by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
+    val day = LocalDate.parse(selectedDate)
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Food diary", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Log your meals and build balanced habits", color = Muted) }
-        item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = {}) { Icon(Icons.Default.ChevronLeft, "Previous day", tint = DarkTeal) }; Column(horizontalAlignment = Alignment.CenterHorizontally) { Text("Today", color = Muted, style = MaterialTheme.typography.labelMedium); Text("Jan 26", fontWeight = FontWeight.Bold, color = DarkTeal) }; IconButton(onClick = {}) { Icon(Icons.Default.ChevronRight, "Next day", tint = DarkTeal) } } } }
-        meals.forEach { meal -> item { MealRow(meal, ui.foods.filter { it.meal == meal }) } }
+        item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = { selectedDate = day.minusDays(1).toString() }) { Icon(Icons.Default.ChevronLeft, "Previous day", tint = DarkTeal) }; Column(horizontalAlignment = Alignment.CenterHorizontally) { Text(if (day == LocalDate.now()) "Today" else day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()), color = Muted, style = MaterialTheme.typography.labelMedium); Text(day.format(DateTimeFormatter.ofPattern("MMM d", Locale.getDefault())), fontWeight = FontWeight.Bold, color = DarkTeal) }; IconButton(onClick = { selectedDate = day.plusDays(1).toString() }) { Icon(Icons.Default.ChevronRight, "Next day", tint = DarkTeal) } } } }
+        meals.forEach { meal -> item { MealRow(meal, ui.foods.filter { it.date == selectedDate && it.meal == meal }) } }
         item { Button(onClick = { showPicker = true }, modifier = Modifier.fillMaxWidth().testTag("food_add_button"), shape = RoundedCornerShape(16.dp)) { Icon(Icons.Default.Add, null); Spacer(Modifier.width(8.dp)); Text("Add food") } }
     }
     if (showPicker) FoodPicker(vm) { showPicker = false }
@@ -416,10 +422,11 @@ private fun JourneyScreen(ui: NativeUiState, vm: NativeViewModel) {
 @Composable
 private fun ReportsScreen(ui: NativeUiState, vm: NativeViewModel) {
     var range by rememberSaveable { mutableStateOf("Weekly") }
+    var periodOffset by rememberSaveable { mutableIntStateOf(0) }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Reports", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Your progress and trends over time", color = Muted) }
         item { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { FilterChip(selected = range == "Weekly", onClick = { range = "Weekly" }, label = { Text("Weekly") }, modifier = Modifier.weight(1f).testTag("reports_weekly")); FilterChip(selected = range == "Monthly", onClick = { range = "Monthly" }, label = { Text("Monthly") }, modifier = Modifier.weight(1f).testTag("reports_monthly")) } }
-        item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = {}) { Icon(Icons.Default.ChevronLeft, "Previous period", tint = DarkTeal) }; Text(if (range == "Weekly") "Jan 20 – Jan 26" else "January 2026", fontWeight = FontWeight.Bold, color = DarkTeal); IconButton(onClick = {}) { Icon(Icons.Default.ChevronRight, "Next period", tint = DarkTeal) } } } }
+        item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = { periodOffset-- }) { Icon(Icons.Default.ChevronLeft, "Previous period", tint = DarkTeal) }; Text(if (range == "Weekly") "Week " + periodOffset else "Month " + periodOffset, fontWeight = FontWeight.Bold, color = DarkTeal); IconButton(onClick = { periodOffset++ }) { Icon(Icons.Default.ChevronRight, "Next period", tint = DarkTeal) } } } }
         item { if (ui.foods.isEmpty() && ui.workoutsCompleted == 0 && ui.mood.isBlank()) PreviewCard(Sage) { Text("No weekly progress yet", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Log your food, workouts, and check-ins to see your weekly summary and insights here.", color = Muted); Button(onClick = { vm.select(AppTab.FOOD) }, modifier = Modifier.testTag("reports_start_logging")) { Text("Start logging") } } else PreviewCard(Sage) { Text(if (range == "Weekly") "This week" else "This month", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { SmallMetric("Food", ui.foods.size.toString(), Modifier.weight(1f)); SmallMetric("Move", ui.workoutsCompleted.toString(), Modifier.weight(1f)); SmallMetric("Check-ins", if (ui.mood.isBlank()) "0" else "1", Modifier.weight(1f)) } } }
     }
 }
