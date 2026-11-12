@@ -24,3 +24,13 @@ Use the fixed demo profile in `tests/e2e/helpers.ts`. Do not put real account de
 - UI auth is mocked in test contexts only. Never add an authentication bypass to production.
 - Camera, speech, actual provider login and cross-device D1 need manual/sandbox validation.
 - Do not skip real failing cases to make reports green.
+
+
+## Native Android mobile suite
+
+- Read docs/MOBILE-TESTING.md before changing Android behavior.
+- Run gradle -p android testDebugUnitTest lintDebug.
+- Run gradle -p android connectedDebugAndroidTest with an API 30 emulator/device.
+- Update android/app/src/androidTest or android/app/src/test and the matching MOB-* case whenever a native feature or bug fix changes behavior.
+- Run node scripts/check-mobile-test-alignment.mjs before pushing Android changes.
+- Keep real provider/email, two-account, Samsung S21 FE and physical-device checks marked manual until executed.
