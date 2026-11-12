@@ -1,9 +1,11 @@
+
 package com.rishikesht775.nutriguide
 
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,308 +22,307 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
-private val Teal = Color(0xff126f67)
-private val DarkTeal = Color(0xff103b3b)
+private val Teal = Color(0xff177d72)
+private val DarkTeal = Color(0xff173f3d)
 private val Cream = Color(0xfffbfaf4)
-private val Sage = Color(0xffeaf6ef)
+private val Sage = Color(0xffedf7ee)
 private val Coral = Color(0xffffeee6)
-private val Mint = Color(0xffe9f7f5)
-private val Muted = Color(0xff587575)
+private val Lilac = Color(0xfff0f1fb)
+private val Mint = Color(0xffeaf7f5)
+private val Border = Color(0xffd9e7df)
+private val Muted = Color(0xff5b7470)
 
-enum class AppTab(val label: String) { TODAY("Today"), FOOD("Food"), MOVE("Move"), JOURNEY("Journey"), REPORTS("Reports") }
-
+enum class AppTab(val title: String) { TODAY("Today"), FOOD("Food"), MOVE("Move"), JOURNEY("Journey"), REPORTS("Reports") }
+enum class AuthStatus { CHECKING, SIGNED_OUT, SIGNED_IN }
 data class FoodEntry(val name: String, val meal: String, val calories: Int, val protein: Double)
+data class Workout(val name: String, val detail: String, val category: String, val tone: Color)
 data class NativeUiState(
-    val tab: AppTab = AppTab.TODAY,
-    val profileReady: Boolean = false,
-    val name: String = "",
-    val calorieTarget: Int = 0,
-    val proteinTarget: Int = 0,
-    val caloriesLogged: Int = 0,
-    val proteinLogged: Double = 0.0,
-    val steps: Int = 0,
-    val water: Int = 0,
-    val foods: List<FoodEntry> = emptyList(),
-    val workoutsCompleted: Int = 0,
-    val recoverySaved: Boolean = false,
-    val mood: String = "",
-    val recoveryNote: String = "",
-    val message: String = ""
+    val auth: AuthStatus = AuthStatus.CHECKING, val authEmail: String = "", val authBusy: Boolean = false,
+    val tab: AppTab = AppTab.TODAY, val profileReady: Boolean = false, val name: String = "",
+    val calorieTarget: Int = 0, val proteinTarget: Int = 0, val caloriesLogged: Int = 0, val proteinLogged: Double = 0.0,
+    val foods: List<FoodEntry> = emptyList(), val workoutsCompleted: Int = 0, val mood: String = "",
+    val recoveryNote: String = "", val steps: Int = 0, val water: Int = 0, val message: String = "", val confirmation: String = ""
 )
 
 class NativeViewModel(app: Application) : AndroidViewModel(app) {
-    private val prefs = app.getSharedPreferences("native-compose-state-v3", 0)
-    var ui by mutableStateOf(load())
+    private val api = NativeApi(app)
+    private val store = NativeStore(app)
+    var ui by mutableStateOf(NativeUiState())
         private set
 
-    private fun load(): NativeUiState {
-        val raw = prefs.getString("foods", "[]") ?: "[]"
-        val foods = mutableListOf<FoodEntry>()
-        runCatching {
-            val array = JSONArray(raw)
-            for (i in 0 until array.length()) {
-                val item = array.getJSONObject(i)
-                foods += FoodEntry(item.optString("name"), item.optString("meal"), item.optInt("calories"), item.optDouble("protein"))
-            }
+    init { checkSession() }
+
+    private fun checkSession() {
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) { api.request("/api/account/session", null) }
+                if (response.optBoolean("authenticated")) {
+                    val user = response.optJSONObject("user")
+                    openAccount(user?.optString("email").orEmpty(), user?.optString("name").orEmpty())
+                } else ui = ui.copy(auth = AuthStatus.SIGNED_OUT)
+            } catch (_: Exception) { ui = ui.copy(auth = AuthStatus.SIGNED_OUT) }
         }
-        return NativeUiState(
-            tab = AppTab.entries.getOrElse(prefs.getInt("tab", 0)) { AppTab.TODAY },
-            profileReady = prefs.getBoolean("profileReady", false),
-            name = prefs.getString("name", "") ?: "",
-            calorieTarget = prefs.getInt("calorieTarget", 0),
-            proteinTarget = prefs.getInt("proteinTarget", 0),
-            caloriesLogged = prefs.getInt("caloriesLogged", 0),
-            proteinLogged = prefs.getFloat("proteinLogged", 0f).toDouble(),
-            steps = prefs.getInt("steps", 0),
-            water = prefs.getInt("water", 0),
-            foods = foods,
-            workoutsCompleted = prefs.getInt("workoutsCompleted", 0),
-            recoverySaved = prefs.getBoolean("recoverySaved", false),
-            mood = prefs.getString("mood", "") ?: "",
-            recoveryNote = prefs.getString("recoveryNote", "") ?: ""
+    }
+
+    private fun openAccount(email: String, displayName: String) {
+        if (email.isBlank()) { ui = ui.copy(auth = AuthStatus.SIGNED_OUT, message = "The account session did not include an email address."); return }
+        store.switchOwner("email:$email", email)
+        val saved = store.snapshot()
+        val foods = mutableListOf<FoodEntry>()
+        val array = saved.optJSONArray("foods") ?: JSONArray()
+        for (i in 0 until array.length()) {
+            val item = array.optJSONObject(i) ?: continue
+            foods += FoodEntry(item.optString("name"), item.optString("meal"), item.optInt("calories"), item.optDouble("protein"))
+        }
+        ui = NativeUiState(
+            auth = AuthStatus.SIGNED_IN, authEmail = email, name = saved.optString("name", displayName),
+            tab = runCatching { AppTab.valueOf(saved.optString("tab", AppTab.TODAY.name)) }.getOrDefault(AppTab.TODAY),
+            profileReady = saved.optBoolean("profileReady"), calorieTarget = saved.optInt("calorieTarget"),
+            proteinTarget = saved.optInt("proteinTarget"), caloriesLogged = saved.optInt("caloriesLogged"),
+            proteinLogged = saved.optDouble("proteinLogged"), foods = foods, workoutsCompleted = saved.optInt("workoutsCompleted"),
+            mood = saved.optString("mood"), recoveryNote = saved.optString("recoveryNote"),
+            steps = saved.optInt("steps"), water = saved.optInt("water")
         )
     }
 
-    private fun save(next: NativeUiState, message: String = "") {
+    private fun persist(next: NativeUiState, message: String = "") {
         ui = next.copy(message = message)
-        val foodArray = JSONArray()
-        next.foods.forEach { food -> foodArray.put(JSONObject().put("name", food.name).put("meal", food.meal).put("calories", food.calories).put("protein", food.protein)) }
-        prefs.edit()
-            .putInt("tab", next.tab.ordinal)
-            .putBoolean("profileReady", next.profileReady)
-            .putString("name", next.name)
-            .putInt("calorieTarget", next.calorieTarget)
-            .putInt("proteinTarget", next.proteinTarget)
-            .putInt("caloriesLogged", next.caloriesLogged)
-            .putFloat("proteinLogged", next.proteinLogged.toFloat())
-            .putInt("steps", next.steps)
-            .putInt("water", next.water)
-            .putString("foods", foodArray.toString())
-            .putInt("workoutsCompleted", next.workoutsCompleted)
-            .putBoolean("recoverySaved", next.recoverySaved)
-            .putString("mood", next.mood)
-            .putString("recoveryNote", next.recoveryNote)
-            .apply()
+        if (next.auth != AuthStatus.SIGNED_IN) return
+        store.put("tab", next.tab.name); store.put("profileReady", next.profileReady); store.put("name", next.name)
+        store.put("calorieTarget", next.calorieTarget); store.put("proteinTarget", next.proteinTarget)
+        store.put("caloriesLogged", next.caloriesLogged); store.put("proteinLogged", next.proteinLogged)
+        store.put("workoutsCompleted", next.workoutsCompleted); store.put("mood", next.mood)
+        store.put("recoveryNote", next.recoveryNote); store.put("steps", next.steps); store.put("water", next.water)
+        val foods = JSONArray()
+        next.foods.forEach { f -> foods.put(JSONObject().put("name", f.name).put("meal", f.meal).put("calories", f.calories).put("protein", f.protein)) }
+        store.put("foods", foods)
     }
 
-    fun select(tab: AppTab) = save(ui.copy(tab = tab))
-    fun saveProfile(name: String, calories: Int, protein: Int) {
-        save(ui.copy(profileReady = true, name = name.trim(), calorieTarget = calories, proteinTarget = protein), "Profile saved")
+    fun select(tab: AppTab) = persist(ui.copy(tab = tab))
+    fun saveProfile(name: String, calories: Int, protein: Int) = persist(ui.copy(profileReady = true, name = name.trim(), calorieTarget = calories, proteinTarget = protein), "Profile saved")
+    fun addWater() = persist(ui.copy(water = (ui.water + 1).coerceAtMost(12)), "Water logged")
+    fun addSteps() = persist(ui.copy(steps = ui.steps + 500), "500 steps added")
+    fun logFood(food: FoodEntry) = persist(ui.copy(foods = ui.foods + food, caloriesLogged = ui.caloriesLogged + food.calories, proteinLogged = ui.proteinLogged + food.protein), "${food.name} added to ${food.meal}")
+    fun completeWorkout(name: String) = persist(ui.copy(workoutsCompleted = ui.workoutsCompleted + 1), "${name} completed")
+    fun saveRecovery(mood: String, note: String) = persist(ui.copy(mood = mood, recoveryNote = note.trim()), "Check-in saved")
+
+    fun signIn(email: String, password: String) {
+        if (email.isBlank() || password.isBlank()) { ui = ui.copy(message = "Enter your email and password."); return }
+        ui = ui.copy(authBusy = true, message = "")
+        viewModelScope.launch {
+            try {
+                withContext(Dispatchers.IO) { api.request("/api/account/sign-in", JSONObject().put("email", email.trim()).put("password", password)) }
+                val session = withContext(Dispatchers.IO) { api.request("/api/account/session", null) }
+                val user = session.optJSONObject("user")
+                openAccount(user?.optString("email").orEmpty().ifBlank { email.trim().lowercase() }, user?.optString("name").orEmpty())
+            } catch (e: Exception) { ui = ui.copy(authBusy = false, message = e.message ?: "Sign-in failed. Check your credentials and confirm your email.") }
+        }
     }
-    fun addWater() = save(ui.copy(water = (ui.water + 1).coerceAtMost(20)), "Water logged")
-    fun addSteps() = save(ui.copy(steps = ui.steps + 500), "500 steps added")
-    fun logFood(food: FoodEntry) = save(ui.copy(foods = ui.foods + food, caloriesLogged = ui.caloriesLogged + food.calories, proteinLogged = ui.proteinLogged + food.protein), "${food.name} added to ${food.meal}")
-    fun completeWorkout(name: String) = save(ui.copy(workoutsCompleted = ui.workoutsCompleted + 1), "${name} completed")
-    fun saveRecovery(mood: String, note: String) = save(ui.copy(recoverySaved = true, mood = mood, recoveryNote = note.trim()), "Check-in saved")
+
+    fun signUp(name: String, email: String, password: String, confirm: String) {
+        if (name.isBlank() || email.isBlank() || password.length !in 12..128 || password != confirm) {
+            ui = ui.copy(message = "Enter your name and matching passwords of 12–128 characters."); return
+        }
+        ui = ui.copy(authBusy = true, message = "")
+        viewModelScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) { api.request("/api/account/sign-up", JSONObject().put("name", name.trim()).put("email", email.trim()).put("password", password).put("confirmPassword", confirm)) }
+                ui = ui.copy(authBusy = false, confirmation = result.optString("message", "Check your email to confirm your account."))
+            } catch (e: Exception) { ui = ui.copy(authBusy = false, message = e.message ?: "Account creation could not be completed.") }
+        }
+    }
+
+    fun resetPassword(email: String) {
+        if (email.isBlank()) { ui = ui.copy(message = "Enter your email address."); return }
+        ui = ui.copy(authBusy = true, message = "")
+        viewModelScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) { api.request("/api/account/request-reset", JSONObject().put("email", email.trim())) }
+                ui = ui.copy(authBusy = false, confirmation = result.optString("message", "If an account exists for this email, a reset link will be sent."))
+            } catch (e: Exception) { ui = ui.copy(authBusy = false, message = e.message ?: "The reset email could not be sent.") }
+        }
+    }
+
+    fun clearConfirmation() { ui = ui.copy(confirmation = "", message = "") }
+    fun logout() {
+        viewModelScope.launch {
+            runCatching { withContext(Dispatchers.IO) { api.request("/api/account/logout", JSONObject()) } }
+            api.clear(); store.switchOwner("guest", ""); ui = NativeUiState(auth = AuthStatus.SIGNED_OUT)
+        }
+    }
 }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.statusBarColor = android.graphics.Color.rgb(251, 250, 244)
+        window.navigationBarColor = android.graphics.Color.rgb(23, 63, 61)
         setContent { NutriGuideApp() }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NutriGuideApp(vm: NativeViewModel = viewModel()) {
     val ui = vm.ui
-    var showProfile by rememberSaveable { mutableStateOf(false) }
-    var showNotifications by rememberSaveable { mutableStateOf(false) }
-    MaterialTheme(
-        colorScheme = lightColorScheme(primary = Teal, onPrimary = Color.White, background = Cream, surface = Color.White, onSurface = DarkTeal)
-    ) {
-        Scaffold(
-            containerColor = Cream,
-            topBar = { AppHeader(tab = ui.tab, onProfile = { showProfile = true }, onNotifications = { showNotifications = true }) },
-            bottomBar = {
-                NavigationBar(containerColor = DarkTeal) {
-                    AppTab.entries.forEach { tab ->
-                        NavigationBarItem(
-                            modifier = Modifier.testTag("nav_${tab.label.lowercase()}"),
-                            selected = ui.tab == tab,
-                            onClick = { vm.select(tab) },
-                            icon = { Icon(tabIcon(tab), contentDescription = tab.label) },
-                            label = { Text(tab.label) },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = DarkTeal,
-                                selectedTextColor = DarkTeal,
-                                indicatorColor = Color(0xffd8f0e5),
-                                unselectedIconColor = Color.White,
-                                unselectedTextColor = Color.White
-                            )
-                        )
+    MaterialTheme(colorScheme = lightColorScheme(primary = Teal, onPrimary = Color.White, background = Cream, surface = Color.White, onSurface = DarkTeal)) {
+        if (ui.auth != AuthStatus.SIGNED_IN) AuthScreen(ui, vm) else MainShell(ui, vm)
+    }
+}
+
+@Composable
+private fun AuthScreen(ui: NativeUiState, vm: NativeViewModel) {
+    var mode by rememberSaveable { mutableStateOf("sign-in") }
+    var reset by rememberSaveable { mutableStateOf(false) }
+    var name by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var confirm by rememberSaveable { mutableStateOf("") }
+
+    Surface(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding(), color = Cream) {
+        Column(Modifier.fillMaxSize().padding(22.dp).verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
+            Spacer(Modifier.height(24.dp)); Text("🍃", style = MaterialTheme.typography.displaySmall)
+            Text("NutriGuide", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold, color = DarkTeal)
+            Text("Your wellness, in one place", color = Muted); Spacer(Modifier.height(22.dp))
+            if (ui.confirmation.isNotBlank()) {
+                Card(colors = CardDefaults.cardColors(containerColor = Sage), shape = RoundedCornerShape(24.dp), modifier = Modifier.fillMaxWidth().testTag("auth_confirmation")) {
+                    Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text("Check your email", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = DarkTeal)
+                        Text(ui.confirmation, color = Muted)
+                        Button(onClick = { vm.clearConfirmation(); reset = false; mode = "sign-in" }, modifier = Modifier.fillMaxWidth()) { Text("Return to sign in") }
+                    }
+                }
+            } else {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Color.White), modifier = Modifier.fillMaxWidth().testTag("auth_card")) {
+                    Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Text(if (reset) "Reset your password" else if (mode == "sign-up") "Create your account" else "Welcome back", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = DarkTeal)
+                        Text(if (reset) "We’ll send a secure reset link to your email." else "Save your nutrition, movement and recovery in your own account.", color = Muted)
+                        if (!reset) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            FilterChip(selected = mode == "sign-in", onClick = { mode = "sign-in" }, label = { Text("Sign in") }, modifier = Modifier.weight(1f).testTag("auth_sign_in_tab"))
+                            FilterChip(selected = mode == "sign-up", onClick = { mode = "sign-up" }, label = { Text("Create account") }, modifier = Modifier.weight(1f).testTag("auth_sign_up_tab"))
+                        }
+                        if (mode == "sign-up" && !reset) OutlinedTextField(name, { name = it }, label = { Text("Name") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("auth_name"))
+                        OutlinedTextField(email, { email = it }, label = { Text("Email address") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("auth_email"))
+                        if (!reset) {
+                            OutlinedTextField(password, { password = it }, label = { Text("Password") }, singleLine = true, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth().testTag("auth_password"))
+                            if (mode == "sign-up") OutlinedTextField(confirm, { confirm = it }, label = { Text("Confirm password") }, singleLine = true, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth().testTag("auth_confirm"))
+                        }
+                        Button(onClick = { if (reset) vm.resetPassword(email) else if (mode == "sign-up") vm.signUp(name, email, password, confirm) else vm.signIn(email, password) }, enabled = !ui.authBusy, modifier = Modifier.fillMaxWidth().testTag("auth_submit")) {
+                            Text(if (ui.authBusy) "Please wait…" else if (reset) "Send reset link" else if (mode == "sign-up") "Create account" else "Sign in")
+                        }
+                        TextButton(onClick = { reset = !reset; vm.clearConfirmation() }, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("auth_reset")) { Text(if (reset) "Back to sign in" else "Forgot password?") }
+                        if (ui.message.isNotBlank()) Text(ui.message, color = Color(0xffa13d3d), modifier = Modifier.testTag("auth_message"))
+                        if (mode == "sign-up" && !reset) Text("Use 12–128 characters for your password.", color = Muted, style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
-        ) { padding ->
-            Box(Modifier.padding(padding).fillMaxSize()) {
-                when (ui.tab) {
-                    AppTab.TODAY -> TodayScreen(ui, vm) { showProfile = true }
-                    AppTab.FOOD -> FoodScreen(ui, vm)
-                    AppTab.MOVE -> MoveScreen(ui, vm)
-                    AppTab.JOURNEY -> JourneyScreen(ui, vm)
-                    AppTab.REPORTS -> ReportsScreen(ui)
-                }
-            }
-        }
-        if (showProfile) ProfileDialog(ui, vm) { showProfile = false }
-        if (showNotifications) {
-            AlertDialog(
-                onDismissRequest = { showNotifications = false },
-                title = { Text("Notifications") },
-                text = { Text("No new notifications.") },
-                confirmButton = { TextButton(onClick = { showNotifications = false }) { Text("Close") } }
-            )
+            Spacer(Modifier.height(18.dp)); Text("Each account starts with its own private wellness data.", color = Muted, style = MaterialTheme.typography.bodySmall)
         }
     }
 }
 
 @Composable
-private fun AppHeader(tab: AppTab, onProfile: () -> Unit, onNotifications: () -> Unit) {
-    Surface(color = Cream) {
-        Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("🍃", style = MaterialTheme.typography.titleLarge)
-            Spacer(Modifier.width(8.dp))
-            Column(Modifier.weight(1f)) {
-                Text("NutriGuide", color = DarkTeal, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge)
-                Text(tab.label, color = Muted, style = MaterialTheme.typography.labelMedium)
+private fun MainShell(ui: NativeUiState, vm: NativeViewModel) {
+    var account by rememberSaveable { mutableStateOf(false) }
+    var notifications by rememberSaveable { mutableStateOf(false) }
+    Scaffold(
+        containerColor = Cream,
+        topBar = { AppHeader(ui.tab, { account = true }, { notifications = true }) },
+        bottomBar = {
+            NavigationBar(containerColor = DarkTeal, modifier = Modifier.navigationBarsPadding()) {
+                AppTab.entries.forEach { tab ->
+                    NavigationBarItem(modifier = Modifier.testTag("nav_${tab.title.lowercase()}"), selected = ui.tab == tab, onClick = { vm.select(tab) }, icon = { Icon(tabIcon(tab), tab.title) }, label = { Text(tab.title) }, colors = NavigationBarItemDefaults.colors(selectedIconColor = DarkTeal, selectedTextColor = DarkTeal, indicatorColor = Color(0xffd8f0e5), unselectedIconColor = Color.White, unselectedTextColor = Color.White))
+                }
             }
+        }
+    ) { padding ->
+        Box(Modifier.padding(padding).fillMaxSize()) {
+            when (ui.tab) {
+                AppTab.TODAY -> TodayScreen(ui, vm)
+                AppTab.FOOD -> FoodScreen(ui, vm)
+                AppTab.MOVE -> MoveScreen(ui, vm)
+                AppTab.JOURNEY -> JourneyScreen(ui, vm)
+                AppTab.REPORTS -> ReportsScreen(ui, vm)
+            }
+        }
+    }
+    if (account) AccountSheet(ui, vm) { account = false }
+    if (notifications) AlertDialog(onDismissRequest = { notifications = false }, title = { Text("Notifications") }, text = { Text("No new notifications yet.") }, confirmButton = { TextButton(onClick = { notifications = false }) { Text("Close") } })
+}
+
+@Composable
+private fun AppHeader(tab: AppTab, onAccount: () -> Unit, onNotifications: () -> Unit) {
+    Surface(color = Cream, modifier = Modifier.statusBarsPadding()) {
+        Row(Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("🍃", style = MaterialTheme.typography.titleLarge); Spacer(Modifier.width(8.dp))
+            Column(Modifier.weight(1f)) { Text("NutriGuide", color = DarkTeal, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge); Text(tab.title, color = Muted, style = MaterialTheme.typography.labelMedium) }
             IconButton(onClick = onNotifications) { Icon(Icons.Default.NotificationsNone, "Notifications", tint = DarkTeal) }
-            IconButton(onClick = onProfile) { Icon(Icons.Default.AccountCircle, "Profile", tint = Teal) }
+            IconButton(onClick = onAccount) { Icon(Icons.Default.AccountCircle, "Account", tint = Teal) }
         }
     }
 }
 
 @Composable
-private fun TodayScreen(ui: NativeUiState, vm: NativeViewModel, onProfile: () -> Unit) {
-    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item {
-            Text("A little better, every day.", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal)
-            Text("Your wellness, in one place.", color = Muted)
-        }
-        item {
-            if (!ui.profileReady) {
-                WellnessCard(Sage) {
-                    Text("Set up your profile", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                    Text("Tell us a bit about you to get a personalised plan.", color = Muted)
-                    Button(onClick = onProfile, modifier = Modifier.testTag("today_setup_profile")) { Text("Create profile") }
-                }
-            } else {
-                WellnessCard(Coral) {
-                    Text("Good morning${if (ui.name.isBlank()) "" else ", ${ui.name}"}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                    Text("Your targets are ready for today.", color = Muted)
-                    Text("${(ui.calorieTarget - ui.caloriesLogged).coerceAtLeast(0)} kcal remaining", style = MaterialTheme.typography.headlineSmall, color = Teal, fontWeight = FontWeight.Bold)
-                    LinearProgressIndicator(progress = { if (ui.calorieTarget == 0) 0f else (ui.caloriesLogged.toFloat() / ui.calorieTarget).coerceIn(0f, 1f) }, modifier = Modifier.fillMaxWidth())
-                    Text("${ui.proteinLogged.toInt()} of ${ui.proteinTarget} g protein", color = Muted)
-                }
-            }
-        }
-        item {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                SummaryMetric("Steps", ui.steps.toString(), Icons.Default.DirectionsWalk, Modifier.weight(1f))
-                SummaryMetric("Water", "${ui.water}/8", Icons.Default.WaterDrop, Modifier.weight(1f))
-            }
-        }
-        item {
-            WellnessCard(Mint) {
-                Text("Small actions", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Text("Keep your next step simple.", color = Muted)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                    OutlinedButton(onClick = vm::addWater, modifier = Modifier.weight(1f).testTag("today_add_water")) { Text("+ Water") }
-                    OutlinedButton(onClick = vm::addSteps, modifier = Modifier.weight(1f).testTag("today_add_steps")) { Text("+ Steps") }
-                }
-            }
-        }
+private fun TodayScreen(ui: NativeUiState, vm: NativeViewModel) {
+    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        item { Text("Today", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Your wellness, in one place", color = Muted) }
+        item { PreviewCard(Sage) { Text("Set up your profile", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(if (ui.profileReady) "Your personalized targets are ready." else "Tell us a bit about you to get a personalized plan.", color = Muted); if (!ui.profileReady) Button(onClick = {}, modifier = Modifier.testTag("today_setup_profile")) { Text("Set up profile") } else Text("${ui.calorieTarget} kcal · ${ui.proteinTarget} g protein target", color = Teal, fontWeight = FontWeight.SemiBold) } }
+        item { PreviewCard(Coral) { Text(if (ui.foods.isEmpty()) "No food logged yet" else "${ui.foods.size} food entries today", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(if (ui.foods.isEmpty()) "Start your food diary to build healthy habits." else "${ui.caloriesLogged} kcal · ${ui.proteinLogged.toInt()} g protein logged", color = Muted); OutlinedButton(onClick = { vm.select(AppTab.FOOD) }, modifier = Modifier.testTag("today_add_food")) { Text("Add food") } } }
+        item { PreviewCard(Lilac) { Text(if (ui.workoutsCompleted == 0) "No workouts yet" else "${ui.workoutsCompleted} workout completed", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(if (ui.workoutsCompleted == 0) "Choose a workout and get moving today." else "Nice work. Keep your movement consistent.", color = Muted); OutlinedButton(onClick = { vm.select(AppTab.MOVE) }, modifier = Modifier.testTag("today_browse_workouts")) { Text("Browse workouts") } } }
+        item { PreviewCard(Mint) { Text(if (ui.mood.isBlank()) "No check-ins yet" else "Check-in saved: ${ui.mood}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(if (ui.mood.isBlank()) "Check in with how you're feeling and track your recovery." else "Your recovery note is saved for this account.", color = Muted); OutlinedButton(onClick = { vm.select(AppTab.JOURNEY) }, modifier = Modifier.testTag("today_check_in")) { Text("Do a check-in") } } }
+        item { PreviewCard(Color.White) { Text("Daily rhythm", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { SmallMetric("Steps", ui.steps.toString(), Modifier.weight(1f)); SmallMetric("Water", "${ui.water}/8", Modifier.weight(1f)); SmallMetric("Calories", ui.caloriesLogged.toString(), Modifier.weight(1f)) }; Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { OutlinedButton(onClick = vm::addSteps, modifier = Modifier.weight(1f).testTag("today_add_steps")) { Text("+500 steps") }; OutlinedButton(onClick = vm::addWater, modifier = Modifier.weight(1f).testTag("today_add_water")) { Text("+ water") } } }
         if (ui.message.isNotBlank()) item { Text(ui.message, color = Teal, modifier = Modifier.testTag("status_message")) }
     }
 }
 
 @Composable
 private fun FoodScreen(ui: NativeUiState, vm: NativeViewModel) {
-    var showFoodPicker by rememberSaveable { mutableStateOf(false) }
+    var showPicker by rememberSaveable { mutableStateOf(false) }
+    val meals = listOf("Breakfast", "Lunch", "Dinner", "Snacks")
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item {
-            Text("Food diary", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal)
-            Text("Log meals without changing anything else in the app.", color = Muted)
-        }
-        item {
-            Button(onClick = { showFoodPicker = true }, modifier = Modifier.fillMaxWidth().testTag("food_add_button"), shape = RoundedCornerShape(14.dp)) {
-                Icon(Icons.Default.Add, null)
-                Spacer(Modifier.width(8.dp))
-                Text("Add food")
-            }
-        }
-        item {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                SummaryMetric("Calories", ui.caloriesLogged.toString(), Icons.Default.LocalFireDepartment, Modifier.weight(1f))
-                SummaryMetric("Protein", "${ui.proteinLogged.toInt()} g", Icons.Default.FitnessCenter, Modifier.weight(1f))
-            }
-        }
-        item { Text("Today", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal) }
-        if (ui.foods.isEmpty()) item { EmptyState("No food logged yet", "Tap Add food and choose a meal.") }
-        else items(ui.foods, key = { "${it.name}-${it.meal}-${it.calories}-${it.protein}" }) { food -> FoodRow(food) }
+        item { Text("Food diary", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Log your meals and build balanced habits", color = Muted) }
+        item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = {}) { Icon(Icons.Default.ChevronLeft, "Previous day", tint = DarkTeal) }; Column(horizontalAlignment = Alignment.CenterHorizontally) { Text("Today", color = Muted, style = MaterialTheme.typography.labelMedium); Text("Jan 26", fontWeight = FontWeight.Bold, color = DarkTeal) }; IconButton(onClick = {}) { Icon(Icons.Default.ChevronRight, "Next day", tint = DarkTeal) } } } }
+        meals.forEach { meal -> item { MealRow(meal, ui.foods.filter { it.meal == meal }) } }
+        item { Button(onClick = { showPicker = true }, modifier = Modifier.fillMaxWidth().testTag("food_add_button"), shape = RoundedCornerShape(16.dp)) { Icon(Icons.Default.Add, null); Spacer(Modifier.width(8.dp)); Text("Add food") } }
     }
-    if (showFoodPicker) FoodPickerDialog(vm) { showFoodPicker = false }
+    if (showPicker) FoodPicker(vm) { showPicker = false }
 }
 
 @Composable
-private fun FoodPickerDialog(vm: NativeViewModel, close: () -> Unit) {
-    val choices = listOf(
-        FoodEntry("Paneer bowl", "Lunch", 265, 18.0),
-        FoodEntry("Dal rice", "Lunch", 390, 14.0),
-        FoodEntry("Masala oats", "Breakfast", 220, 9.0),
-        FoodEntry("Fruit bowl", "Snack", 140, 2.0)
-    )
-    AlertDialog(
-        onDismissRequest = close,
-        title = { Text("Choose food") },
-        text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                choices.forEach { food ->
-                    OutlinedButton(
-                        onClick = { vm.logFood(food); close() },
-                        modifier = Modifier.fillMaxWidth().testTag("food_choice_${food.name.lowercase().replace(" ", "_")}")
-                    ) {
-                        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) {
-                            Text(food.name, fontWeight = FontWeight.Bold)
-                            Text("${food.meal} · ${food.calories} kcal · ${food.protein.toInt()} g protein", color = Muted)
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = { TextButton(onClick = close) { Text("Cancel") } }
-    )
+private fun MealRow(meal: String, entries: List<FoodEntry>) {
+    PreviewCard(if (meal == "Breakfast") Sage else Color.White) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) { Text(meal, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = DarkTeal, modifier = Modifier.weight(1f)); Text(if (entries.isEmpty()) "No entries" else "${entries.size} item${if (entries.size == 1) "" else "s"}", color = Muted) }
+        if (entries.isEmpty()) Text("Tap Add food to log this meal.", color = Muted, style = MaterialTheme.typography.bodySmall)
+        entries.forEach { food -> Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) { Text(food.name, color = DarkTeal); Text("${food.calories} kcal · ${food.protein.toInt()} g", color = Muted, style = MaterialTheme.typography.bodySmall) } }
+    }
+}
+
+@Composable
+private fun FoodPicker(vm: NativeViewModel, close: () -> Unit) {
+    val choices = listOf(FoodEntry("Masala oats", "Breakfast", 220, 9.0), FoodEntry("Paneer bowl", "Lunch", 265, 18.0), FoodEntry("Dal rice", "Dinner", 390, 14.0), FoodEntry("Fruit bowl", "Snacks", 140, 2.0))
+    AlertDialog(onDismissRequest = close, title = { Text("Choose food") }, text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { choices.forEach { food -> OutlinedButton(onClick = { vm.logFood(food); close() }, modifier = Modifier.fillMaxWidth().testTag("food_choice_${food.name.lowercase().replace(" ", "_")}")) { Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.Start) { Text(food.name, fontWeight = FontWeight.Bold, color = DarkTeal); Text("${food.meal} · ${food.calories} kcal · ${food.protein.toInt()} g protein", color = Muted, style = MaterialTheme.typography.bodySmall) } } } } }, confirmButton = { TextButton(onClick = close) { Text("Cancel") } })
 }
 
 @Composable
 private fun MoveScreen(ui: NativeUiState, vm: NativeViewModel) {
-    val sessions = listOf("Full Body Basics" to "20 min · Strength", "Energy Boost" to "15 min · Cardio", "Mobility Flow" to "10 min · Mobility")
+    val sessions = listOf(Workout("Full Body Basics", "20 min · Strength", "Strength", Coral), Workout("Energy Boost", "15 min · Cardio", "Cardio", Sage), Workout("Mobility Flow", "10 min · Mobility", "Mobility", Lilac))
+    var category by rememberSaveable { mutableStateOf("All") }
     var started by rememberSaveable { mutableStateOf<String?>(null) }
+    val filtered = sessions.filter { category == "All" || it.category == category }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item {
-            Text("Move", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal)
-            Text("Simple workouts to build strength, energy, and consistency.", color = Muted)
-        }
-        items(sessions) { (name, detail) ->
-            WellnessCard(if (name == "Full Body Basics") Coral else Sage) {
-                Text(name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Text(detail, color = Muted)
-                Button(onClick = { if (started != name) { started = name; vm.completeWorkout(name) } }, modifier = Modifier.testTag("workout_${name.lowercase().replace(" ", "_")}")) {
-                    Icon(if (started == name) Icons.Default.Check else Icons.Default.PlayArrow, null)
-                    Spacer(Modifier.width(6.dp))
-                    Text(if (started == name) "Completed" else "Start session")
-                }
-            }
-        }
-        item { if (started != null) Text("${started} completed. It is counted only in Move.", color = Teal) }
+        item { Text("Move", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Simple workouts to build strength, energy, and consistency", color = Muted) }
+        item { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp)) { listOf("All", "Strength", "Cardio", "Mobility").forEach { chip -> FilterChip(selected = category == chip, onClick = { category = chip }, label = { Text(chip) }, modifier = Modifier.weight(1f).testTag("move_filter_${chip.lowercase()}")) } } }
+        items(filtered, key = { it.name }) { workout -> PreviewCard(workout.tone) { Text(workout.name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(workout.detail, color = Muted); Button(onClick = { if (started != workout.name) { started = workout.name; vm.completeWorkout(workout.name) } }, modifier = Modifier.testTag("workout_${workout.name.lowercase().replace(" ", "_")}")) { Icon(if (started == workout.name) Icons.Default.Check else Icons.Default.PlayArrow, null); Spacer(Modifier.width(6.dp)); Text(if (started == workout.name) "Completed" else "Start session") } } }
     }
 }
 
@@ -331,126 +332,42 @@ private fun JourneyScreen(ui: NativeUiState, vm: NativeViewModel) {
     var note by rememberSaveable(ui.recoveryNote) { mutableStateOf(ui.recoveryNote) }
     val moods = listOf("Low", "Okay", "Steady", "Good", "Great")
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item {
-            Text("Journey", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal)
-            Text("Check in, reflect, and support your recovery.", color = Muted)
-        }
-        item {
-            WellnessCard(Sage) {
-                Text("How are you feeling today?", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Text("Take a quick check-in to track your recovery and overall well-being.", color = Muted)
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                    moods.forEach { option ->
-                        FilterChip(selected = mood == option, onClick = { mood = option }, label = { Text(option, style = MaterialTheme.typography.labelSmall) }, modifier = Modifier.weight(1f))
-                    }
-                }
-                OutlinedTextField(value = note, onValueChange = { note = it }, label = { Text("Anything you’d like to note?") }, placeholder = { Text("Energy, mood, sleep, cravings…") }, modifier = Modifier.fillMaxWidth().testTag("journey_note"))
-                Button(onClick = { vm.saveRecovery(mood.ifBlank { "Steady" }, note) }, modifier = Modifier.fillMaxWidth().testTag("journey_save")) {
-                    Icon(Icons.Default.Check, null)
-                    Spacer(Modifier.width(6.dp))
-                    Text(if (ui.recoverySaved) "Check-in saved" else "Save check-in")
-                }
-            }
-        }
+        item { Text("Journey", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Check in, reflect, and support your recovery", color = Muted) }
+        item { PreviewCard(Sage) { Text("How are you feeling today?", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Take a moment to reflect on your energy, mood, sleep, and cravings.", color = Muted); Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp)) { moods.forEach { option -> FilterChip(selected = mood == option, onClick = { mood = option }, label = { Text(option, style = MaterialTheme.typography.labelSmall) }, modifier = Modifier.weight(1f)) } }; OutlinedTextField(note, { note = it }, label = { Text("Anything you'd like to note?") }, placeholder = { Text("E.g., energy, mood, sleep, cravings…") }, modifier = Modifier.fillMaxWidth().testTag("journey_note")); Button(onClick = { vm.saveRecovery(mood.ifBlank { "Steady" }, note) }, modifier = Modifier.fillMaxWidth().testTag("journey_save")) { Icon(Icons.Default.Check, null); Spacer(Modifier.width(6.dp)); Text("Save check-in") } } }
         if (ui.message.isNotBlank()) item { Text(ui.message, color = Teal, modifier = Modifier.testTag("status_message")) }
     }
 }
 
 @Composable
-private fun ReportsScreen(ui: NativeUiState) {
+private fun ReportsScreen(ui: NativeUiState, vm: NativeViewModel) {
+    var range by rememberSaveable { mutableStateOf("Weekly") }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item {
-            Text("Reports", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal)
-            Text("Your progress and trends over time.", color = Muted)
-        }
-        item {
-            WellnessCard(Sage) {
-                Text("This week", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Text("Food logged: ${ui.foods.size}", color = Muted)
-                Text("Workouts completed: ${ui.workoutsCompleted}", color = Muted)
-                Text("Check-ins saved: ${if (ui.recoverySaved) 1 else 0}", color = Muted)
-                if (ui.foods.isEmpty() && ui.workoutsCompleted == 0 && !ui.recoverySaved) Text("Start logging to see your weekly summary.", color = DarkTeal, fontWeight = FontWeight.SemiBold)
-            }
-        }
+        item { Text("Reports", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Your progress and trends over time", color = Muted) }
+        item { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { FilterChip(selected = range == "Weekly", onClick = { range = "Weekly" }, label = { Text("Weekly") }, modifier = Modifier.weight(1f).testTag("reports_weekly")); FilterChip(selected = range == "Monthly", onClick = { range = "Monthly" }, label = { Text("Monthly") }, modifier = Modifier.weight(1f).testTag("reports_monthly")) } }
+        item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = {}) { Icon(Icons.Default.ChevronLeft, "Previous period", tint = DarkTeal) }; Text(if (range == "Weekly") "Jan 20 – Jan 26" else "January 2026", fontWeight = FontWeight.Bold, color = DarkTeal); IconButton(onClick = {}) { Icon(Icons.Default.ChevronRight, "Next period", tint = DarkTeal) } } } }
+        item { if (ui.foods.isEmpty() && ui.workoutsCompleted == 0 && ui.mood.isBlank()) PreviewCard(Sage) { Text("No weekly progress yet", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Log your food, workouts, and check-ins to see your weekly summary and insights here.", color = Muted); Button(onClick = { vm.select(AppTab.FOOD) }, modifier = Modifier.testTag("reports_start_logging")) { Text("Start logging") } } else PreviewCard(Sage) { Text(if (range == "Weekly") "This week" else "This month", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { SmallMetric("Food", ui.foods.size.toString(), Modifier.weight(1f)); SmallMetric("Move", ui.workoutsCompleted.toString(), Modifier.weight(1f)); SmallMetric("Check-ins", if (ui.mood.isBlank()) "0" else "1", Modifier.weight(1f)) } } }
     }
 }
 
 @Composable
-private fun ProfileDialog(ui: NativeUiState, vm: NativeViewModel, close: () -> Unit) {
-    var name by rememberSaveable { mutableStateOf(ui.name) }
-    var calories by rememberSaveable { mutableStateOf(if (ui.calorieTarget == 0) "" else ui.calorieTarget.toString()) }
-    var protein by rememberSaveable { mutableStateOf(if (ui.proteinTarget == 0) "" else ui.proteinTarget.toString()) }
-    AlertDialog(
-        onDismissRequest = close,
-        title = { Text("Your profile") },
-        text = {
-            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                OutlinedTextField(name, { name = it }, label = { Text("Name") }, singleLine = true)
-                OutlinedTextField(calories, { calories = it.filter(Char::isDigit) }, label = { Text("Daily calories") }, singleLine = true)
-                OutlinedTextField(protein, { protein = it.filter(Char::isDigit) }, label = { Text("Daily protein (g)") }, singleLine = true)
-                Text("Targets are saved only when you press Save.", color = Muted, style = MaterialTheme.typography.bodySmall)
-            }
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    val kcal = calories.toIntOrNull()
-                    val grams = protein.toIntOrNull()
-                    if (name.isNotBlank() && kcal != null && kcal > 0 && grams != null && grams > 0) {
-                        vm.saveProfile(name, kcal, grams)
-                        close()
-                    }
-                },
-                modifier = Modifier.testTag("profile_save")
-            ) { Text("Save") }
-        },
-        dismissButton = { TextButton(onClick = close) { Text("Cancel") } }
-    )
+private fun AccountSheet(ui: NativeUiState, vm: NativeViewModel, close: () -> Unit) {
+    AlertDialog(onDismissRequest = close, title = { Text("Your account") }, text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { Text(ui.name.ifBlank { "NutriGuide member" }, fontWeight = FontWeight.Bold, color = DarkTeal); Text(ui.authEmail, color = Muted); Text("Your entries are stored separately for this account.", color = Muted, style = MaterialTheme.typography.bodySmall) } }, confirmButton = { Button(onClick = { close(); vm.logout() }, modifier = Modifier.testTag("account_logout")) { Text("Log out") } }, dismissButton = { TextButton(onClick = close) { Text("Close") } })
 }
 
 @Composable
-private fun WellnessCard(color: Color, content: @Composable ColumnScope.() -> Unit) {
-    Card(shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = color)) {
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
-    }
+private fun PreviewCard(color: Color, content: @Composable ColumnScope.() -> Unit) {
+    Card(shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = color), border = BorderStroke(1.dp, Border), modifier = Modifier.fillMaxWidth()) { Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp), content = content) }
 }
 
 @Composable
-private fun SummaryMetric(title: String, value: String, icon: androidx.compose.ui.graphics.vector.ImageVector, modifier: Modifier) {
-    Card(modifier = modifier, shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
-        Column(Modifier.padding(14.dp)) {
-            Icon(icon, null, tint = Teal)
-            Text(title, color = Muted, style = MaterialTheme.typography.labelMedium)
-            Text(value, color = DarkTeal, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        }
-    }
-}
-
-@Composable
-private fun FoodRow(food: FoodEntry) {
-    Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Color.White)) {
-        ListItem(
-            headlineContent = { Text(food.name, fontWeight = FontWeight.Bold) },
-            supportingContent = { Text("${food.meal} · ${food.calories} kcal · ${food.protein.toInt()} g protein", color = Muted) },
-            leadingContent = { Icon(Icons.Default.Restaurant, null, tint = Teal) }
-        )
-    }
-}
-
-@Composable
-private fun EmptyState(title: String, body: String) {
-    Card(shape = RoundedCornerShape(16.dp), colors = CardDefaults.cardColors(containerColor = Sage)) {
-        Column(Modifier.fillMaxWidth().padding(18.dp)) {
-            Text(title, fontWeight = FontWeight.Bold, color = DarkTeal)
-            Text(body, color = Muted)
-        }
-    }
+private fun SmallMetric(label: String, value: String, modifier: Modifier = Modifier) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) { Text(value, color = Teal, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium); Text(label, color = Muted, style = MaterialTheme.typography.labelSmall) }
 }
 
 private fun tabIcon(tab: AppTab) = when (tab) {
     AppTab.TODAY -> Icons.Default.Home
     AppTab.FOOD -> Icons.Default.Restaurant
     AppTab.MOVE -> Icons.Default.DirectionsRun
-    AppTab.JOURNEY -> Icons.Default.AutoStories
-    AppTab.REPORTS -> Icons.Default.BarChart
+    AppTab.JOURNEY -> Icons.Default.SelfImprovement
+    AppTab.REPORTS -> Icons.Default.Insights
 }
