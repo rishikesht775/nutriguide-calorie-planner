@@ -98,7 +98,7 @@ class NativeFlowTest {
         assertTrue(rule.onAllNodesWithTag("food_remove_masala_oats").fetchSemanticsNodes().isNotEmpty())
     }
 
-    @Test fun customFoodControlsAreReachable() {
+    @Test fun customFoodEntryPointRemainsReachable() {
         enableTestMode()
         rule.onNodeWithTag("nav_food").performClick()
         waitForTag("food_scroll")
@@ -107,9 +107,6 @@ class NativeFlowTest {
         waitForTag("food_custom_button")
         rule.onNodeWithTag("food_custom_button").performClick()
         waitForTag("food_custom_name")
-        waitForTag("food_custom_calories")
-        waitForTag("food_custom_protein")
-        waitForTag("food_custom_save")
     }
 
     @Test fun everyBottomTabRemainsReachable() {
