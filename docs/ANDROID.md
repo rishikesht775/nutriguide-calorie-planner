@@ -1,5 +1,9 @@
 # NutriGuide native Android app
 
+## Mobile test suite and change traceability
+
+The complete native APK test plan is maintained in [docs/MOBILE-TESTING.md](MOBILE-TESTING.md), with a concise index in [tests/mobile/MOBILE-TEST-MATRIX.md](../tests/mobile/MOBILE-TEST-MATRIX.md). It covers authentication, safe areas, lifecycle, Today, Food date isolation, Move, Journey, Reports, network failures, privacy and physical Samsung S21 FE acceptance. Android changes must update native tests and this mobile documentation in the same change; `.github/workflows/android.yml` runs `scripts/check-mobile-test-alignment.mjs` before building.
+
 ## Native UI redesign — 11 November 2026
 
 The Android app is being rebuilt around Jetpack Compose and Material 3. The redesign uses an app-level `Scaffold`, a Material 3 bottom navigation bar, feature-oriented screens, a ViewModel-owned UI state, and a repository boundary for persistence and sync. The current UI direction follows established nutrition-app patterns: a Today diary as the first screen, direct meal logging, visible calorie/macro summaries, quick actions, workout cards and weekly reports. It retains NutriGuide’s green visual language and account-isolation behavior.
@@ -61,7 +65,7 @@ The last command requires a running emulator/device. The project has no checked-
 
 ## Validation and phone acceptance
 
-The workflow assembles the APK, runs seven JVM policy tests and Android lint, then runs a native Espresso flow on an API 30 emulator before uploading the APK. The instrumented flow verifies no WebView in the native view hierarchy, empty-profile setup, 1,950 kcal estimate for a synthetic profile, correct Paneer logging, 1,685 kcal remaining, persistence through Activity recreation and native Journey/Reports navigation.
+The workflow assembles the APK, runs JVM policy tests and Android lint, then runs native Jetpack Compose instrumentation on an API 30 emulator before uploading the APK. The instrumented flow verifies no WebView in the native view hierarchy, empty-profile setup, 1,950 kcal estimate for a synthetic profile, correct Paneer logging, 1,685 kcal remaining, persistence through Activity recreation and native Journey/Reports navigation.
 
 Physical Samsung S21 FE acceptance remains required: installation, profile/target edits, food/custom portions, timer pause on background, day rollover, recovery, CSV export, native email confirmation/login, two-account isolation, explicit cloud sync and offline edits/retry. These must not be reported as passed until actually executed.
 
