@@ -27,6 +27,8 @@ class NativeFlowTest {
         waitForAuth()
         rule.onNodeWithTag("auth_sign_up_tab").performClick()
         assertTrue(rule.onAllNodesWithTag("auth_name").fetchSemanticsNodes().isNotEmpty())
+        assertTrue(rule.onAllNodesWithTag("auth_email").fetchSemanticsNodes().isNotEmpty())
+        assertTrue(rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isNotEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_confirm").fetchSemanticsNodes().isNotEmpty())
     }
 
