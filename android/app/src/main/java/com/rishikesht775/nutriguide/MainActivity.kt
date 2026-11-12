@@ -274,19 +274,65 @@ private fun AppHeader(tab: AppTab, onAccount: () -> Unit, onNotifications: () ->
     }
 }
 
+
 @Composable
 private fun TodayScreen(ui: NativeUiState, vm: NativeViewModel, onProfile: () -> Unit) {
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        item { Text("Today", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Your wellness, in one place", color = Muted) }
-        item { PreviewCard(Sage) { Text("Set up your profile", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(if (ui.profileReady) "Your personalized targets are ready." else "Tell us a bit about you to get a personalized plan.", color = Muted); if (!ui.profileReady) Button(onClick = onProfile, modifier = Modifier.testTag("today_setup_profile")) { Text("Set up profile") } else Text("${ui.calorieTarget} kcal · ${ui.proteinTarget} g protein target", color = Teal, fontWeight = FontWeight.SemiBold) } }
-        item { PreviewCard(Coral) { Text(if (ui.foods.isEmpty()) "No food logged yet" else "${ui.foods.size} food entries today", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(if (ui.foods.isEmpty()) "Start your food diary to build healthy habits." else "${ui.caloriesLogged} kcal · ${ui.proteinLogged.toInt()} g protein logged", color = Muted); OutlinedButton(onClick = { vm.select(AppTab.FOOD) }, modifier = Modifier.testTag("today_add_food")) { Text("Add food") } } }
-        item { PreviewCard(Lilac) { Text(if (ui.workoutsCompleted == 0) "No workouts yet" else "${ui.workoutsCompleted} workout completed", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(if (ui.workoutsCompleted == 0) "Choose a workout and get moving today." else "Nice work. Keep your movement consistent.", color = Muted); OutlinedButton(onClick = { vm.select(AppTab.MOVE) }, modifier = Modifier.testTag("today_browse_workouts")) { Text("Browse workouts") } } }
-        item { PreviewCard(Mint) { Text(if (ui.mood.isBlank()) "No check-ins yet" else "Check-in saved: ${ui.mood}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Text(if (ui.mood.isBlank()) "Check in with how you're feeling and track your recovery." else "Your recovery note is saved for this account.", color = Muted); OutlinedButton(onClick = { vm.select(AppTab.JOURNEY) }, modifier = Modifier.testTag("today_check_in")) { Text("Do a check-in") } } }
-        item { PreviewCard(Color.White) { Text("Daily rhythm", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal); Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { SmallMetric("Steps", ui.steps.toString(), Modifier.weight(1f)); SmallMetric("Water", "${ui.water}/8", Modifier.weight(1f)); SmallMetric("Calories", ui.caloriesLogged.toString(), Modifier.weight(1f)) }; Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { OutlinedButton(onClick = vm::addSteps, modifier = Modifier.weight(1f).testTag("today_add_steps")) { Text("+500 steps") }; OutlinedButton(onClick = vm::addWater, modifier = Modifier.weight(1f).testTag("today_add_water")) { Text("+ water") } } }
-        if (ui.message.isNotBlank()) item { Text(ui.message, color = Teal, modifier = Modifier.testTag("status_message")) }
+        item {
+            Text("Today", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal)
+            Text("Your wellness, in one place", color = Muted)
+        }
+        item {
+            PreviewCard(Sage) {
+                Text("Set up your profile", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal)
+                Text(if (ui.profileReady) "Your personalized targets are ready." else "Tell us a bit about you to get a personalized plan.", color = Muted)
+                if (!ui.profileReady) {
+                    Button(onClick = onProfile, modifier = Modifier.testTag("today_setup_profile")) { Text("Set up profile") }
+                } else {
+                    Text("${ui.calorieTarget} kcal · ${ui.proteinTarget} g protein target", color = Teal, fontWeight = FontWeight.SemiBold)
+                }
+            }
+        }
+        item {
+            PreviewCard(Coral) {
+                Text(if (ui.foods.isEmpty()) "No food logged yet" else "${ui.foods.size} food entries today", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal)
+                Text(if (ui.foods.isEmpty()) "Start your food diary to build healthy habits." else "${ui.caloriesLogged} kcal · ${ui.proteinLogged.toInt()} g protein logged", color = Muted)
+                OutlinedButton(onClick = { vm.select(AppTab.FOOD) }, modifier = Modifier.testTag("today_add_food")) { Text("Add food") }
+            }
+        }
+        item {
+            PreviewCard(Lilac) {
+                Text(if (ui.workoutsCompleted == 0) "No workouts yet" else "${ui.workoutsCompleted} workout completed", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal)
+                Text(if (ui.workoutsCompleted == 0) "Choose a workout and get moving today." else "Nice work. Keep your movement consistent.", color = Muted)
+                OutlinedButton(onClick = { vm.select(AppTab.MOVE) }, modifier = Modifier.testTag("today_browse_workouts")) { Text("Browse workouts") }
+            }
+        }
+        item {
+            PreviewCard(Mint) {
+                Text(if (ui.mood.isBlank()) "No check-ins yet" else "Check-in saved: ${ui.mood}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal)
+                Text(if (ui.mood.isBlank()) "Check in with how you're feeling and track your recovery." else "Your recovery note is saved for this account.", color = Muted)
+                OutlinedButton(onClick = { vm.select(AppTab.JOURNEY) }, modifier = Modifier.testTag("today_check_in")) { Text("Do a check-in") }
+            }
+        }
+        item {
+            PreviewCard(Color.White) {
+                Text("Daily rhythm", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = DarkTeal)
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    SmallMetric("Steps", ui.steps.toString(), Modifier.weight(1f))
+                    SmallMetric("Water", "${ui.water}/8", Modifier.weight(1f))
+                    SmallMetric("Calories", ui.caloriesLogged.toString(), Modifier.weight(1f))
+                }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedButton(onClick = vm::addSteps, modifier = Modifier.weight(1f).testTag("today_add_steps")) { Text("+500 steps") }
+                    OutlinedButton(onClick = vm::addWater, modifier = Modifier.weight(1f).testTag("today_add_water")) { Text("+ water") }
+                }
+            }
+        }
+        if (ui.message.isNotBlank()) {
+            item { Text(ui.message, color = Teal, modifier = Modifier.testTag("status_message")) }
+        }
     }
 }
-
 
 @Composable
 private fun ProfileDialog(ui: NativeUiState, vm: NativeViewModel, close: () -> Unit) {
