@@ -3,7 +3,9 @@ package com.rishikesht775.nutriguide
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -53,6 +55,7 @@ class NativeFlowTest {
     @Test fun resetModeDoesNotShowPasswordField() {
         waitForAuth()
         rule.onNodeWithTag("auth_reset").performClick()
+        rule.waitUntil(2000) { rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty() }
         assertTrue(rule.onAllNodesWithTag("auth_email").fetchSemanticsNodes().isNotEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_submit").fetchSemanticsNodes().isNotEmpty())
@@ -74,6 +77,7 @@ class NativeFlowTest {
         rule.onNodeWithTag("profile_save").performClick()
         assertTrue(rule.onAllNodesWithTag("today_setup_profile").fetchSemanticsNodes().isEmpty())
 
+        rule.onNodeWithTag("today_scroll").performScrollToNode(hasTestTag("today_add_steps"))
         rule.onNodeWithTag("today_add_steps").performClick()
         rule.onNodeWithTag("today_add_water").performClick()
 

@@ -336,7 +336,7 @@ private fun AppHeader(tab: AppTab, onAccount: () -> Unit, onNotifications: () ->
 
 @Composable
 private fun TodayScreen(ui: NativeUiState, vm: NativeViewModel, onProfile: () -> Unit) {
-    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+    LazyColumn(modifier = Modifier.testTag("today_scroll"), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
         item {
             Text("Today", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal)
             Text("Your wellness, in one place", color = Muted)
