@@ -63,7 +63,8 @@ data class NativeUiState(
 
 class NativeViewModel(app: Application) : AndroidViewModel(app) {
     private val api = NativeApi(app)
-    // Deterministic offline mode keeps UI automation independent of provider/network state.\n    private var testMode = false
+    // Deterministic offline mode keeps UI automation independent of provider/network state.
+    private var testMode = false
     private val store = NativeStore(app)
     var ui by mutableStateOf(NativeUiState())
         private set
