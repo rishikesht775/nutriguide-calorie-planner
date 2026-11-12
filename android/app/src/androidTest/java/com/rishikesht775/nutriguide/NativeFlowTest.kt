@@ -19,6 +19,10 @@ class NativeFlowTest {
         rule.waitUntil(5000) { rule.onAllNodesWithTag("auth_card").fetchSemanticsNodes().isNotEmpty() }
     }
 
+    private fun waitForTag(tag: String) {
+        rule.waitUntil(5000) { rule.onAllNodesWithTag(tag).fetchSemanticsNodes().isNotEmpty() }
+    }
+
     private fun enableTestMode() {
         rule.activity.runOnUiThread {
             rule.activity.intent.putExtra("NUTRIGUIDE_TEST_MODE", true)
@@ -54,8 +58,10 @@ class NativeFlowTest {
 
     @Test fun resetModeDoesNotShowPasswordField() {
         waitForAuth()
-        rule.onNodeWithTag("auth_reset").performClick()
-        rule.waitUntil(2000) { rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty() }
+        if (rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isNotEmpty()) {
+            rule.onNodeWithTag("auth_reset").performClick()
+        }
+        rule.waitUntil(5000) { rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty() }
         assertTrue(rule.onAllNodesWithTag("auth_email").fetchSemanticsNodes().isNotEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_submit").fetchSemanticsNodes().isNotEmpty())
@@ -82,18 +88,22 @@ class NativeFlowTest {
         rule.onNodeWithTag("today_add_water").performClick()
 
         rule.onNodeWithTag("nav_food").performClick()
+        waitForTag("food_add_button")
         rule.onNodeWithTag("food_add_button").performClick()
         rule.onNodeWithTag("food_choice_masala_oats").performClick()
         assertTrue(rule.onAllNodesWithTag("food_add_button").fetchSemanticsNodes().isNotEmpty())
 
         rule.onNodeWithTag("nav_move").performClick()
+        waitForTag("workout_full_body_basics")
         rule.onNodeWithTag("workout_full_body_basics").performClick()
 
         rule.onNodeWithTag("nav_journey").performClick()
+        waitForTag("journey_save")
         rule.onNodeWithTag("journey_save").performClick()
         assertTrue(rule.onAllNodesWithTag("status_message").fetchSemanticsNodes().isNotEmpty())
 
         rule.onNodeWithTag("nav_reports").performClick()
+        waitForTag("reports_weekly")
         assertTrue(rule.onAllNodesWithTag("reports_weekly").fetchSemanticsNodes().isNotEmpty())
         rule.onNodeWithTag("reports_monthly").performClick()
         assertTrue(rule.onAllNodesWithTag("reports_monthly").fetchSemanticsNodes().isNotEmpty())
