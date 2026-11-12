@@ -177,7 +177,7 @@ Record device model, Android version, build commit, case ID, result, evidence an
 
 ## Android/web parity implementation batches
 
-The first parity batch is implemented in the native Compose app and is covered by NativeFlowTest:
+The first parity batch is implemented in the native Compose app and is covered by NativeFlowTest. The release gate also compiles the instrumentation source before starting any emulator work:
 
 - PARITY-FOOD-01: Food Studio opens with the same four meal buckets and an explicit day selector.
 - PARITY-FOOD-02: Food search and meal selection log exactly one deliberate item to the selected date.
