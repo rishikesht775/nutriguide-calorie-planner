@@ -10,6 +10,7 @@ import org.junit.Test
 
 class NativeFlowTest {
     // Functional tests run against the deterministic signed-in test account.
+    // These tests are part of the APK release gate.
     @get:Rule val rule = createAndroidComposeRule<MainActivity>()
 
     private fun waitForAuth() {
