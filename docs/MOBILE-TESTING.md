@@ -42,7 +42,7 @@ The CI alignment check fails an Android source change when neither the mobile te
 | ID | Scenario | Automated coverage |
 | --- | --- | --- |
 | MOB-AUTH-01 | Auth gate renders without a WebView and exposes email/password sign in | `NativeFlowTest.authGateShowsRealAccountActions` |
-| MOB-AUTH-02 | Create-account mode exposes name, email, password and confirmation fields | Compose instrumentation; add to `NativeFlowTest` when the form changes |
+| MOB-AUTH-02 | Create-account mode exposes name, email, password and confirmation fields | `NativeFlowTest.createAccountModeShowsMatchingRegistrationFields` |
 | MOB-AUTH-03 | Forgot-password mode hides the password field and keeps the email field | Compose instrumentation |
 | MOB-AUTH-04 | Unverified or invalid sign-in stays signed out with a safe error | JVM/API contract plus manual provider acceptance |
 | MOB-AUTH-05 | Successful sign-in selects the verified email owner | Native API contract and manual provider acceptance |
@@ -140,6 +140,20 @@ The CI alignment check fails an Android source change when neither the mobile te
 | MOB-SEC-02 | Switch between two test accounts | Each owner sees only their own local and cloud state |
 | MOB-SEC-03 | Reinstall or stale debug APK | Install instructions explain signing-key and data consequences |
 
+## Automated signed-in functional coverage
+
+The instrumentation suite now launches a deterministic signed-in test account through the NUTRIGUIDE_TEST_MODE activity extra. This keeps the full UI flow offline and repeatable while provider and real-account behavior remain separate acceptance cases.
+
+| Test | Coverage |
+| --- | --- |
+| `NativeFlowTest.fullSignedInJourneyRunsAutomatically` | Profile setup, steps, water, Food picker/logging, Move completion, Journey check-in, Reports weekly/monthly toggle |
+| `NativeFlowTest.everyBottomTabRemainsReachable` | Today, Food, Move, Journey and Reports navigation without a crash |
+| Existing auth tests | Auth gate, create-account fields, reset mode and account-mode navigation |
+
+The release command must run unit tests, lint, build and connected instrumentation together. A failure in any stage blocks the APK artifact:
+```powershell
+gradle -p android testDebugUnitTest lintDebug assembleDebug connectedDebugAndroidTest
+```
 ## Manual Samsung S21 FE acceptance
 
 Run these on a test account and a separate second test account:
