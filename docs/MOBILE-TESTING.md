@@ -49,6 +49,7 @@ The CI alignment check fails an Android source change when neither the mobile te
 | MOB-AUTH-06 | Logout clears the native session and returns to the auth gate | Instrumentation/manual provider acceptance |
 | MOB-AUTH-07 | Guest data is never copied into a new account | `NativeStore` policy test and two-account manual acceptance |
 | MOB-AUTH-08 | Passwords and session tokens are not persisted in app state or logs | Native policy review; provider response contract |
+| MOB-AUTH-09 | Auth mode controls remain reachable after switching between registration and reset | Compose instrumentation: `NativeFlowTest.accountModesRemainReachableAfterNavigation` |
 
 ### Safe area, device and lifecycle
 

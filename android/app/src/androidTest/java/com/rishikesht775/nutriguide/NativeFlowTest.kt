@@ -30,6 +30,14 @@ class NativeFlowTest {
         assertTrue(rule.onAllNodesWithTag("auth_confirm").fetchSemanticsNodes().isNotEmpty())
     }
 
+    @Test fun accountModesRemainReachableAfterNavigation() {
+        waitForAuth()
+        rule.onNodeWithTag("auth_sign_up_tab").performClick()
+        assertTrue(rule.onAllNodesWithTag("auth_confirm").fetchSemanticsNodes().isNotEmpty())
+        rule.onNodeWithTag("auth_reset").performClick()
+        assertTrue(rule.onAllNodesWithTag("auth_submit").fetchSemanticsNodes().isNotEmpty())
+    }
+
     @Test fun resetModeDoesNotShowPasswordField() {
         waitForAuth()
         rule.onNodeWithTag("auth_reset").performClick()
