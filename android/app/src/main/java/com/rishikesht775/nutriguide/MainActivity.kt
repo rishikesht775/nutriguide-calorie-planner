@@ -82,7 +82,7 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
                     val user = response.optJSONObject("user")
                     openAccount(user?.optString("email").orEmpty(), user?.optString("name").orEmpty())
                 } else ui = ui.copy(auth = AuthStatus.SIGNED_OUT)
-            } catch (_: Exception) { if (!testMode) ui = ui.copy(auth = AuthStatus.SIGNED_OUT) }
+            } catch (_: Exception) { ui = ui.copy(auth = AuthStatus.SIGNED_OUT) }
         }
     }
 
@@ -262,7 +262,7 @@ private fun AuthScreen(ui: NativeUiState, vm: NativeViewModel) {
                     }
                 }
             } else {
-                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Color.White), modifier = Modifier.fillMaxWidth().testTag(if (reset) "auth_reset_mode" else "auth_card")) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Color.White), modifier = Modifier.fillMaxWidth().testTag("auth_card")) {
                     Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(if (reset) "Reset your password" else if (mode == "sign-up") "Create your account" else "Welcome back", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = DarkTeal)
                         Text(if (reset) "We’ll send a secure reset link to your email." else "Save your nutrition, movement and recovery in your own account.", color = Muted)
@@ -425,7 +425,7 @@ private fun FoodScreen(ui: NativeUiState, vm: NativeViewModel) {
     val meals = listOf("Breakfast", "Lunch", "Dinner", "Snacks")
     var selectedDate by rememberSaveable { mutableStateOf(LocalDate.now().toString()) }
     val day = runCatching { LocalDate.parse(selectedDate) }.getOrElse { LocalDate.now() }
-    LazyColumn(modifier = Modifier.testTag("food_scroll"), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { Text("Food diary", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = DarkTeal); Text("Log your meals and build balanced habits", color = Muted) }
         item { PreviewCard(Color.White) { Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) { IconButton(onClick = { selectedDate = day.minusDays(1).toString() }) { Icon(Icons.Default.ChevronLeft, "Previous day", tint = DarkTeal) }; Column(horizontalAlignment = Alignment.CenterHorizontally) { Text(if (day == LocalDate.now()) "Today" else day.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()), color = Muted, style = MaterialTheme.typography.labelMedium); Text(day.format(DateTimeFormatter.ofPattern("MMM d", Locale.getDefault())), fontWeight = FontWeight.Bold, color = DarkTeal) }; IconButton(onClick = { selectedDate = day.plusDays(1).toString() }) { Icon(Icons.Default.ChevronRight, "Next day", tint = DarkTeal) } } } }
         meals.forEach { meal -> item { MealRow(meal, ui.foods.filter { it.date == selectedDate && it.meal == meal }) } }

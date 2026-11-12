@@ -83,7 +83,7 @@ class NativeFlowTest {
         rule.onNodeWithTag("today_add_water").performClick()
 
         rule.onNodeWithTag("nav_food").performClick()
-        waitForTag("food_add_button")
+        waitForTag("food_scroll")
         rule.onNodeWithTag("food_scroll").performScrollToNode(hasTestTag("food_add_button"))
         rule.onNodeWithTag("food_add_button").performClick()
         rule.onNodeWithTag("food_choice_masala_oats").performClick()
