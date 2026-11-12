@@ -1,6 +1,8 @@
 package com.rishikesht775.nutriguide
 
 import android.os.Bundle
+import android.app.Application
+import org.json.JSONArray
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -18,7 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 private val Green = Color(0xff147d68)
@@ -37,15 +39,23 @@ data class NativeUiState(
     val water: Int = 0,
     val profileReady: Boolean = false,
     val foods: List<String> = emptyList(),
-    val message: String = ""
+    val message: String = "",
+    val workouts: Int = 0,
+    val recoverySaved: Boolean = false
 )
 
-class NativeViewModel : ViewModel() {
-    var ui by mutableStateOf(NativeUiState()); private set
-    fun select(tab: AppTab) { ui = ui.copy(tab = tab, message = "") }
-    fun addWater() { ui = ui.copy(water = (ui.water + 1).coerceAtMost(30), message = "Water logged") }
-    fun addFood(name: String, calories: Int, protein: Double) { ui = ui.copy(foods = ui.foods + name, caloriesLogged = ui.caloriesLogged + calories, protein = ui.protein + protein, message = "$name added") }
-    fun setupDemoProfile() { ui = ui.copy(profileReady = true, calories = 1950, proteinTarget = 118, message = "Profile saved") }
+class NativeViewModel(app: Application) : AndroidViewModel(app) {
+    private val prefs=app.getSharedPreferences("native-compose-state",0)
+    var ui by mutableStateOf(load()); private set
+    private fun load(): NativeUiState { val foods=prefs.getStringSet("foods",emptySet())!!.toList(); return NativeUiState(calories=prefs.getInt("calories",0),caloriesLogged=prefs.getInt("logged",0),protein=prefs.getFloat("protein",0f).toDouble(),proteinTarget=prefs.getInt("proteinTarget",0),steps=prefs.getInt("steps",0),water=prefs.getInt("water",0),profileReady=prefs.getBoolean("profile",false),foods=foods,workouts=prefs.getInt("workouts",0),recoverySaved=prefs.getBoolean("recovery",false)) }
+    private fun save(next:NativeUiState){ui=next;prefs.edit().putInt("calories",next.calories).putInt("logged",next.caloriesLogged).putFloat("protein",next.protein.toFloat()).putInt("proteinTarget",next.proteinTarget).putInt("steps",next.steps).putInt("water",next.water).putBoolean("profile",next.profileReady).putStringSet("foods",next.foods.toSet()).putInt("workouts",next.workouts).putBoolean("recovery",next.recoverySaved).apply()}
+    fun select(tab: AppTab){save(ui.copy(tab=tab,message=""))}
+    fun addWater(){save(ui.copy(water=(ui.water+1).coerceAtMost(30),message="Water logged"))}
+    fun addFood(name:String,calories:Int,protein:Double){save(ui.copy(foods=(ui.foods+name).distinct(),caloriesLogged=ui.caloriesLogged+calories,protein=ui.protein+protein,message="$name added"))}
+    fun setupDemoProfile(){save(ui.copy(profileReady=true,calories=1950,proteinTarget=118,message="Profile saved"))}
+    fun saveSteps(steps:Int){save(ui.copy(steps=steps,message="Steps saved"))}
+    fun completeWorkout(){save(ui.copy(workouts=ui.workouts+1,message="Workout saved"))}
+    fun saveRecovery(){save(ui.copy(recoverySaved=true,message="Recovery saved"))}
 }
 
 class MainActivity : ComponentActivity() {
@@ -61,7 +71,7 @@ class MainActivity : ComponentActivity() {
             topBar = { CenterAlignedTopAppBar(title = { Text("NutriGuide", fontWeight = FontWeight.Bold) }, actions = { IconButton(onClick = {}) { Icon(Icons.Default.Person, "Account") } }) },
             bottomBar = { NavigationBar(containerColor = Color.White) { AppTab.entries.forEach { tab -> NavigationBarItem(modifier = Modifier.testTag("nav_${tab.label.lowercase()}"), selected = ui.tab == tab, onClick = { vm.select(tab) }, icon = { Icon(tabIcon(tab), tab.label) }, label = { Text(tab.label) }) } } },
             floatingActionButton = { if (ui.tab == AppTab.TODAY || ui.tab == AppTab.FOOD) FloatingActionButton(onClick = { vm.addFood("Quick add", 100, 5.0) }, containerColor = Green) { Icon(Icons.Default.Add, "Quick add") } }
-        ) { padding -> Box(Modifier.padding(padding).fillMaxSize()) { when (ui.tab) { AppTab.TODAY -> TodayScreen(ui, vm); AppTab.FOOD -> FoodScreen(ui, vm); AppTab.MOVE -> MoveScreen(); AppTab.JOURNEY -> JourneyScreen(); AppTab.REPORTS -> ReportsScreen(ui) } } }
+        ) { padding -> Box(Modifier.padding(padding).fillMaxSize()) { when (ui.tab) { AppTab.TODAY -> TodayScreen(ui, vm); AppTab.FOOD -> FoodScreen(ui, vm); AppTab.MOVE -> MoveScreen(vm); AppTab.JOURNEY -> JourneyScreen(vm); AppTab.REPORTS -> ReportsScreen(ui) } } }
     }
 }
 
@@ -81,9 +91,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable private fun FoodScreen(ui: NativeUiState, vm: NativeViewModel) { LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) { item { Text("Food diary", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold); Text("Search, review and log familiar Indian foods.", color = Color(0xff536f67)) }; item { OutlinedButton(onClick = { vm.addFood("Paneer", 265, 18.0) }, modifier = Modifier.fillMaxWidth()) { Icon(Icons.Default.Search, null); Spacer(Modifier.width(8.dp)); Text("Search foods") } }; item { Text("Today’s nutrition", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) }; item { Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) { MetricCard("Calories", ui.caloriesLogged.toString(), Icons.Default.LocalFireDepartment, Modifier.weight(1f)); MetricCard("Protein", "${ui.protein.toInt()} g", Icons.Default.FitnessCenter, Modifier.weight(1f)) } }; item { Text("Logged foods", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) }; if (ui.foods.isEmpty()) item { Text("No food logged yet. Use the + button to add a quick entry.", color = Color(0xff536f67)) } else items(ui.foods) { food -> ListItem(headlineContent = { Text(food) }, leadingContent = { Icon(Icons.Default.Restaurant, null, tint = Green) }) } } }
 
-@Composable private fun MoveScreen() { LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) { item { Text("Move", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold); Text("Choose a session that fits your energy today.", color = Color(0xff536f67)) }; items(listOf("Comfortable walking" to "10–30 min", "Chair squat" to "3 sets", "Wall push-up" to "3 sets", "Gentle mobility" to "10 min")) { (name, detail) -> Card { ListItem(headlineContent = { Text(name, fontWeight = FontWeight.Bold) }, supportingContent = { Text(detail) }, leadingContent = { Icon(Icons.Default.DirectionsRun, null, tint = Green) }, trailingContent = { Button(onClick = {}) { Text("Start") } }) } } } }
+@Composable private fun MoveScreen(vm: NativeViewModel) { LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) { item { Text("Move", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold); Text("Choose a session that fits your energy today.", color = Color(0xff536f67)) }; items(listOf("Comfortable walking" to "10–30 min", "Chair squat" to "3 sets", "Wall push-up" to "3 sets", "Gentle mobility" to "10 min")) { (name, detail) -> Card { ListItem(headlineContent = { Text(name, fontWeight = FontWeight.Bold) }, supportingContent = { Text(detail) }, leadingContent = { Icon(Icons.Default.DirectionsRun, null, tint = Green) }, trailingContent = { Button(onClick = {}) { Text("Start") } }) } } } }
 
-@Composable private fun JourneyScreen() { LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) { item { Text("Journey", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold); Text("Recovery and reflection belong beside food and movement.", color = Color(0xff536f67)) }; item { Card { Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) { Text("Today's check-in", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold); OutlinedTextField(value = "", onValueChange = {}, label = { Text("How are you feeling?") }, modifier = Modifier.fillMaxWidth()); Button(onClick = {}) { Text("Save check-in") } } } } } }
+@Composable private fun JourneyScreen(vm: NativeViewModel) { LazyColumn(contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) { item { Text("Journey", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold); Text("Recovery and reflection belong beside food and movement.", color = Color(0xff536f67)) }; item { Card { Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) { Text("Today's check-in", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold); OutlinedTextField(value = "", onValueChange = {}, label = { Text("How are you feeling?") }, modifier = Modifier.fillMaxWidth()); Button(onClick = vm::saveRecovery) { Text("Save check-in") } } } } } }
 
 @Composable
 private fun ReportsScreen(ui: NativeUiState) {
