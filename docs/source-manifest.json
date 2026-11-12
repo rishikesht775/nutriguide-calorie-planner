@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "2cbe41f8923705691f2adbf4de372c02d6a29e3f579f4600bf5797387b028685",
+  "sourceDigest": "cdd1a2e5e0560c56084288ff1df538667a1ae5470111ab52cb870334b45ff047",
   "files": {
     ".github/workflows/android.yml": "6d2cb9a50ccc593300f197b13fd6f29646b8936993c678fb2eaafeff7b02f761",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
@@ -12,7 +12,7 @@
     "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "ca47e24e18dc1304d5f2caa30ef7fd7d0ebbbdff9f5ddb466883dcf33ab5729a",
     "android/app/src/main/AndroidManifest.xml": "86159d4a78b356bddd310fe551018c2c0e22a90894aacdf28a67958946c52adc",
     "android/app/src/main/java/com/rishikesht775/nutriguide/FoodCatalog.java": "e8276e89f4c174ba0c707227c9e6e9a9b3e21f25c9b51ed205aca1a18f833652",
-    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "10eb69d25425a17c9f414c4be01766a9bdc445c3478d5ed898fc664f8b1734ff",
+    "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "e9b7870fd201a55ff3eb2ee9d4fddba6e8475fca16204511519547156e627b3d",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeApi.java": "acae2545de4065c72605d04c521e985bfb16e2e2fef82a6f48fb1c689232f965",
     "android/app/src/main/java/com/rishikesht775/nutriguide/NativeStore.java": "c5f4be47192513549511ba71169637b6ea87b2d2a656e210be9fd1ca35570811",
     "android/app/src/main/java/com/rishikesht775/nutriguide/StateMerge.java": "2d3a372b61934b7272a3e9615dee3ddf0181150a908d523cf34d3457c86b909e",
@@ -99,8 +99,8 @@
     "components/ui/tooltip.tsx": "a0784eb77831a799fad7991df4f1b666f876201565a80175e1aa68733574a2e4",
     "db/schema.ts": "433a7f9a630470ddb6e26e9b164e2b37d18c6a2067feb3019d10ad38325503f8",
     "docs/ACCOUNT-FLOW.md": "c6f147bd241250e12778b200a77efecb3433f69ad9f765a2a601ec3a99ad3634",
-    "docs/ANDROID.md": "330a342679d719d79e93cfe47a4a4b189e34071ee1ee73b9d55782c23e9b1e1c",
-    "docs/APPLICATION.md": "b3ee34de209f0414e4fb6d2042befaa7281b839f193f7a87a0ead57c3fe6a3ad",
+    "docs/ANDROID.md": "22e2d92dd3dcc4924ef5fa3219560d2eebd2949f842b3e9f26e46766f6d3c670",
+    "docs/APPLICATION.md": "827e214b71f98e938bf134c068e376cbed09d5a18bfad5e3aebee550d5989127",
     "docs/DOCUMENTATION.md": "3143c2d85820f1d684f3742076978957f06e9f59654ad9e3fbcf3af902f3cc72",
     "docs/EMAIL-ACCOUNTS.md": "8ec7bad82243f35996be01e313656595f5f78138ea5f194e56c63d33e2935e36",
     "docs/PROFILE-DEFAULTS-AND-GUIDE.md": "5c3d28e94163cc647b2b3e7466a2b5d0d86d63cbf365d1b196e5216eeffd0cca",
