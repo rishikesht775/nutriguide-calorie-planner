@@ -337,8 +337,8 @@ private fun TodayScreen(ui: NativeUiState, vm: NativeViewModel, onProfile: () ->
 @Composable
 private fun ProfileDialog(ui: NativeUiState, vm: NativeViewModel, close: () -> Unit) {
     var name by rememberSaveable(ui.name) { mutableStateOf(ui.name) }
-    var calories by rememberSaveable(ui.calorieTarget) { mutableStateOf(if (ui.calorieTarget == 0) "1800" else ui.calorieTarget.toString()) }
-    var protein by rememberSaveable(ui.proteinTarget) { mutableStateOf(if (ui.proteinTarget == 0) "100" else ui.proteinTarget.toString()) }
+    var calories by rememberSaveable(ui.calorieTarget) { mutableStateOf(if (ui.calorieTarget == 0) "" else ui.calorieTarget.toString()) }
+    var protein by rememberSaveable(ui.proteinTarget) { mutableStateOf(if (ui.proteinTarget == 0) "" else ui.proteinTarget.toString()) }
     AlertDialog(
         onDismissRequest = close,
         title = { Text("Set up your profile") },
