@@ -147,7 +147,7 @@ The instrumentation suite now launches a deterministic signed-in test account th
 | Test | Coverage |
 | --- | --- |
 | `NativeFlowTest.fullSignedInJourneyRunsAutomatically` | Profile setup, steps, water, Food picker/logging, Move completion, Journey check-in, Reports weekly/monthly toggle |
-| `today_scroll` semantics | Keeps Today actions discoverable to automation on API 30 and smaller emulator viewports |\n| Navigation waits | Tests wait for the destination semantics node before interacting with each tab |
+| `today_scroll` semantics | Keeps Today actions discoverable to automation on API 30 and smaller emulator viewports |\n| Navigation waits | Tests wait for the destination semantics node before interacting with each tab |\n| Reset-mode semantics | The reset card has a dedicated test tag so repeated instrumentation runs do not depend on saved UI mode |
 | `NativeFlowTest.testModeStartsWithoutFabricatedCalorieTarget` | New test account starts without a hard-coded calorie target; profile setup is required |
 | `NativeFlowTest.everyBottomTabRemainsReachable` | Today, Food, Move, Journey and Reports navigation without a crash |
 | Existing auth tests | Auth gate, create-account fields, reset mode and account-mode navigation |

@@ -61,7 +61,8 @@ class NativeFlowTest {
         if (rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isNotEmpty()) {
             rule.onNodeWithTag("auth_reset").performClick()
         }
-        rule.waitUntil(5000) { rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty() }
+        waitForTag("auth_reset_mode")
+        assertTrue(rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_email").fetchSemanticsNodes().isNotEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_password").fetchSemanticsNodes().isEmpty())
         assertTrue(rule.onAllNodesWithTag("auth_submit").fetchSemanticsNodes().isNotEmpty())

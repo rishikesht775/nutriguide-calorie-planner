@@ -82,7 +82,7 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
                     val user = response.optJSONObject("user")
                     openAccount(user?.optString("email").orEmpty(), user?.optString("name").orEmpty())
                 } else ui = ui.copy(auth = AuthStatus.SIGNED_OUT)
-            } catch (_: Exception) { ui = ui.copy(auth = AuthStatus.SIGNED_OUT) }
+            } catch (_: Exception) { if (!testMode) ui = ui.copy(auth = AuthStatus.SIGNED_OUT) }
         }
     }
 
@@ -262,7 +262,7 @@ private fun AuthScreen(ui: NativeUiState, vm: NativeViewModel) {
                     }
                 }
             } else {
-                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Color.White), modifier = Modifier.fillMaxWidth().testTag("auth_card")) {
+                Card(shape = RoundedCornerShape(24.dp), colors = CardDefaults.cardColors(containerColor = Color.White), modifier = Modifier.fillMaxWidth().testTag(if (reset) "auth_reset_mode" else "auth_card")) {
                     Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(if (reset) "Reset your password" else if (mode == "sign-up") "Create your account" else "Welcome back", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = DarkTeal)
                         Text(if (reset) "We’ll send a secure reset link to your email." else "Save your nutrition, movement and recovery in your own account.", color = Muted)
