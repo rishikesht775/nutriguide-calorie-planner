@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "c97b041ce0a39a7818bf62f108d38180ecbe130701baf20b85217b42286a42bd",
+  "sourceDigest": "193e5ce7b2017a322b750c48305cbfe0943b6e052cd8d630822b54104ee31de4",
   "files": {
     ".github/workflows/android.yml": "6d2cb9a50ccc593300f197b13fd6f29646b8936993c678fb2eaafeff7b02f761",
     ".github/workflows/documentation.yml": "41ed820aabf99752d559433c246d42c0401ecee04fd061a8bcebf89f1e746ca3",
@@ -9,7 +9,7 @@
     "AGENTS.md": "82f80eecc0af9cdda7ac76580f21d1577e18de1ba3ae190803400fcb0b5b08ec",
     "README-KIRO.md": "bd6143c2d13c57ffe856660662103f2c87f7b8a7283cd3003e2f9a61f4c6388b",
     "android/app/build.gradle": "2b0b5668f4fa66e85560b9cf7e96f35d22ea953ce97c7e65028f46910a68bb6c",
-    "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "ca47e24e18dc1304d5f2caa30ef7fd7d0ebbbdff9f5ddb466883dcf33ab5729a",
+    "android/app/src/androidTest/java/com/rishikesht775/nutriguide/NativeFlowTest.kt": "d79f4f58057d7d0e64125af921975bb2764b0796643c2b6317327708550c3c4d",
     "android/app/src/main/AndroidManifest.xml": "86159d4a78b356bddd310fe551018c2c0e22a90894aacdf28a67958946c52adc",
     "android/app/src/main/java/com/rishikesht775/nutriguide/FoodCatalog.java": "e8276e89f4c174ba0c707227c9e6e9a9b3e21f25c9b51ed205aca1a18f833652",
     "android/app/src/main/java/com/rishikesht775/nutriguide/MainActivity.kt": "56993c7f638e67319df7cb7d271e4313ca83f18934757a0d93ccfe9079040ab5",
@@ -100,7 +100,7 @@
     "db/schema.ts": "433a7f9a630470ddb6e26e9b164e2b37d18c6a2067feb3019d10ad38325503f8",
     "docs/ACCOUNT-FLOW.md": "c6f147bd241250e12778b200a77efecb3433f69ad9f765a2a601ec3a99ad3634",
     "docs/ANDROID.md": "44acb585df095b0adc0be76da8b5f7894da190801241e7b3ff6211ebc39a38df",
-    "docs/APPLICATION.md": "cd032246f132fd32a192d8bba598d5f024b2532a8f2e21e69436e54dd7494b76",
+    "docs/APPLICATION.md": "64fbea8db23387666d734bc4362b05485cf4638a2df300f0957fcc3a794954b2",
     "docs/DOCUMENTATION.md": "3143c2d85820f1d684f3742076978957f06e9f59654ad9e3fbcf3af902f3cc72",
     "docs/EMAIL-ACCOUNTS.md": "8ec7bad82243f35996be01e313656595f5f78138ea5f194e56c63d33e2935e36",
     "docs/PROFILE-DEFAULTS-AND-GUIDE.md": "5c3d28e94163cc647b2b3e7466a2b5d0d86d63cbf365d1b196e5216eeffd0cca",
