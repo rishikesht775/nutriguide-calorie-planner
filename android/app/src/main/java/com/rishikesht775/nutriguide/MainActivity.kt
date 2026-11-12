@@ -91,7 +91,7 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
     private fun save(next: NativeUiState, message: String = "") {
         ui = next.copy(message = message)
         val foodArray = JSONArray()
-        next.foods.forEach { foodArray.put(JSONObject().put("name", food.name).put("meal", food.meal).put("calories", food.calories).put("protein", food.protein)) }
+        next.foods.forEach { food -> foodArray.put(JSONObject().put("name", food.name).put("meal", food.meal).put("calories", food.calories).put("protein", food.protein)) }
         prefs.edit()
             .putInt("tab", next.tab.ordinal)
             .putBoolean("profileReady", next.profileReady)
