@@ -63,6 +63,7 @@ data class NativeUiState(
 
 class NativeViewModel(app: Application) : AndroidViewModel(app) {
     private val api = NativeApi(app)
+    private var testMode = false
     private val store = NativeStore(app)
     var ui by mutableStateOf(NativeUiState())
         private set
@@ -70,6 +71,7 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
     init { checkSession() }
 
     private fun checkSession() {
+        if (testMode) return
         viewModelScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) { api.request("/api/account/session", null) }
@@ -141,6 +143,19 @@ class NativeViewModel(app: Application) : AndroidViewModel(app) {
         store.put("foods", foods)
     }
 
+    fun enableTestMode() {
+        testMode = true
+        api.clear()
+        ui = NativeUiState(
+            auth = AuthStatus.SIGNED_IN,
+            authEmail = "automation@example.test",
+            name = "",
+            profileReady = false,
+            calorieTarget = 0,
+            proteinTarget = 0
+        )
+    }
+
     fun select(tab: AppTab) = persist(ui.copy(tab = tab))
     fun saveProfile(name: String, calories: Int, protein: Int) = persist(ui.copy(profileReady = true, name = name.trim(), calorieTarget = calories, proteinTarget = protein), "Profile saved")
     fun addWater() = persist(ui.copy(water = (ui.water + 1).coerceAtMost(12)), "Water logged")
@@ -207,12 +222,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         window.statusBarColor = android.graphics.Color.rgb(251, 250, 244)
         window.navigationBarColor = android.graphics.Color.rgb(23, 63, 61)
-        setContent { NutriGuideApp() }
+        val testMode = intent.getBooleanExtra("NUTRIGUIDE_TEST_MODE", false)
+        setContent { NutriGuideApp(testMode = testMode) }
     }
 }
 
 @Composable
-fun NutriGuideApp(vm: NativeViewModel = viewModel()) {
+fun NutriGuideApp(vm: NativeViewModel = viewModel(), testMode: Boolean = false) {
+    if (testMode) LaunchedEffect(Unit) { vm.enableTestMode() }
     val ui = vm.ui
     MaterialTheme(colorScheme = lightColorScheme(primary = Teal, onPrimary = Color.White, background = Cream, surface = Color.White, onSurface = DarkTeal)) {
         if (ui.auth != AuthStatus.SIGNED_IN) AuthScreen(ui, vm) else MainShell(ui, vm)
