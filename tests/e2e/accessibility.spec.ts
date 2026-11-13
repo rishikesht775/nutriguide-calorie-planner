@@ -8,6 +8,9 @@ test.describe('@accessibility keyboard and semantic checks',()=>{
   const next=page.locator('.ng-profile-next:visible');
   for(let i=0;i<steps.length;i++){
    for(const [id,label] of steps[i]){await expect(page.locator('#'+id)).toBeVisible();await expect(page.locator('#'+id)).toHaveAccessibleName(new RegExp(label,'i'));}
+   if(i===0){await page.locator('#age').fill('30');await page.locator('#sex').selectOption('male');}
+   if(i===1){await page.locator('#height').fill('170');await page.locator('#weight').fill('70');}
+   if(i===2)await page.locator('#activity').selectOption('1.375');
    if(i<steps.length-1){await expect(next).toBeVisible();await next.click();await expect(page.locator('#'+steps[i+1][0][0])).toBeVisible();}
   }
  });
