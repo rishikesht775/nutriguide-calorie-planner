@@ -81,6 +81,21 @@ export async function chooseGuide(page: Page, guide: RegExp = /Panda trainer Mar
   await expect(page.locator('#coachName')).toContainText(/Panda trainer|Fresh-start kid|hydration cat|Workout duo|Adventure explorer|Star fitness hero/i);
 }
 
+export async function openProfileEditor(page: Page) {
+  const form = page.locator('#form');
+  if (!(await form.isVisible())) {
+    const trigger = page.locator('#ngHomeProfileButton:visible, #ngProfilePromptButton:visible').first();
+    if (await trigger.count()) await trigger.click();
+  }
+  await expect(form).toBeVisible();
+  const weight = page.locator('#weight');
+  const back = page.locator('.ng-profile-back');
+  while (!(await weight.isVisible())) {
+    await expect(back).toBeEnabled();
+    await back.click();
+  }
+}
+
 export async function visibleTabSection(page: Page, tab: string) {
   return page.locator(({ home: '.dashboard-summary', food: '.food-nutrition', move: '.exercise-library', journey: '.journey', plan: '.weekly-report' } as Record<string, string>)[tab] + ':visible');
 }
