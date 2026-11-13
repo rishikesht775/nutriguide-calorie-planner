@@ -1,7 +1,6 @@
 /* In-app navigation controls */
 (function(){
   "use strict";
-  var labels={home:"Home",food:"Food studio",move:"Exercise",journey:"Journey",plan:"Plan & reports"};
   var activeTab="home";
   var tabHistory=[];
   var suppressRecord=false;
@@ -15,8 +14,8 @@
     var bar=document.createElement("div");
     bar.id="ngInAppToolbar";
     bar.className="ng-inapp-toolbar";
-    bar.innerHTML="<button type='button' id='ngInAppBack' class='ng-inapp-back' aria-label='Go back within NutriGuide'><span aria-hidden='true'>←</span><span>Back</span></button><span id='ngInAppContext' class='ng-inapp-context'>Home</span>";
-    nav.parentNode.insertBefore(bar,nav);
+    bar.innerHTML="<button type='button' id='ngInAppBack' class='ng-inapp-back' aria-label='Go back within NutriGuide'><span aria-hidden='true'>←</span><span>Back</span></button>";
+    nav.parentNode.insertBefore(bar,nav.nextSibling);
     $("#ngInAppBack").addEventListener("click",goBack);
     addModalCancel();
     addStepsCancel();
@@ -82,9 +81,8 @@
   function render(){
     if(!ready)return;
     var tab=currentTab();
-    var back=$("#ngInAppBack"),context=$("#ngInAppContext");
+    var back=$("#ngInAppBack");
     var transient=isVisible($("#exerciseModal"))||isVisible($("#ngStepsQuickPanel"));
-    if(context)context.textContent=labels[tab]||"NutriGuide";
     if(back)back.hidden=tab==="home"&&!tabHistory.length&&!transient;
     addStepsCancel();
     addModalCancel();
