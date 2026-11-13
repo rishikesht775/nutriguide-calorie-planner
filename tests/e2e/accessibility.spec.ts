@@ -4,7 +4,11 @@ import {completeProfile,openTab,startFresh} from './helpers';
 test.describe('@accessibility keyboard and semantic checks',()=>{
  test('profile inputs have programmatically associated labels',async({page})=>{
   await startFresh(page);
-  for(const [id,label] of [['age','Age'],['sex','Sex'],['height','Height'],['weight','Weight'],['activity','Activity level'],['goal','Goal']])await expect(page.locator('#'+id)).toHaveAccessibleName(new RegExp(label,'i'));
+  const steps=[[['age','Age'],['sex','Sex']],[['height','Height'],['weight','Weight']],[['activity','Activity level']],[['goal','Goal']]];
+  for(let i=0;i<steps.length;i++){
+   for(const [id,label] of steps[i])await expect(page.locator('#'+id)).toBeVisible().and.toHaveAccessibleName(new RegExp(label,'i'));
+   if(i<steps.length-1)await page.locator('.ng-profile-next').click();
+  }
  });
  test('navigation exposes meaningful names and receives keyboard focus',async({page})=>{
   await completeProfile(page);
