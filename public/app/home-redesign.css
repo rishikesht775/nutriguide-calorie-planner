@@ -16,7 +16,7 @@ body.ng-redesign .app-nav{margin-bottom:18px!important}
 .ng-icon-button{width:40px!important;height:40px!important;padding:0!important;margin:0!important;display:grid;place-items:center;border-radius:13px!important;border:1px solid var(--ng-home-line)!important;background:#fff!important;color:var(--ng-home-teal)!important;font-size:17px!important}
 .ng-icon-button:hover{background:var(--ng-home-mint)!important;transform:translateY(-1px)}
 .ng-next-action-card{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:24px 26px;border-radius:24px;background:linear-gradient(120deg,#126b5b 0%,#1a826b 62%,#e87961 170%);color:#fff;box-shadow:0 18px 38px rgba(18,107,91,.2);position:relative;overflow:hidden}
-.ng-next-action-card:after{content:"?";position:absolute;right:22px;top:-20px;font-size:130px;line-height:1;color:rgba(255,255,255,.1);pointer-events:none}
+.ng-next-action-card:after{content:"✦";position:absolute;right:22px;top:-20px;font-size:130px;line-height:1;color:rgba(255,255,255,.1);pointer-events:none}
 .ng-next-action-card h2{margin:5px 0 6px;font-size:clamp(21px,3vw,29px);letter-spacing:-.7px;position:relative;z-index:1}
 .ng-next-action-card p{margin:0;max-width:620px;color:rgba(255,255,255,.82);line-height:1.5;font-size:14px;position:relative;z-index:1}
 .ng-next-action-card .ng-kicker{color:#d9f5e9}
