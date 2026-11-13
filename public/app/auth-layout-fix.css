@@ -90,3 +90,17 @@ body.auth-pending .wrap{display:none!important}
   #appAuthGate .auth-gate-art{justify-content:center!important}
   #appAuthGate .auth-gate-art h1{font-size:clamp(40px,11vw,54px)!important}
 }
+
+#appAuthGate .auth-gate-art{
+  background:
+    linear-gradient(90deg,#eaf7eff7 0%,#eaf7efd9 42%,#eaf7ef55 78%,#eaf7ef22 100%),
+    url('/onboarding-hero.webp') center/cover!important;
+}
+#appAuthGate .auth-gate-highlight{color:#168c79}
+@media(max-width:760px){
+  #appAuthGate .auth-gate-art{
+    background:
+      linear-gradient(180deg,#eaf7eff4 0%,#eaf7eccc 55%,#eaf7ef88 100%),
+      url('/onboarding-hero.webp') center/cover!important;
+  }
+}
