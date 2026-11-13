@@ -138,3 +138,9 @@ body.auth-pending .wrap{display:none!important}
 /* auth equal-height publish retry */
 
 /* remote build fallback */
+
+/* Standard validation states */
+#gateStatus.status-error{padding:12px!important;border:1px solid #f1b8b4!important;border-radius:10px!important;background:#fff1f0!important;color:#b42318!important;font-weight:600!important}
+#emailAccountForm input[aria-invalid="true"]{border-color:#d92d20!important;box-shadow:0 0 0 3px rgba(217,45,32,.12)!important}
+#emailAccountForm input[aria-invalid="true"]:focus{outline:2px solid #d92d20!important;outline-offset:1px}
+#emailSubmit:disabled{background:#98a2b3!important;color:#fff!important;cursor:not-allowed!important;opacity:.8!important}
