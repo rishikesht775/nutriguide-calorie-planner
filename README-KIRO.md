@@ -1,5 +1,58 @@
 # NutriGuide testing in Kiro (Windows)
 
+## Deploying to the live Site
+
+The live app at `https://nutriguide-calorie-planner.rishikesht775.chatgpt.site/legacy`
+deploys from a **separate Sites source repo** — not from GitHub. Pushing to GitHub alone
+does not update the live site.
+
+### Root cause of past deployment failures
+
+There are two distinct remotes:
+
+| Remote | URL | Purpose |
+|--------|-----|---------|
+| `origin` | `https://github.com/rishikesht775/nutriguide-calorie-planner.git` | GitHub source |
+| `site` | `https://git.chatgpt-team.site/.../appgprj_6ae6381427d88191aa2c5749b2a0875a.git` | Sites deploy target |
+
+The `site` remote is **local only** — it is not stored in GitHub and is absent after a
+fresh clone. It must be added manually before any deployment can succeed.
+
+Authentication uses temporary Site publish credentials that are separate from your
+GitHub login. Google OAuth cannot be passed through a terminal prompt; Git Credential
+Manager opens a browser window so you can sign in with your ChatGPT/Google account.
+
+### Setup — run once after every fresh clone
+
+```powershell
+.\scripts\setup-site-remote.ps1
+```
+
+This adds (or updates) the `site` remote. Safe to re-run.
+
+### Deploy
+
+```powershell
+git push site main
+```
+
+On the first push, Git Credential Manager opens a browser window. Sign in with your
+ChatGPT account (Google login works). Credentials are cached by Windows Credential
+Manager for future pushes.
+
+### Verify the live site after deploy
+
+Check that the response contains the expected assets:
+
+```powershell
+$r = Invoke-WebRequest "https://nutriguide-calorie-planner.rishikesht775.chatgpt.site/legacy" -UseBasicParsing
+if ($r.Content -match "premium-ui.css") { "premium-ui.css OK" } else { "MISSING premium-ui.css" }
+if ($r.Content -match "premium-ui.js")  { "premium-ui.js OK"  } else { "MISSING premium-ui.js"  }
+if ($r.Content -match "made simple")    { "Headline OK"        } else { "MISSING headline"        }
+```
+
+
+
 ## Native Android UI redesign
 
 The Android module is moving to Jetpack Compose + Material 3. Test the native app through its Today, Food, Move, Journey and Reports tabs; do not compare it with the website DOM. The native UI test asserts the Compose navigation flow. Run the Android workflow after pulling the redesign commit; a successful workflow is required before treating the new APK as ready for phone installation.
