@@ -9,7 +9,7 @@
 #   git push site main
 # Git Credential Manager will open a browser window for ChatGPT authentication on first push.
 
-$SiteRemoteUrl = "https://git.chatgpt-team.site/b9c64515-d6d6-491d-9ad6-4c8885992e3e/appgprj_6ae6381427d88191aa2c5749b2a0875a.git"
+$SiteRemoteUrl = "https://git.chatgpt-team.site/b9c64515-d6d6-491d-9ad6-4c8885992e3e/appgprj_6af73121356c81918979ed6ea0bbc272.git"
 
 $existing = git remote get-url site 2>$null
 if ($existing) {

@@ -28,7 +28,8 @@ The current product is a general wellness tool. Its calorie estimates, food data
 
 | Item | Location |
 | --- | --- |
-| Public application | https://nutriguide-calorie-planner.rishikesht775.chatgpt.site/legacy |
+| Public application | https://nutriguide-calorie-planner-v2.rishikesht775.chatgpt.site/legacy |
+| Sites project | appgprj_6af73121356c81918979ed6ea0bbc272 |
 | GitHub repository | https://github.com/rishikesht775/nutriguide-calorie-planner |
 | Main branch | main |
 | Maintained document | docs/APPLICATION.md |
