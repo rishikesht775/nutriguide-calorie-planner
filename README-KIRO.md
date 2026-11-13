@@ -121,6 +121,17 @@ npm.cmd run test:contracts
 
 `test:uat` includes the full E2E journey; backend includes the Node SQLite contracts. Some category coverage overlaps by design.
 
+### Duplicate email validation regression
+
+Use these focused checks after changing account validation or auth styling:
+
+```powershell
+npm.cmd run test:contracts
+npx.cmd playwright test tests/e2e/auth.spec.ts --grep "duplicate registration"
+```
+
+The regression expects HTTP 409 for an existing address, the standard red error state, `aria-invalid="true"`, and a disabled Create account button.
+
 ## Browser, debugging and reports
 
 ```powershell
