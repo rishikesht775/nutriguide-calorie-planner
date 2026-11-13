@@ -2,6 +2,7 @@ import { expect, Page } from '@playwright/test';
 
 export type ProfileValues = {
   age?: string;
+  sex?: string;
   height?: string;
   weight?: string;
   activity?: string;
@@ -36,11 +37,31 @@ export async function startFresh(page: Page) {
 
 export async function completeProfile(page: Page, values: ProfileValues = {}) {
   await startFresh(page);
-  await page.locator('#age').fill(values.age ?? '30');
-  await page.locator('#height').fill(values.height ?? '170');
-  await page.locator('#weight').fill(values.weight ?? '70');
-  await page.locator('#activity').selectOption(values.activity ?? '1.375');
-  await page.locator('#goal').selectOption(values.goal ?? 'loss');
+  // premium-ui.js presents the profile form as four visible wizard steps.
+  // Keep a fallback for pages/configurations that still render the legacy
+  // single form so every suite can share the same setup helper.
+  const next = page.locator('.ng-profile-next');
+  if (await next.count()) {
+    await page.locator('#age').fill(values.age ?? '30');
+    await page.locator('#sex').selectOption(values.sex ?? 'male');
+    await next.click();
+
+    await page.locator('#height').fill(values.height ?? '170');
+    await page.locator('#weight').fill(values.weight ?? '70');
+    await next.click();
+
+    await page.locator('#activity').selectOption(values.activity ?? '1.375');
+    await next.click();
+
+    await page.locator('#goal').selectOption(values.goal ?? 'loss');
+  } else {
+    await page.locator('#age').fill(values.age ?? '30');
+    await page.locator('#sex').selectOption(values.sex ?? 'male');
+    await page.locator('#height').fill(values.height ?? '170');
+    await page.locator('#weight').fill(values.weight ?? '70');
+    await page.locator('#activity').selectOption(values.activity ?? '1.375');
+    await page.locator('#goal').selectOption(values.goal ?? 'loss');
+  }
   await page.getByRole('button', { name: 'Calculate my plan', exact: true }).click();
   await expect(page.locator('body')).toHaveClass(/post-profile/);
   await expect(page.locator('.app-nav button[data-tab=food]')).toBeVisible();
