@@ -10,7 +10,7 @@ body.auth-pending .wrap{display:none!important}
   grid-template-columns:minmax(320px,.92fr) minmax(380px,1.08fr)!important;
   grid-template-areas:"art panel";
   gap:20px!important;
-  align-items:stretch!important;
+  align-items:start!important;
   box-sizing:border-box;
 }
 #appAuthGate .auth-gate-art{grid-area:art;min-height:clamp(430px,calc(100dvh - 72px),590px)!important;padding:clamp(28px,4vw,42px)!important}
