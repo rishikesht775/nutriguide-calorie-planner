@@ -148,3 +148,15 @@ button,input,select,textarea{border-radius:12px!important}
   .ng-dashboard{grid-template-columns:1fr!important}.food-grid,.trend-grid,.exercise-cards{grid-template-columns:1fr!important}
   .hero:after{opacity:.65}.ng-weekly-chart{gap:3px}
 }
+
+
+/* premium UI finishing alignment */
+.ng-panda-guide strong{display:block;color:var(--ng-premium-teal);font-size:13px}
+.ng-panda-guide em{display:block;margin-top:2px;color:var(--ng-premium-muted);font-size:12px;font-style:normal}
+.ng-food-filter-row button.is-active{background:var(--ng-premium-teal);color:#fff;border-color:var(--ng-premium-teal)}
+.ng-weekly-chart{display:block!important}
+.ng-chart-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.ng-chart-heading h3{margin:3px 0 0;color:var(--ng-premium-ink);font-size:18px}
+.ng-chart-pill{padding:6px 9px;border-radius:999px;background:#fff;color:var(--ng-premium-muted);font-size:11px;font-weight:800}
+.ng-week-bars{display:grid;grid-template-columns:repeat(7,1fr);align-items:end;gap:10px}
+.ng-week-bar span{font-size:10px;color:var(--ng-premium-muted);font-weight:800}
