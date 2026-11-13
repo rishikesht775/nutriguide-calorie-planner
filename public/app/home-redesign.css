@@ -1,0 +1,122 @@
+/* Compact Today/Home experience */
+#ngHomeRedesign{display:none}
+body.ng-redesign{--ng-home-ink:#173d38;--ng-home-muted:#6b827b;--ng-home-line:#d8e9e1;--ng-home-mint:#eaf8f2;--ng-home-teal:#126b5b;--ng-home-coral:#e87961}
+body.ng-redesign .hero,body.ng-redesign .weekly-strip,body.ng-redesign .sticker-row-global{display:none!important}
+body.ng-redesign.ng-home-mode .guide-coach,body.ng-redesign.ng-home-mode #ngToday,body.ng-redesign.ng-home-mode .grid{display:none!important}
+body.ng-redesign.ng-home-mode #ngHomeRedesign{display:block!important}
+body.ng-redesign.ng-home-mode.ng-show-profile .grid{display:grid!important}
+body.ng-redesign .app-nav{margin-bottom:18px!important}
+.ng-home-redesign{max-width:1050px;margin:0 auto 26px;color:var(--ng-home-ink)}
+.ng-home-header{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:4px 0 18px}
+.ng-home-person{display:flex;align-items:center;gap:14px;min-width:0}
+.ng-home-avatar{display:grid;place-items:center;width:56px;height:56px;border-radius:18px;background:linear-gradient(145deg,#e8f7ef,#fff4e4);border:1px solid #cfe6da;font-size:31px;box-shadow:0 10px 24px rgba(18,107,91,.1)}
+.ng-home-person h1{margin:2px 0 3px;font-size:clamp(24px,4vw,34px);letter-spacing:-1px;color:var(--ng-home-ink)}
+.ng-home-person p{margin:0;color:var(--ng-home-muted);font-size:13px;max-width:560px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ng-home-tools{display:flex;gap:8px}
+.ng-icon-button{width:40px!important;height:40px!important;padding:0!important;margin:0!important;display:grid;place-items:center;border-radius:13px!important;border:1px solid var(--ng-home-line)!important;background:#fff!important;color:var(--ng-home-teal)!important;font-size:17px!important}
+.ng-icon-button:hover{background:var(--ng-home-mint)!important;transform:translateY(-1px)}
+.ng-next-action-card{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:24px 26px;border-radius:24px;background:linear-gradient(120deg,#126b5b 0%,#1a826b 62%,#e87961 170%);color:#fff;box-shadow:0 18px 38px rgba(18,107,91,.2);position:relative;overflow:hidden}
+.ng-next-action-card:after{content:"?";position:absolute;right:22px;top:-20px;font-size:130px;line-height:1;color:rgba(255,255,255,.1);pointer-events:none}
+.ng-next-action-card h2{margin:5px 0 6px;font-size:clamp(21px,3vw,29px);letter-spacing:-.7px;position:relative;z-index:1}
+.ng-next-action-card p{margin:0;max-width:620px;color:rgba(255,255,255,.82);line-height:1.5;font-size:14px;position:relative;z-index:1}
+.ng-next-action-card .ng-kicker{color:#d9f5e9}
+.ng-primary-action{width:auto!important;min-width:108px;margin:0!important;padding:12px 16px!important;background:#fff!important;color:var(--ng-home-teal)!important;border-radius:13px!important;position:relative;z-index:1;box-shadow:0 8px 20px rgba(0,0,0,.12)!important}
+.ng-progress-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}
+.ng-progress-card{position:relative;min-height:126px;padding:18px;border:1px solid var(--ng-home-line);border-radius:20px;background:#fff;box-shadow:0 10px 24px rgba(18,107,91,.07);overflow:hidden}
+.ng-progress-card span{display:block;color:var(--ng-home-muted);font-size:12px;font-weight:800}
+.ng-progress-card strong{display:block;margin:12px 0 2px;font-size:27px;letter-spacing:-.8px;color:var(--ng-home-teal)}
+.ng-progress-card small{color:var(--ng-home-muted);font-size:11px}
+.ng-progress-card i{position:absolute;right:15px;bottom:15px;width:38px;height:38px;border-radius:50%;border:5px solid #e4f2ec;border-top-color:var(--ng-home-teal);transform:rotate(28deg)}
+.ng-progress-card:nth-child(2) i{border-top-color:#e87961;transform:rotate(125deg)}
+.ng-progress-card:nth-child(3) i{border-top-color:#e8b85b;transform:rotate(220deg)}
+.ng-progress-card:nth-child(4) i{border-top-color:#6b9fe8;transform:rotate(310deg)}
+.ng-quick-action-block,.ng-home-card,.ng-more-today,.ng-profile-prompt{margin-top:14px;border:1px solid var(--ng-home-line);border-radius:22px;background:rgba(255,255,255,.9);box-shadow:0 10px 25px rgba(18,107,91,.06)}
+.ng-quick-action-block{padding:20px}
+.ng-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.ng-section-heading h2{margin:3px 0 0;font-size:20px;letter-spacing:-.4px;color:var(--ng-home-ink)}
+.ng-kicker{font-size:10px;letter-spacing:1.4px;font-weight:900;color:var(--ng-home-teal)}
+.ng-muted-label{font-size:11px;color:var(--ng-home-muted)}
+.ng-quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ng-quick-actions button,.ng-more-grid button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:14px!important;margin:0!important;border:1px solid var(--ng-home-line)!important;border-radius:17px!important;background:#fff!important;color:var(--ng-home-ink)!important;box-shadow:none!important}
+.ng-quick-actions button:hover,.ng-more-grid button:hover{border-color:#9bcfba!important;background:var(--ng-home-mint)!important;transform:translateY(-2px)}
+.ng-quick-actions button span,.ng-more-grid button span{font-size:23px}.ng-quick-actions button b,.ng-more-grid button b{font-size:13px}.ng-quick-actions button small,.ng-more-grid button small{font-size:11px;color:var(--ng-home-muted)}
+.ng-steps-quick-panel{display:flex;align-items:end;gap:10px;margin-top:12px;padding:12px;border-radius:15px;background:var(--ng-home-mint)}
+.ng-steps-quick-panel label{flex:1;margin:0;font-size:12px}.ng-steps-quick-panel input{margin-top:5px;background:#fff}.ng-steps-quick-panel button{width:auto;margin:0;padding:11px 14px;font-size:12px}
+.ng-home-columns{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.ng-home-card{padding:20px}
+.ng-card-icon{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--ng-home-mint);color:var(--ng-home-teal)}
+.ng-home-card p{min-height:44px;margin:0;color:var(--ng-home-muted);font-size:14px;line-height:1.55}
+.ng-activity-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}.ng-activity-row span{padding:8px 10px;border-radius:11px;background:#f7fbf8;color:var(--ng-home-muted);font-size:11px}
+.ng-week-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.ng-week-grid div{padding:10px;border-radius:14px;background:#f7fbf8}.ng-week-grid strong{display:block;color:var(--ng-home-teal);font-size:19px}.ng-week-grid small{color:var(--ng-home-muted);font-size:11px}
+.ng-more-today{padding:0 20px}.ng-more-today summary{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 0;cursor:pointer;list-style:none}.ng-more-today summary::-webkit-details-marker{display:none}.ng-more-today summary b{display:block;margin-top:4px;font-size:16px}.ng-summary-chevron{font-size:22px;color:var(--ng-home-muted)}.ng-more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 0 18px}
+.ng-profile-prompt{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 22px;background:linear-gradient(135deg,#fff8ec,#f0faf5)}.ng-profile-prompt h2{margin:4px 0 5px;font-size:20px}.ng-profile-prompt p{margin:0;color:var(--ng-home-muted);font-size:13px;line-height:1.5;max-width:660px}
+body.ng-dark-mode{--ng-home-ink:#edf7f2;--ng-home-muted:#a6c0b5;--ng-home-line:#31574d;--ng-home-mint:#173c35;background:#10231f!important;color:var(--ng-home-ink)!important}
+body.ng-dark-mode .ng-progress-card,body.ng-dark-mode .ng-quick-action-block,body.ng-dark-mode .ng-home-card,body.ng-dark-mode .ng-more-today,body.ng-dark-mode .ng-profile-prompt,body.ng-dark-mode .ng-icon-button,body.ng-dark-mode .ng-quick-actions button,body.ng-dark-mode .ng-more-grid button{background:#18332e!important;color:var(--ng-home-ink)!important;border-color:var(--ng-home-line)!important}
+body.ng-dark-mode .ng-home-person h1,body.ng-dark-mode .ng-section-heading h2,body.ng-dark-mode .ng-profile-prompt h2{color:var(--ng-home-ink)!important}
+body.ng-dark-mode .ng-activity-row span,body.ng-dark-mode .ng-week-grid div{background:#20443b;color:var(--ng-home-muted)}
+body.ng-comfortable .ng-progress-grid{gap:16px}body.ng-comfortable .ng-progress-card{min-height:145px;padding:22px}body.ng-comfortable .ng-quick-actions{gap:14px}
+@media(max-width:780px){.ng-home-header{align-items:flex-start}.ng-home-tools{flex-shrink:0}.ng-home-person p{max-width:240px}.ng-next-action-card{display:block}.ng-next-action-card .ng-primary-action{margin-top:16px!important}.ng-progress-grid{grid-template-columns:repeat(2,1fr)}.ng-quick-actions{grid-template-columns:repeat(2,1fr)}.ng-home-columns{grid-template-columns:1fr}.ng-more-grid{grid-template-columns:repeat(2,1fr)}.ng-profile-prompt{display:block}.ng-profile-prompt .ng-primary-action{margin-top:14px!important}}
+@media(max-width:430px){.ng-home-header{gap:10px}.ng-home-avatar{width:46px;height:46px;font-size:25px}.ng-home-tools{gap:4px}.ng-icon-button{width:34px!important;height:34px!important}.ng-home-person p{max-width:175px}.ng-progress-card{min-height:112px;padding:14px}.ng-progress-card strong{font-size:23px}.ng-steps-quick-panel{display:block}.ng-steps-quick-panel button{margin-top:8px;width:100%}.ng-activity-row{display:grid;grid-template-columns:1fr}.ng-more-today{padding:0 14px}}
+
+/* Shared page shell: use the available desktop width and keep tabs consistent. */
+body.ng-redesign.post-profile .wrap{
+  max-width:none!important;
+  width:auto!important;
+  margin-left:244px!important;
+  margin-right:0!important;
+  padding:24px clamp(24px,3vw,48px) 72px!important;
+}
+body.ng-redesign.post-profile .ng-home-redesign,
+body.ng-redesign.post-profile .ng-section,
+body.ng-redesign.post-profile .ng-smart-panel,
+body.ng-redesign.post-profile .dashboard-summary,
+body.ng-redesign.post-profile .weekly-report,
+body.ng-redesign.post-profile .protein-tracker,
+body.ng-redesign.post-profile .food-studio,
+body.ng-redesign.post-profile .food-nutrition,
+body.ng-redesign.post-profile .food-library,
+body.ng-redesign.post-profile .market-banner,
+body.ng-redesign.post-profile .stories,
+body.ng-redesign.post-profile .all-foods,
+body.ng-redesign.post-profile .inspiration,
+body.ng-redesign.post-profile .exercise-library,
+body.ng-redesign.post-profile .journey,
+body.ng-redesign.post-profile .reminders,
+body.ng-redesign.post-profile .motivation,
+body.ng-redesign.post-profile .guide-picker{
+  width:100%!important;
+  max-width:1440px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+body.ng-redesign.post-profile .ng-section{margin-bottom:16px!important;padding:22px!important}
+body.ng-redesign.post-profile .card{padding:20px!important}
+body.ng-redesign.post-profile.ng-home-mode .ng-personal-guide,
+body.ng-redesign.post-profile.ng-home-mode .guide-coach,
+body.ng-redesign.post-profile.ng-home-mode #ngToday,
+body.ng-redesign.post-profile.ng-home-mode #ngSmartPanel,
+body.ng-redesign.post-profile.ng-home-mode .grid{display:none!important}
+body.ng-redesign.post-profile.ng-home-mode .ng-home-redesign{max-width:1440px!important;margin-top:0!important}
+
+@media(max-width:760px){
+  body.ng-redesign.post-profile .wrap{margin:0!important;padding:14px 12px 112px!important}
+  body.ng-redesign.post-profile .ng-home-redesign,
+  body.ng-redesign.post-profile .ng-section,
+  body.ng-redesign.post-profile .ng-smart-panel,
+  body.ng-redesign.post-profile .dashboard-summary,
+  body.ng-redesign.post-profile .weekly-report,
+  body.ng-redesign.post-profile .protein-tracker,
+  body.ng-redesign.post-profile .food-studio,
+  body.ng-redesign.post-profile .food-nutrition,
+  body.ng-redesign.post-profile .food-library,
+  body.ng-redesign.post-profile .market-banner,
+  body.ng-redesign.post-profile .stories,
+  body.ng-redesign.post-profile .all-foods,
+  body.ng-redesign.post-profile .inspiration,
+  body.ng-redesign.post-profile .exercise-library,
+  body.ng-redesign.post-profile .journey,
+  body.ng-redesign.post-profile .reminders,
+  body.ng-redesign.post-profile .motivation,
+  body.ng-redesign.post-profile .guide-picker{max-width:none!important}
+}
+
