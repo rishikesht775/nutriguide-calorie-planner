@@ -1,0 +1,150 @@
+
+/* NutriGuide premium wellness visual system */
+:root{
+  --ng-premium-teal:#126b5b;
+  --ng-premium-teal-dark:#0d4d43;
+  --ng-premium-mint:#e9f7f1;
+  --ng-premium-cream:#fffaf2;
+  --ng-premium-coral:#e5725b;
+  --ng-premium-gold:#e8b85b;
+  --ng-premium-ink:#173d38;
+  --ng-premium-muted:#638078;
+  --ng-premium-line:#d6e8df;
+  --ng-premium-shadow:0 18px 46px rgba(18,107,91,.12);
+}
+body{
+  background:
+    radial-gradient(circle at 8% 6%,rgba(232,184,91,.12),transparent 30rem),
+    radial-gradient(circle at 92% 15%,rgba(229,114,91,.09),transparent 32rem),
+    linear-gradient(180deg,#fffdf9 0%,#f7fcf9 48%,#fffaf5 100%)!important;
+  color:var(--ng-premium-ink)!important;
+}
+.wrap{position:relative;z-index:1}
+.hero{
+  position:relative!important;
+  isolation:isolate;
+  overflow:hidden!important;
+  min-height:320px!important;
+  padding:42px 44px!important;
+  border:1px solid rgba(18,107,91,.16)!important;
+  border-radius:30px!important;
+  background:
+    linear-gradient(112deg,rgba(255,255,255,.96) 0%,rgba(238,249,244,.9) 58%,rgba(255,245,232,.86) 100%)!important;
+  box-shadow:var(--ng-premium-shadow)!important;
+}
+.hero:before{
+  content:"";
+  position:absolute;inset:auto -60px -120px auto;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(229,114,91,.22),rgba(229,114,91,0) 68%);
+  z-index:-1;animation:ng-float 8s ease-in-out infinite;
+}
+.hero:after{
+  content:"🐼";
+  position:absolute;right:8%;bottom:26px;font-size:92px;filter:drop-shadow(0 12px 12px rgba(18,107,91,.16));
+  animation:ng-panda-breathe 4s ease-in-out infinite;z-index:0;
+}
+.hero>div:first-child{max-width:62%!important;z-index:1}
+.hero .eyebrow{color:var(--ng-premium-teal)!important;font-weight:900;letter-spacing:1.6px!important}
+.hero h1{font-family:Georgia,serif!important;font-size:clamp(42px,6vw,72px)!important;line-height:.96!important;color:var(--ng-premium-ink)!important;letter-spacing:-2px!important}
+.hero h1 span{color:var(--ng-premium-teal)!important}
+.hero p{max-width:560px!important;color:#55746c!important;font-size:17px!important;line-height:1.65!important}
+.hero .badge{
+  position:relative!important;z-index:2!important;
+  border:1px solid rgba(18,107,91,.18)!important;border-radius:22px!important;
+  background:rgba(255,255,255,.78)!important;color:var(--ng-premium-teal)!important;
+  box-shadow:0 12px 26px rgba(18,107,91,.10)!important;
+  backdrop-filter:blur(8px);font-weight:800!important;
+}
+.ng-panda-guide{
+  display:flex;align-items:center;gap:12px;margin:0 0 16px;padding:11px 14px;
+  border:1px solid var(--ng-premium-line);border-radius:18px;background:rgba(255,255,255,.86);
+  color:var(--ng-premium-ink);box-shadow:0 10px 24px rgba(18,107,91,.08);
+}
+.ng-panda-guide>span{font-size:28px;animation:ng-panda-breathe 4s ease-in-out infinite}
+.ng-panda-guide b{font-size:13px;color:var(--ng-premium-teal)}
+.ng-panda-guide p{margin:2px 0 0;color:var(--ng-premium-muted);font-size:12px}
+.ng-dashboard{gap:14px!important}
+.ng-tile{
+  position:relative!important;overflow:hidden!important;
+  min-height:138px!important;padding:22px!important;
+  border:1px solid var(--ng-premium-line)!important;border-radius:22px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(239,249,244,.9))!important;
+  box-shadow:0 12px 28px rgba(18,107,91,.08)!important;
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease!important;
+}
+.ng-tile:hover{transform:translateY(-4px)!important;box-shadow:0 18px 38px rgba(18,107,91,.14)!important;border-color:#b8dccd!important}
+.ng-tile:before{position:absolute;right:16px;top:10px;font-size:26px;opacity:.92}
+.ng-tile:nth-child(1):before{content:"🔥"}.ng-tile:nth-child(2):before{content:"💪"}.ng-tile:nth-child(3):before{content:"👟"}.ng-tile:nth-child(4):before{content:"🌿"}
+.ng-tile:after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:5px;
+  background:linear-gradient(90deg,var(--ng-premium-teal),var(--ng-premium-gold));opacity:.75;
+}
+.ng-tile span{font-size:13px!important;color:var(--ng-premium-muted)!important;font-weight:800!important}
+.ng-tile strong{display:block!important;margin-top:12px!important;color:var(--ng-premium-teal)!important;font-size:34px!important;letter-spacing:-1px!important}
+.ng-tile small{color:#6b847c!important;font-size:12px!important}
+.ng-actions button,.ng-smart-action,.notify-btn{
+  border-radius:13px!important;border:1px solid #c3e0d4!important;
+  background:#fff!important;color:var(--ng-premium-teal)!important;
+  box-shadow:0 6px 14px rgba(18,107,91,.07)!important;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease!important;
+}
+.ng-actions button:hover,.ng-smart-action:hover,.notify-btn:hover{transform:translateY(-2px)!important;box-shadow:0 10px 20px rgba(18,107,91,.12)!important;background:var(--ng-premium-mint)!important}
+.ng-actions button.primary,.ng-actions button:first-child,.ng-smart-action.primary{background:var(--ng-premium-teal)!important;color:#fff!important;border-color:var(--ng-premium-teal)!important}
+.card,.ng-box,.ng-smart-panel,.weekly-report,.food-library,.food-studio,.exercise-library,.journey,.reminders,.motivation,.guide-picker,.dashboard-summary,.protein-tracker{
+  border-color:var(--ng-premium-line)!important;border-radius:24px!important;box-shadow:var(--ng-premium-shadow)!important;
+}
+.card h2,.food-library h2,.food-studio h2,.exercise-library h2,.weekly-report h2,.journey h2,.ng-smart-panel h2{color:var(--ng-premium-ink)!important;letter-spacing:-.45px!important}
+.food-library,.food-studio{background:linear-gradient(145deg,#fffffffa,#f4fbf7f2)!important}
+.food-grid,.trend-grid,.exercise-cards{gap:14px!important}
+.food-item,.trend-grid article,.exercise-card,.exercise{
+  border:1px solid var(--ng-premium-line)!important;border-radius:18px!important;
+  background:linear-gradient(145deg,#fff,#f3faf6)!important;
+  box-shadow:0 8px 18px rgba(18,107,91,.07)!important;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease!important;
+}
+.food-item:hover,.trend-grid article:hover,.exercise-card:hover,.exercise:hover{transform:translateY(-4px)!important;border-color:#a9d5c5!important;box-shadow:0 16px 28px rgba(18,107,91,.13)!important}
+.ng-food-filter-row{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.ng-food-filter-row button{
+  border:1px solid #c9e3d8;border-radius:999px;padding:9px 13px;
+  background:#fff;color:var(--ng-premium-teal);font-weight:800;font-size:12px;cursor:pointer;
+}
+.ng-food-filter-row button.active,.ng-food-filter-row button:hover{background:var(--ng-premium-teal);color:#fff;border-color:var(--ng-premium-teal)}
+.ng-empty-state{display:grid;place-items:center;text-align:center;min-height:120px;padding:18px;color:var(--ng-premium-muted);background:linear-gradient(145deg,#fbfffd,#fffaf4);border:1px dashed #bfded1;border-radius:18px}
+.ng-empty-state strong{display:block;color:var(--ng-premium-teal);font-size:14px;margin-bottom:4px}
+.ng-empty-state span{font-size:12px}
+.ng-profile-progress{display:flex;align-items:center;gap:10px;margin:0 0 18px;padding:11px 13px;border-radius:16px;background:var(--ng-premium-mint);color:var(--ng-premium-teal);font-size:12px;font-weight:900}
+.ng-profile-progress i{height:7px;flex:1;border-radius:99px;background:#cfe8dd;overflow:hidden}
+.ng-profile-progress i b{display:block;height:100%;width:25%;border-radius:inherit;background:linear-gradient(90deg,var(--ng-premium-teal),var(--ng-premium-gold));transition:width .25s ease}
+.ng-profile-step{display:grid;gap:7px}
+.ng-profile-step[hidden]{display:none!important}
+.ng-profile-step label{margin-top:9px!important}
+.ng-profile-controls{display:flex;gap:8px;margin-top:14px}
+.ng-profile-controls button{flex:1!important;margin-top:0!important}
+.ng-exercise-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.ng-exercise-meta span{padding:5px 8px;border-radius:999px;background:#eaf7f1;color:var(--ng-premium-teal);font-size:11px;font-weight:800}
+.ng-view-steps{display:block;margin-top:11px;color:var(--ng-premium-coral);font-size:12px;font-weight:900}
+.ng-weekly-chart{display:grid;grid-template-columns:repeat(7,1fr);align-items:end;gap:10px;min-height:150px;margin:18px 0;padding:16px 14px 12px;border-radius:18px;background:linear-gradient(180deg,#f1faf5,#fffaf3);border:1px solid var(--ng-premium-line)}
+.ng-week-bar{display:grid;gap:7px;justify-items:center;height:120px;align-items:end}
+.ng-week-bar i{display:block;width:100%;max-width:28px;min-height:8px;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg,var(--ng-premium-coral),var(--ng-premium-gold));transition:height .45s ease}
+.ng-week-bar b{font-size:10px;color:var(--ng-premium-muted)}
+.ng-weekly-insight{margin:0!important;padding:12px 14px;border-radius:14px;background:#fff4e7;color:#805846!important;font-size:12px!important}
+body.ng-premium-transition .wrap{opacity:.55;transform:translateY(3px)}
+.wrap{transition:opacity .22s ease,transform .22s ease}
+button,input,select,textarea{border-radius:12px!important}
+@keyframes ng-float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-12px,-10px,0)}}
+@keyframes ng-panda-breathe{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+@media(max-width:760px){
+  .hero{min-height:310px!important;padding:28px 20px 24px!important;border-radius:24px!important}
+  .hero>div:first-child{max-width:100%!important}.hero:after{right:9%;bottom:18px;font-size:68px}.hero h1{font-size:clamp(38px,12vw,54px)!important}
+  .hero p{font-size:15px!important}.ng-panda-guide{margin-top:10px}
+  .ng-dashboard{grid-template-columns:1fr 1fr!important}.ng-tile{min-height:126px!important;padding:16px!important}.ng-tile strong{font-size:28px!important}
+  .ng-actions{gap:8px!important}.ng-actions button{min-height:45px!important}
+  .ng-profile-controls button{min-height:46px!important}
+  .ng-weekly-chart{gap:5px;padding:12px 8px}.ng-week-bar{height:105px}
+  .card,.ng-box,.ng-smart-panel,.weekly-report,.food-library,.food-studio,.exercise-library,.journey,.reminders,.motivation,.guide-picker,.dashboard-summary,.protein-tracker{border-radius:20px!important}
+  .food-grid,.trend-grid,.exercise-cards{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:420px){
+  .ng-dashboard{grid-template-columns:1fr!important}.food-grid,.trend-grid,.exercise-cards{grid-template-columns:1fr!important}
+  .hero:after{opacity:.65}.ng-weekly-chart{gap:3px}
+}
