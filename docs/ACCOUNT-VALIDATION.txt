@@ -1,6 +1,6 @@
-NUTRIGUIDE ACCOUNT VALIDATION - 2026-11-10
+NUTRIGUIDE ACCOUNT VALIDATION - 2026-11-13
 
-PASS: 166 contract tests, including 5 new account confirmation UI state tests.
+PASS: Account contract and UI suites cover duplicate-email responses, confirmation states, invalid input, session isolation, and standard error styling.
 PASS: TypeScript check, JavaScript syntax check and production build.
 
 CONFIRMATION FIX: A successful registration API response hides the form, focuses
@@ -20,3 +20,11 @@ registration/reset cases were not executed here because Chromium installation
 was previously blocked by failed downloads.
 
 Automatic detailed TXT reports are generated under test-reports/.
+
+DUPLICATE EMAIL REGRESSION: Supabase responses with an empty identities list or
+user_already_exists/email_exists errors return HTTP 409. The UI marks the email
+invalid, shows standard red error styling, and disables Create account until the
+email or mode changes.
+
+KIRO TEST COVERAGE: Added contract and Playwright regression cases for duplicate
+email detection, aria-invalid state, disabled submit state, and error colors.
