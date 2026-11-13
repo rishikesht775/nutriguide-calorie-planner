@@ -52,8 +52,8 @@ export async function POST(request:Request){
    if(!passwordValid(body.password)||body.password!==body.confirmPassword||typeof body.name!=='string'||!body.name.trim()||body.name.length>120)return privateJSON({error:'Enter your name and matching passwords of 12–128 characters.'},400);
    const {error}=await client.auth.signUp({email,password:body.password,options:{emailRedirectTo:config.site+'/account/callback?email='+encodeURIComponent(email),data:{full_name:body.name.trim()}}});
    if(error&&error.status===429)return privateJSON({error:'Too many requests. Please wait before trying again.'},429);
-   if(error&&error.code!=='user_already_exists')return privateJSON({error:'Account creation could not be completed. Check your details and try again.'},400);
-   // Same generic outcome for existing addresses; no account enumeration.
+   if(error?.code==='user_already_exists')return privateJSON({error:'An account with this email already exists. Sign in or reset your password.'},409);
+   if(error)return privateJSON({error:'Account creation could not be completed. Check your details and try again.'},400);
    return privateJSON({message:'Check your email to confirm your account. If you already have an account, sign in or reset your password.'},202);
   }
   const {data,error}=await client.auth.signInWithPassword({email,password:body.password});
