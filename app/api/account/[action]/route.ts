@@ -50,10 +50,12 @@ export async function POST(request:Request){
   if(typeof body.password!=='string'||body.password.length<1||body.password.length>128)return privateJSON({error:'Enter your password.'},400);
   if(action==='sign-up'){
    if(!passwordValid(body.password)||body.password!==body.confirmPassword||typeof body.name!=='string'||!body.name.trim()||body.name.length>120)return privateJSON({error:'Enter your name and matching passwords of 12–128 characters.'},400);
-   const {error}=await client.auth.signUp({email,password:body.password,options:{emailRedirectTo:config.site+'/account/callback?email='+encodeURIComponent(email),data:{full_name:body.name.trim()}}});
+   const {data,error}=await client.auth.signUp({email,password:body.password,options:{emailRedirectTo:config.site+'/account/callback?email='+encodeURIComponent(email),data:{full_name:body.name.trim()}}});
    if(error&&error.status===429)return privateJSON({error:'Too many requests. Please wait before trying again.'},429);
-   if(error?.code==='user_already_exists')return privateJSON({error:'An account with this email already exists. Sign in or reset your password.'},409);
+   if(error?.code==='user_already_exists'||error?.code==='email_exists')return privateJSON({error:'An account with this email already exists. Sign in or reset your password.'},409);
    if(error)return privateJSON({error:'Account creation could not be completed. Check your details and try again.'},400);
+   if(data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0)return privateJSON({error:'An account with this email already exists. Sign in or reset your password.'},409);
+   if(!data.user)return privateJSON({error:'Account creation could not be completed. Check your details and try again.'},400);
    return privateJSON({message:'Check your email to confirm your account. If you already have an account, sign in or reset your password.'},202);
   }
   const {data,error}=await client.auth.signInWithPassword({email,password:body.password});
