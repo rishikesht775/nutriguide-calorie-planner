@@ -2,7 +2,7 @@
 
 NutriGuide offers real independent email registration/sign-in through Supabase Auth, plus its preserved connected-account option. See APPLICATION.md sections 2, 6 and 7 and EMAIL-ACCOUNTS.md for the current contracts and release limits. Earlier descriptions of provider-only login are superseded.
 
-Registration calls the server sign-up action. Accepted requests show a prominent Check your email panel, hide the original form and offer Continue to sign in or Use a different email. These controls do not send another email by themselves. Generic duplicate-address wording avoids account enumeration. Failure keeps the form visible and displays the error.
+Registration calls the server sign-up action. Accepted requests show a prominent Check your email panel, hide the original form and offer Continue to sign in or Use a different email. These controls do not send another email by themselves. Generic duplicate-address wording avoids account enumeration. Failure keeps the form visible and displays the error. Duplicate Supabase responses, including empty identities and duplicate error codes, use HTTP 409; the UI shows a standard red validation state and disables Create account until the user changes the email or mode.
 
 Supabase email confirmation is required. The PKCE callback uses /account/callback, and recovery uses the same callback with recovery intent followed by /account-reset.html. Use the requesting browser for confirmation links. Sign-in validates the provider identity and confirmed email; HttpOnly cookies hold native sessions. Passwords and SMTP keys are not wellness state.
 
