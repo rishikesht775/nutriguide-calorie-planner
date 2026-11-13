@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 2.6 | Reviewed 12 November 2026 | Owner Rishikesh Tiwari
+Version 2.7 | Reviewed 13 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
@@ -10,7 +10,7 @@ NutriGuide is a browser-based nutrition, movement and wellness planner. This doc
 
 The current application combines a legacy HTML interface with modular JavaScript and a server-backed Vinext application hosted through Sites on Cloudflare Workers. Supabase manages independent email accounts. Brevo delivers authentication emails. Cloudflare D1 stores wellness state. Supabase is not the wellness database in the current implementation.
 
-Email registration is enabled and the owner reported receiving a real signup email. The confirmation panel was then improved to show Check your email prominently. Complete confirmation, password reset, separate-account isolation and simultaneous cross-device behavior still require live acceptance testing. Source-level implementation and a passing mocked test are not proof of those external flows.
+Email registration is enabled and the owner reported receiving a real signup email. The confirmation panel was then improved to show Check your email prominently. Duplicate signup attempts now return a clear server validation error, mark the email field invalid and disable Create account until the address changes. Complete confirmation, password reset, separate-account isolation and simultaneous cross-device behavior still require live acceptance testing. Source-level implementation and a passing mocked test are not proof of those external flows.
 
 The current product is a general wellness tool. Its calorie estimates, food data, budget estimates and exercise suggestions are not a diagnosis, prescription or medically validated care plan. The guide is rule-based; it is not a generative AI model or a human trainer.
 
@@ -46,7 +46,7 @@ A visitor may register with email and password or continue with the existing con
 
 ### Registration and sign in
 
-A user chooses Create account, enters a name, email and matching password, and submits once. The server calls Supabase signup. An accepted response replaces the form with Check your email, confirmation instructions and buttons to continue to sign in or change the email. Duplicate-address handling intentionally uses a generic response rather than revealing account existence. Changing UI modes does not itself send another email.
+A user chooses Create account, enters a name, email and matching password, and submits once. The server calls Supabase signup. An accepted response replaces the form with Check your email, confirmation instructions and buttons to continue to sign in or change the email. If Supabase reports that the email already exists, the server returns HTTP 409, the form shows a direct validation message and Create account stays disabled until the email changes. Changing UI modes does not itself send another email.
 
 The user opens the email confirmation link in the same browser used for signup. A successful PKCE callback exchanges the one-time code for the provider session, selects the email identity and returns to the app. Missing or expired links return a controlled error notice. If automatic sign-in cannot complete, the user can sign in after confirming the email. Never ask a user to share passwords, reset links, SMTP keys or confirmation codes in chat.
 
@@ -412,7 +412,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
-| 12 November 2026 | 2.6 | Updated native Android instrumentation dependencies to AndroidX Test Runner 1.7.0, JUnit extension 1.3.0 and Espresso 3.7.0 after the local Android 17/API 37 emulator exposed Espresso 3.6.1 reflection on removed `InputManager.getInstance`; the app build, install and launch passed, while instrumentation rerun is required to verify the dependency fix; the reset-mode instrumentation assertion now explicitly checks that the password field is absent. |
+| 13 November 2026 | 2.7 | Duplicate email signup attempts now return an explicit HTTP 409 validation error from the account API. The browser marks the email field invalid and disables Create account until the email changes or the user switches modes; no privileged client-side account lookup was added. Live provider acceptance remains required. |\n| 12 November 2026 | 2.6 | Updated native Android instrumentation dependencies to AndroidX Test Runner 1.7.0, JUnit extension 1.3.0 and Espresso 3.7.0 after the local Android 17/API 37 emulator exposed Espresso 3.6.1 reflection on removed `InputManager.getInstance`; the app build, install and launch passed, while instrumentation rerun is required to verify the dependency fix; the reset-mode instrumentation assertion now explicitly checks that the password field is absent. |
 | 12 November 2026 | 2.5 | Fixed the native Android account/session blocker: clear the prior encrypted cookie jar before sign-in/sign-up, verify the returned email owner, and normalize malformed legacy numeric/date values before tab persistence. Added regression cases for second-account isolation and tab-safe legacy state. |
 | 12 November 2026 | 2.4 | Documented the Kotlin/Jetpack Compose decision, the circumstances where Flutter would be appropriate, and the migration/test scope required before changing mobile frameworks. |
 | 12 November 2026 | 2.3 | Added a separate native Android mobile test strategy and case matrix covering authentication, safe areas, lifecycle, Today, Food date isolation, Move, Journey, Reports, network failures, privacy and Samsung S21 FE acceptance. Added Compose auth instrumentation expansion, JVM date/duplicate-entry policy checks, and an Android CI alignment guard requiring Android behavior changes to update both tests and mobile documentation. The native APK build/lint/emulator gate remains the release evidence; provider and physical-device cases remain explicitly pending. |\n| 11 November 2026 | 2.2 | Started the native UI architecture redesign with Jetpack Compose and Material 3: Scaffold + bottom navigation, Today/Food/Move/Journey/Reports feature surfaces, ViewModel UI state, and a repository boundary for future persistence/sync. Native UI test migrated to Compose navigation checks. Product direction follows documented nutrition-app patterns while preserving NutriGuide branding and account isolation. Full APK/emulator validation is pending for this redesign commit. |
