@@ -50,7 +50,7 @@ export async function POST(request:Request){
   if(typeof body.password!=='string'||body.password.length<1||body.password.length>128)return privateJSON({error:'Enter your password.'},400);
   if(action==='sign-up'){
    if(!passwordValid(body.password)||body.password!==body.confirmPassword||typeof body.name!=='string'||!body.name.trim()||body.name.length>120)return privateJSON({error:'Enter your name and matching passwords of 12–128 characters.'},400);
-   const {error}=await client.auth.signUp({email,password:body.password,options:{emailRedirectTo:config.site+'/account/callback',data:{full_name:body.name.trim()}}});
+   const {error}=await client.auth.signUp({email,password:body.password,options:{emailRedirectTo:config.site+'/account/callback?email='+encodeURIComponent(email),data:{full_name:body.name.trim()}}});
    if(error&&error.status===429)return privateJSON({error:'Too many requests. Please wait before trying again.'},429);
    if(error&&error.code!=='user_already_exists')return privateJSON({error:'Account creation could not be completed. Check your details and try again.'},400);
    // Same generic outcome for existing addresses; no account enumeration.
