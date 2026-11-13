@@ -36,3 +36,57 @@ body.auth-pending .wrap{display:none!important}
   #appAuthGate .auth-gate-art h1{font-size:clamp(38px,12vw,56px)!important}
   #appAuthGate .auth-gate-panel h2{font-size:28px!important}
 }
+
+/* Refined welcome card */
+#appAuthGate .auth-gate-art{
+  position:relative;
+  overflow:hidden!important;
+  justify-content:center!important;
+  background:linear-gradient(145deg,#eaf7ef 0%,#f8f6e9 58%,#fff2dc 100%)!important;
+  color:#174b43!important;
+}
+#appAuthGate .auth-gate-art::before,
+#appAuthGate .auth-gate-art::after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+}
+#appAuthGate .auth-gate-art::before{
+  width:260px;height:260px;right:-95px;top:-90px;
+  background:radial-gradient(circle,#ffffffaa 0%,#ffffff00 70%);
+}
+#appAuthGate .auth-gate-art::after{
+  width:220px;height:220px;left:-110px;bottom:-115px;
+  background:radial-gradient(circle,#b8e1c488 0%,#b8e1c400 72%);
+}
+#appAuthGate .auth-gate-art>*{position:relative;z-index:1}
+#appAuthGate .auth-gate-brand{color:#1e6658!important;letter-spacing:1.8px}
+#appAuthGate .auth-gate-art h1{
+  max-width:9ch;
+  color:#174b43!important;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif!important;
+  font-size:clamp(42px,5vw,66px)!important;
+  line-height:.98!important;
+  letter-spacing:-.045em;
+  margin:18px 0 16px!important;
+}
+#appAuthGate .auth-gate-art p{
+  max-width:31rem;
+  color:#496d64!important;
+  font-size:15px!important;
+  line-height:1.55!important;
+  margin:0!important;
+}
+#appAuthGate .auth-gate-chips{margin-top:22px!important}
+#appAuthGate .auth-gate-chips span{
+  border-color:#b9d9ca!important;
+  background:#ffffffa8!important;
+  color:#24594f!important;
+  font-size:11px!important;
+  padding:9px 12px!important;
+}
+@media(max-width:760px){
+  #appAuthGate .auth-gate-art{justify-content:center!important}
+  #appAuthGate .auth-gate-art h1{font-size:clamp(40px,11vw,54px)!important}
+}
