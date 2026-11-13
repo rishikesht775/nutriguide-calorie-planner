@@ -125,3 +125,12 @@ body.auth-pending .wrap{display:none!important}
   #appAuthGate .auth-gate-art{border-radius:26px!important;min-height:245px!important}
   #appAuthGate .auth-gate-panel{border-radius:26px!important}
 }
+
+@media(min-width:761px){
+  #appAuthGate{align-items:stretch!important}
+  #appAuthGate .auth-gate-art,
+  #appAuthGate .auth-gate-panel{
+    height:auto!important;
+    min-height:560px!important;
+  }
+}
