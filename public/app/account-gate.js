@@ -1,21 +1,24 @@
 /* Account controls are enabled only when the real email provider is configured. */
 (() => {
- const $=id=>document.getElementById(id),gate=$('appAuthGate'),form=$('emailAccountForm'),status=$('gateStatus'),retry=$('gateRetry'),connected=$('gateSubmit');
+ const $=id=>document.getElementById(id),gate=$('appAuthGate'),form=$('emailAccountForm'),status=$('gateStatus'),retry=$('gateRetry'),connected=$('gateSubmit'),emailField=$('emailAddress'),submit=$('emailSubmit');
  const local=['localhost','127.0.0.1','[::1]'].includes(location.hostname);
  connected.href=local?'https://nutriguide-calorie-planner.rishikesht775.chatgpt.site/account/connected':'/account/connected';
- let enabled=false,mode='sign-in',busy=false,checking=false;
+ let enabled=false,mode='sign-in',busy=false,checking=false,duplicateEmail=false;
+ function clearDuplicateEmailState(){duplicateEmail=false;emailField?.removeAttribute('aria-invalid');if(!busy)submit.disabled=false;if(status.textContent.includes('already exists'))status.textContent='';}
  function clearAuthFields(){for(const id of ['emailName','emailAddress','emailPassword','emailConfirm']){const input=$(id);if(input){input.value='';input.removeAttribute?.('value')}}form.setAttribute?.('autocomplete','off');$('emailAddress').setAttribute?.('autocomplete','off');}
- function setMode(next){if(busy)return;const previous=mode;mode=next;if(next==='sign-in'&&previous==='sign-up')clearAuthFields();$('emailConfirmation').hidden=true;form.hidden=false;$('emailForgot').hidden=false;const signup=mode==='sign-up',reset=mode==='request-reset';$('emailNameWrap').hidden=!signup;$('emailName').disabled=!signup;$('emailName').required=signup;$('emailConfirmWrap').hidden=!signup;$('emailConfirm').disabled=!signup;$('emailConfirm').required=signup;$('emailPasswordWrap').hidden=reset;$('emailPassword').disabled=reset;$('emailPassword').required=!reset;$('emailPassword').minLength=signup?12:1;$('emailPassword').autocomplete=signup?'new-password':'current-password';$('emailSubmit').textContent=signup?'Create account':reset?'Send reset link':'Sign in';$('gateTitle').textContent=signup?'Create your NutriGuide account':reset?'Reset your password':'Welcome to NutriGuide';$('gateSubtitle').textContent=signup?'Save your nutrition, movement and recovery in your own account.':reset?'Enter your email to request a secure password reset link.':'Sign in to continue your personal wellness journey.';$('emailSignIn').classList.toggle('active',mode==='sign-in');$('emailSignUp').classList.toggle('active',signup);status.textContent='';}
+ function setMode(next){if(busy)return;clearDuplicateEmailState();const previous=mode;mode=next;if(next==='sign-in'&&previous==='sign-up')clearAuthFields();$('emailConfirmation').hidden=true;form.hidden=false;$('emailForgot').hidden=false;const signup=mode==='sign-up',reset=mode==='request-reset';$('emailNameWrap').hidden=!signup;$('emailName').disabled=!signup;$('emailName').required=signup;$('emailConfirmWrap').hidden=!signup;$('emailConfirm').disabled=!signup;$('emailConfirm').required=signup;$('emailPasswordWrap').hidden=reset;$('emailPassword').disabled=reset;$('emailPassword').required=!reset;$('emailPassword').minLength=signup?12:1;$('emailPassword').autocomplete=signup?'new-password':'current-password';$('emailSubmit').textContent=signup?'Create account':reset?'Send reset link':'Sign in';$('gateTitle').textContent=signup?'Create your NutriGuide account':reset?'Reset your password':'Welcome to NutriGuide';$('gateSubtitle').textContent=signup?'Save your nutrition, movement and recovery in your own account.':reset?'Enter your email to request a secure password reset link.':'Sign in to continue your personal wellness journey.';$('emailSignIn').classList.toggle('active',mode==='sign-in');$('emailSignUp').classList.toggle('active',signup);status.textContent='';}
  $('emailContinue').onclick=()=>setMode('sign-in');$('emailChange').onclick=()=>setMode('sign-up');
  $('emailSignIn').onclick=()=>setMode('sign-in');$('emailSignUp').onclick=()=>setMode('sign-up');$('emailForgot').onclick=()=>setMode('request-reset');
+ emailField?.addEventListener('input',clearDuplicateEmailState);
  form.onsubmit=async event=>{
   event.preventDefault();if(busy||!enabled||!form.checkValidity())return;
+  if(mode==='sign-up'&&duplicateEmail){status.textContent='An account with this email already exists. Sign in or reset your password.';emailField?.focus({preventScroll:true});return}
   if(mode==='sign-up'&&$('emailPassword').value!==$('emailConfirm').value){status.textContent='Passwords must match.';return}
   busy=true;$('emailSubmit').disabled=true;status.textContent='Please wait…';
   const body={email:$('emailAddress').value.trim()};if(mode!=='request-reset')body.password=$('emailPassword').value;if(mode==='sign-up'){body.name=$('emailName').value.trim();body.confirmPassword=$('emailConfirm').value}
   try{
    const response=await fetch('/api/account/'+mode,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(15000)});const data=await response.json();
-   if(!response.ok)throw Error(data.error||'This request could not be completed.');
+   if(!response.ok){if(mode==='sign-up'&&response.status===409){duplicateEmail=true;emailField?.setAttribute('aria-invalid','true');status.textContent=data.error||'An account with this email already exists. Sign in or reset your password.';emailField?.focus({preventScroll:true});return}throw Error(data.error||'This request could not be completed.');}
    $('emailPassword').value='';$('emailConfirm').value='';if(mode==='sign-up')clearAuthFields();
    if(data.signedIn){location.replace('/legacy.html');return}
    form.hidden=true;$('emailForgot').hidden=true;$('emailConfirmation').hidden=false;
@@ -23,7 +26,7 @@
    $('emailConfirmationText').textContent=data.message||'Please check your email for the next step.';status.textContent='';
    $('emailConfirmationTitle').focus({preventScroll:true});$('emailConfirmation').scrollIntoView({block:'center',behavior:'instant'});
   }catch(error){status.textContent=error.name==='TimeoutError'?'The account service timed out. Please try again.':error.message}
-  finally{busy=false;$('emailSubmit').disabled=false}
+  finally{busy=false;submit.disabled=mode==='sign-up'&&duplicateEmail}
  };
  async function check(){
   if(checking)return;checking=true;retry.hidden=true;status.textContent='Checking your account…';
