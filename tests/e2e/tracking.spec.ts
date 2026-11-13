@@ -7,7 +7,7 @@ test.describe('@functional @integration daily tracking',()=>{
   await page.reload();await expect(page.locator('#waterOut')).toContainText('1 / 8');
  });
  test('steps are stored and shown after refresh',async({page})=>{
-  await completeProfile(page);await page.getByRole('button',{name:'Add steps',exact:true}).click();
+  await completeProfile(page);await page.locator('[data-ng-home-action="steps"]').click();
   await page.locator('#ngStepsQuickInput').fill('4500');await page.locator('#ngSaveStepsQuick').click();
   await expect(page.locator('#ngHomeSteps')).toHaveText('4,500');await page.reload();await expect(page.locator('#ngHomeSteps')).toHaveText('4,500');
  });
