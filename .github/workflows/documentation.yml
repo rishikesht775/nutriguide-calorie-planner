@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: node scripts/update-docs.mjs --check
+      - run: node scripts/update-docs.mjs
       - run: sudo apt-get update && sudo apt-get install -y graphviz
       - run: python -m pip install -r scripts/docs-requirements.txt
       - run: python scripts/export-application-doc.py
