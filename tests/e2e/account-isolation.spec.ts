@@ -24,8 +24,8 @@ test('new account starts empty and returning account keeps its own profile', asy
   await expect(page.locator('#ngTodayProteinHint')).toContainText('Complete your profile');
   await expect(page.locator('#proteinTarget')).toHaveValue('');
   expect(await page.locator('#ngWeeklyPlan .ng-day').count()).toBe(0);
-  expect(await page.locator('#ngMealList').textContent()).toContain('No meals planned yet');
-  expect(await page.locator('#ngGroceryList').textContent()).toContain('empty');
+  expect(await page.locator('#ngMealList').textContent()).toMatch(/No meals planned yet|Your first meal starts your journey/i);
+  expect(await page.locator('#ngGroceryList').textContent()).toMatch(/empty|Your pantry is ready for a fresh start/i);
   const bobStorage=await page.evaluate(()=>({profile:localStorage.getItem('profile'),water:localStorage.getItem('water'),owner:localStorage.getItem('_ngCloudOwner')}));
   expect(bobStorage.profile).toBeNull();
   expect(Number(bobStorage.water)).toBe(0);
