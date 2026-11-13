@@ -97,7 +97,7 @@
  const swaps=document.createElement('div');swaps.className='ng-box';swaps.innerHTML='<h3>Easy swaps, familiar flavours</h3><div class="ng-list"><div class="ng-row"><div><b>Paneer → tofu</b><small>A plant-based alternative; protein and calcium vary by brand.</small></div></div><div class="ng-row"><div><b>Fried snack → roasted chana</b><small>A portion of roasted pulses can add fibre and protein.</small></div></div><div class="ng-row"><div><b>Sweet drink → unsweetened water or chaas</b><small>Choose based on your preference and any dietary restrictions.</small></div></div></div>';$('ngRecipeTools').append(swaps);
  function hydrate(){const settings=read('ngPlanSettings',{});if(settings.diet)$('ngDiet').value=settings.diet;if(settings.budget)$('ngBudget').value=settings.budget;if(settings.people)$('ngHousehold').value=settings.people;$('ngPantry').value=read('ngPantry',[]).join(', ');render();renderPlan();renderRecipe();photos()}
  window.ngRefreshWellness=hydrate;window.addEventListener('ng:cloud-hydrated',hydrate);window.addEventListener('pagehide',stopCamera);document.addEventListener('visibilitychange',()=>{if(document.hidden)stopCamera()});
- const baseTab=window.setTab;window.setTab=tab=>{baseTab(tab);if(tab!=='food')stopCamera();render()};
+ const baseTab=window.setTab;window.setTab=tab=>{baseTab(tab);if(tab!=='food')stopCamera();render();requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'auto'}))};
  $('form').addEventListener('submit',()=>setTimeout(render,50));
  // Migrate undated food entries once so repeat-yesterday can become reliable going forward.
  if(nutritionLog.some(x=>!x.date)){nutritionLog=nutritionLog.map(x=>({...x,date:x.date||day()}));localStorage.nutritionLog=JSON.stringify(nutritionLog)}
