@@ -6,7 +6,7 @@ test.describe('@accessibility keyboard and semantic checks',()=>{
   await startFresh(page);
   const steps=[[['age','Age'],['sex','Sex']],[['height','Height'],['weight','Weight']],[['activity','Activity level']],[['goal','Goal']]];
   for(let i=0;i<steps.length;i++){
-   for(const [id,label] of steps[i])await expect(page.locator('#'+id)).toBeVisible().and.toHaveAccessibleName(new RegExp(label,'i'));
+   for(const [id,label] of steps[i]){await expect(page.locator('#'+id)).toBeVisible();await expect(page.locator('#'+id)).toHaveAccessibleName(new RegExp(label,'i'));}
    if(i<steps.length-1)await page.locator('.ng-profile-next').click();
   }
  });
