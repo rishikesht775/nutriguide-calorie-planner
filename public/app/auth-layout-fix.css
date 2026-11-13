@@ -104,3 +104,24 @@ body.auth-pending .wrap{display:none!important}
       url('/onboarding-hero.webp') center/cover!important;
   }
 }
+
+/* Match the selected preview: one joined auth card */
+@media(min-width:761px){
+  #appAuthGate{gap:0!important;padding:0!important;max-width:1160px!important}
+  #appAuthGate .auth-gate-art,#appAuthGate .auth-gate-panel{
+    border-radius:0!important;
+    box-shadow:none!important;
+  }
+  #appAuthGate .auth-gate-art{
+    border-radius:28px 0 0 28px!important;
+    min-height:560px!important;
+  }
+  #appAuthGate .auth-gate-panel{
+    border-radius:0 28px 28px 0!important;
+  }
+}
+@media(max-width:760px){
+  #appAuthGate{grid-template-areas:"art" "panel"!important;gap:12px!important}
+  #appAuthGate .auth-gate-art{border-radius:26px!important;min-height:245px!important}
+  #appAuthGate .auth-gate-panel{border-radius:26px!important}
+}
