@@ -15,13 +15,23 @@
     var bar=document.createElement("div");
     bar.id="ngInAppToolbar";
     bar.className="ng-inapp-toolbar";
-    bar.innerHTML="<button type='button' id='ngInAppBack' class='ng-inapp-back' aria-label='Go back within NutriGuide'><span aria-hidden='true'>←</span><span>Back</span></button><span id='ngInAppContext' class='ng-inapp-context'>Home</span><button type='button' id='ngInAppCancel' class='ng-inapp-cancel' aria-label='Cancel this view'>Cancel</button>";
+    bar.innerHTML="<button type='button' id='ngInAppBack' class='ng-inapp-back' aria-label='Go back within NutriGuide'><span aria-hidden='true'>←</span><span>Back</span></button><span id='ngInAppContext' class='ng-inapp-context'>Home</span>";
     nav.parentNode.insertBefore(bar,nav);
     $("#ngInAppBack").addEventListener("click",goBack);
-    $("#ngInAppCancel").addEventListener("click",cancelView);
     addModalCancel();
+    addStepsCancel();
     ready=true;
     render();
+  }
+  function addStepsCancel(){
+    var panel=$("#ngStepsQuickPanel"),save=$("#ngSaveStepsQuick");
+    if(!panel||!save||$(".ng-steps-cancel",panel))return;
+    var button=document.createElement("button");
+    button.type="button";
+    button.className="ng-steps-cancel";
+    button.textContent="Cancel";
+    button.addEventListener("click",function(){var input=$("#ngStepsQuickInput");if(input)input.value="";panel.hidden=true;render()});
+    save.parentNode.appendChild(button);
   }
   function addModalCancel(){
     var card=$("#exerciseModal .modal-card");
@@ -69,19 +79,14 @@
     var previous=tabHistory.pop();
     if(previous&&previous!==tab)callTab(previous,false);else if(tab!=="home")callTab("home",false);else window.scrollTo({top:0,behavior:"smooth"});
   }
-  function cancelView(){
-    if(closeTransient()){render();return}
-    tabHistory=[];
-    if(currentTab()!=="home")callTab("home",false);else window.scrollTo({top:0,behavior:"smooth"});
-  }
   function render(){
     if(!ready)return;
     var tab=currentTab();
-    var back=$("#ngInAppBack"),cancel=$("#ngInAppCancel"),context=$("#ngInAppContext");
+    var back=$("#ngInAppBack"),context=$("#ngInAppContext");
     var transient=isVisible($("#exerciseModal"))||isVisible($("#ngStepsQuickPanel"));
     if(context)context.textContent=labels[tab]||"NutriGuide";
     if(back)back.hidden=tab==="home"&&!tabHistory.length&&!transient;
-    if(cancel)cancel.hidden=tab==="home"&&!transient;
+    addStepsCancel();
     addModalCancel();
   }
   function boot(){inject();wrap();render()}
