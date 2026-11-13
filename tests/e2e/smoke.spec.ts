@@ -5,7 +5,7 @@ test.describe('@smoke core availability', () => {
   test('profile unlocks all primary tabs', async ({ page }) => {
     await completeProfile(page);
     for (const label of [/Home/i, /Food studio/i, /Exercise/i, /Journey/i, /Plan & reports/i]) {
-      await expect(page.getByRole('button', { name: label })).toBeVisible();
+      await expect(page.locator('.app-nav').getByRole('button', { name: label })).toBeVisible();
     }
   });
 
