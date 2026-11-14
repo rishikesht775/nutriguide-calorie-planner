@@ -95,3 +95,7 @@ body.ng-first-login #ngHomeProfileButton{display:none!important}
   .ng-profile-metrics strong{font-size:16px}
   .ng-profile-row{align-items:flex-start}
 }
+
+/* Keep the legacy calculator/results column inside My Profile only. */
+body.ng-home-mode:not(.ng-first-login) .grid,
+body.ng-profile-open .grid{display:none!important}
