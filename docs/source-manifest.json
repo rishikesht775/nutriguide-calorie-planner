@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "35e78a83dcda3744c152eda48e1179c14d479e656c2fc881f58ee2ff13e16960",
+  "sourceDigest": "a4b08e9455ac440c3bbda2bc102f49d3197dda8a602bffa8b0b228fa7e5ed0f3",
   "files": {
     ".github/workflows/android.yml": "c4b45b7c40ab14f04cc489a2ab6f7d70770109768ab2cff0e9f41ac4ddc604da",
     ".github/workflows/documentation.yml": "cc493246d671e5af298a693355c493722e145733c56896c43b804285241c3652",
@@ -100,7 +100,7 @@
     "db/schema.ts": "77e40466cfef4f84cf73e4db985921df94f8d2c3ff7a72b567a6d50f604f905f",
     "docs/ACCOUNT-FLOW.md": "3f5fe30da2c0c7d9e4bc7afaab31510195ee749b8eaa77d5947e0bda112386b9",
     "docs/ANDROID.md": "e7b6e1773a3ba4ca0227a605e56b4a9944a111cf735dc8a9a3fefd43d2028698",
-    "docs/APPLICATION.md": "87925a9c154127cd55ef6dd249147773ac04a318c0f022984edc65e8cc2be9ec",
+    "docs/APPLICATION.md": "ee8ec54f0ff545b31ee7c4d48ca897f036498b3019d7ed40e2b4c4ecbf312861",
     "docs/DOCUMENTATION.md": "d77e4ce78cbcde02e4ecf7386f1f5b4d62900c879a0a131d369ac3250d79b4c6",
     "docs/EMAIL-ACCOUNTS.md": "7d222e43f7a131370d337407946675ae71726d131d0d23ccfffbf72d1faedbc9",
     "docs/PROFILE-DEFAULTS-AND-GUIDE.md": "92252fc134361416ac4d2cc82966026184ec0f28103d02c2a331af8b48d336a8",
@@ -123,7 +123,7 @@
     "public/app/auth-layout-fix.css": "500739906b3d6400bd5824cc417c1c272253bfca12a63e908231ac656972e30f",
     "public/app/backup.js": "fdfc32e838b5722ba9332093f58d1266e2164d029efc23ba57182253ab283546",
     "public/app/home-redesign.css": "c72c53c42bbb6a3b7697fbbbdb3ec3b3080fe5e341f3d4ad23a9c38f0a2833d2",
-    "public/app/home-redesign.js": "0f103fa139331bde03303c034ab6c2f9d56850690dd2ec16434878dd9c2f371e",
+    "public/app/home-redesign.js": "a7d4cb75a2730eb82d05ec1ab28c505eb18d6b06727c8709d559d2770673f16e",
     "public/app/in-app-navigation.css": "0cfb75eedd927089a81de2b074da3c1de39b2c894bfe39ae56385f0389297583",
     "public/app/in-app-navigation.js": "f3612156e0ad487ad3af99718dd95eea0e1e31e3e3b701f6e0b7212b132b80c0",
     "public/app/meal-engine.js": "1fc70ea832db202a407068b4fe2a435a92c48a0261a1c2298e22291f66461331",
