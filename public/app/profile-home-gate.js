@@ -187,6 +187,24 @@
     if ($("#ngProfileComplete")) $("#ngProfileComplete").textContent = validProfile(p) ? "Setup complete" : "Incomplete";
   }
 
+
+  function hideLegacyCalculator() {
+    const grid = document.querySelector(".grid");
+    if (grid) grid.style.setProperty("display", "none", "important");
+  }
+
+  function installHomeDisplayGuard() {
+    if (window.__ngHomeDisplayGuard) return;
+    const original = window.setTab;
+    if (typeof original !== "function") return;
+    window.setTab = function () {
+      const result = original.apply(this, arguments);
+      hideLegacyCalculator();
+      return result;
+    };
+    window.__ngHomeDisplayGuard = true;
+  }
+
   function renderState() {
     ready = validProfile(profile());
     document.body.classList.toggle("ng-first-login", !ready);
@@ -211,6 +229,8 @@
       }
     }
     renderProfile();
+    hideLegacyCalculator();
+    installHomeDisplayGuard();
     if (window.ngRefreshWellness) window.ngRefreshWellness();
     window.dispatchEvent(new Event("ng:profile-state-changed"));
   }
@@ -341,4 +361,5 @@
   document.addEventListener("DOMContentLoaded", boot);
   window.setTimeout(boot, 250);
   window.setTimeout(boot, 900);
+  window.setInterval(hideLegacyCalculator, 250);
 })();

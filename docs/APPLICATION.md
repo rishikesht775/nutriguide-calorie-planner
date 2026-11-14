@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 3.1 | Reviewed 14 November 2026 | Owner Rishikesh Tiwari
+Version 3.2 | Reviewed 14 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
@@ -420,6 +420,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 | 12 November 2026 | 2.5 | Fixed the native Android account/session blocker: clear the prior encrypted cookie jar before sign-in/sign-up, verify the returned email owner, and normalize malformed legacy numeric/date values before tab persistence. Added regression cases for second-account isolation and tab-safe legacy state. |
 | 12 November 2026 | 2.4 | Documented the Kotlin/Jetpack Compose decision, the circumstances where Flutter would be appropriate, and the migration/test scope required before changing mobile frameworks. |
 | 12 November 2026 | 2.3 | Added a separate native Android mobile test strategy and case matrix covering authentication, safe areas, lifecycle, Today, Food date isolation, Move, Journey, Reports, network failures, privacy and Samsung S21 FE acceptance. Added Compose auth instrumentation expansion, JVM date/duplicate-entry policy checks, and an Android CI alignment guard requiring Android behavior changes to update both tests and mobile documentation. The native APK build/lint/emulator gate remains the release evidence; provider and physical-device cases remain explicitly pending. |\n| 11 November 2026 | 2.2 | Started the native UI architecture redesign with Jetpack Compose and Material 3: Scaffold + bottom navigation, Today/Food/Move/Journey/Reports feature surfaces, ViewModel UI state, and a repository boundary for future persistence/sync. Native UI test migrated to Compose navigation checks. Product direction follows documented nutrition-app patterns while preserving NutriGuide branding and account isolation. Full APK/emulator validation is pending for this redesign commit. |
+| 14 November 2026 | 3.2 | Added an inline display guard for the legacy calculator grid because the original Home tab applies an inline important display rule after navigation. Regular Home now hides that grid deterministically. |
 | 14 November 2026 | 3.1 | Removed the legacy calculator/results column from regular Home rendering so daily targets and profile-based meal plans stay inside the dedicated My Profile details flow. |
 | 14 November 2026 | 3.1 | Removed the legacy calculator/results column from regular Home rendering so daily targets and profile-based meal plans stay inside the dedicated My Profile details flow. |
 | 14 November 2026 | 3.0 | Sites source publication uses the repository build path for the final deployment after the locally packaged Worker archive was rejected by the provider runtime. Local build, documentation refresh and source synchronization remain verified. |

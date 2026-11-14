@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "623f6b7c57042dea39d590d1114e120126b4d95d691b5cfabce321b1d54048bb",
+  "sourceDigest": "f99c2a174bad78c9a287346d74dda3a38e73899c4ff47879458f7f9dd39c97d3",
   "files": {
     ".github/workflows/android.yml": "c4b45b7c40ab14f04cc489a2ab6f7d70770109768ab2cff0e9f41ac4ddc604da",
     ".github/workflows/documentation.yml": "cc493246d671e5af298a693355c493722e145733c56896c43b804285241c3652",
@@ -100,7 +100,7 @@
     "db/schema.ts": "77e40466cfef4f84cf73e4db985921df94f8d2c3ff7a72b567a6d50f604f905f",
     "docs/ACCOUNT-FLOW.md": "3f5fe30da2c0c7d9e4bc7afaab31510195ee749b8eaa77d5947e0bda112386b9",
     "docs/ANDROID.md": "e7b6e1773a3ba4ca0227a605e56b4a9944a111cf735dc8a9a3fefd43d2028698",
-    "docs/APPLICATION.md": "e2283f627e636376c098f4e761b62ac19595d989bd562697930dc2636a7ec9df",
+    "docs/APPLICATION.md": "aaafdc7bef4c664eabbc41d473f7d5ef6ac1f2f4c2252cabbfed3e3ace977113",
     "docs/DOCUMENTATION.md": "d77e4ce78cbcde02e4ecf7386f1f5b4d62900c879a0a131d369ac3250d79b4c6",
     "docs/EMAIL-ACCOUNTS.md": "7d222e43f7a131370d337407946675ae71726d131d0d23ccfffbf72d1faedbc9",
     "docs/PROFILE-DEFAULTS-AND-GUIDE.md": "92252fc134361416ac4d2cc82966026184ec0f28103d02c2a331af8b48d336a8",
@@ -132,7 +132,7 @@
     "public/app/premium-ui.css": "f503eff3e6f5f0287a1330ee30ae6d528ffe02e1973b3f3ed49db4dfa4fa2243",
     "public/app/premium-ui.js": "c220ce7c78a7609c2e2c0354bf7eb74e6d97891dd7158711a381064b8a4b0947",
     "public/app/profile-home-gate.css": "bd9bc9dfd0244f4167c600198d3232eb25bda81a666e39a150386deb65d646bf",
-    "public/app/profile-home-gate.js": "2b50b8f56e49c6400c1102be0ad8c17e19c1f0a601754d828b70a33e3d68e84a",
+    "public/app/profile-home-gate.js": "6cd6beb1ee0a7bf907532b5d7b34985ae9e9b77c12f8aee65869f5538a44b5d6",
     "public/app/stability.js": "b0a5006096028d8fd92c0f0a7825e4ab1c3ed0fbb4905afb82fcec818905b2b7",
     "public/app/storage.js": "26393bdd32c3c0473b964f64be7b4219f639f805d5521a85def86f70510a5adf",
     "public/app/wellness.css": "7cea865c0e0fae1f1453911bc3ee28e925cdf7137528f61a09895a8eea690ae3",
