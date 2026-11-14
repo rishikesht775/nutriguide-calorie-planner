@@ -208,7 +208,12 @@
     const form = $("#form");
     if (!form) return;
     form.setAttribute("tabindex", "-1");
-    form.scrollIntoView({ behavior: "smooth", block: "center" });
+    // The redesigned dashboard hides the legacy grid until this state is set.
+    // Scroll explicitly after revealing it so the form is visible immediately.
+    window.setTimeout(() => {
+      const top = Math.max(0, form.getBoundingClientRect().top + window.scrollY - 96);
+      window.scrollTo({ top, behavior: "smooth" });
+    }, 0);
     form.querySelector("input,select,button")?.focus({ preventScroll: true });
   }
 
