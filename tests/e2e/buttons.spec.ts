@@ -160,7 +160,7 @@ test.describe('@buttons complete application button functionality', () => {
 
     await openTab(page, /Home/i);
     await page.locator('#guideChoices summary').click();
-    await expect(page.locator('#guideChoices')).toHaveAttribute('open', '');
+    await expect(page.locator('#guideChoices')).toHaveJSProperty('open', true);
 
     await openTab(page, /Journey/i);
     await page.getByRole('button', { name: '🌱', exact: true }).click();
