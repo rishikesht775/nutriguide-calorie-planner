@@ -7,7 +7,7 @@ test('one companion picker becomes the selected introduction and stays consisten
  await expect(page.locator('#guideIntroduction')).toBeVisible();await expect(page.locator('#guideStageTitle')).toHaveText('Meet Fresh-start kid');
  await expect(page.locator('#guideChoices')).not.toHaveAttribute('open','');
  for(const tab of [/Home/i,/Food studio/i,/Exercise/i,/Journey/i,/Plan & reports/i]){await openTab(page,tab);await expect(page.locator('#ngPersonalGuideName')).toHaveText('Fresh-start kid');await expect(page.locator('#ngPersonalAvatar')).toHaveText('🍎');}
- await page.reload();await openTab(page,/Home/i);await expect(page.locator('#guideStageTitle')).toHaveText('Meet Fresh-start kid');await expect(page.locator('#guideIntroduction')).toBeVisible();
+ await page.reload();await openTab(page,/Home/i);await expect(page.locator('#ngHomeGuide')).toContainText('Fresh-start kid');await page.locator('#ngHomeGuideButton').click();await expect(page.locator('#guideStageTitle')).toHaveText('Meet Fresh-start kid');await expect(page.locator('#guideIntroduction')).toBeVisible();
 });
 test('change guide from another tab opens the same gallery and selection updates the introduction',async({page})=>{
  await completeProfile(page);await chooseGuide(page);await openTab(page,/Food studio/i);await page.locator('#ngGuideChange').click();

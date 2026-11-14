@@ -1,7 +1,8 @@
 /* Keep the auth gate to the viewport and remove the hidden app from document flow. */
 html,body{min-height:100%}
 body.auth-pending{min-height:100dvh;overflow-x:hidden}
-body.auth-pending .wrap{display:none!important}
+body.auth-pending .wrap{display:none!important;visibility:hidden!important;pointer-events:none!important}
+body.auth-pending.ng-first-login .wrap,body.auth-pending.ng-regular-user .wrap{display:none!important;visibility:hidden!important;pointer-events:none!important}
 #appAuthGate{
   width:min(1180px,calc(100vw - 32px));
   min-height:calc(100dvh - 32px);

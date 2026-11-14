@@ -104,10 +104,15 @@ export async function openProfileEditor(page: Page) {
   if (await detailsTab.count()) await detailsTab.click();
   await expect(form).toBeVisible();
   const weight = page.locator('#weight');
-  while (!(await weight.isVisible())) {
-    const next = form.locator('.ng-profile-next:visible');
-    if (!(await next.count())) break;
-    await next.click();
+  const steps = form.locator('.ng-profile-step');
+  const targetIndex = await steps.evaluateAll((nodes) => nodes.findIndex((node) => !!node.querySelector('#weight')));
+  for (let attempt = 0; attempt < 8 && !(await weight.isVisible()); attempt += 1) {
+    const currentIndex = await steps.evaluateAll((nodes) => nodes.findIndex((node) => !(node as HTMLElement).hidden));
+    if (currentIndex < 0 || currentIndex === targetIndex) break;
+    const control = form.locator(currentIndex < targetIndex ? '.ng-profile-next:visible' : '.ng-profile-back:visible').first();
+    if (!(await control.count())) break;
+    await control.evaluate((element) => (element as HTMLButtonElement).click());
+    await page.waitForTimeout(50);
   }
   await expect(weight).toBeVisible();
 }

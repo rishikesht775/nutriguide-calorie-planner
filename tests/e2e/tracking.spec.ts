@@ -3,8 +3,8 @@ import {completeProfile,openTab} from './helpers';
 
 test.describe('@functional @integration daily tracking',()=>{
  test('water increments and survives refresh',async({page})=>{
-  await completeProfile(page);await page.getByRole('button',{name:'+ Add glass',exact:true}).click();await expect(page.locator('#waterOut')).toContainText('1 / 8');
-  await page.reload();await expect(page.locator('#waterOut')).toContainText('1 / 8');
+  await completeProfile(page);await page.locator('[data-ng-home-action=water]').click();await expect(page.locator('#ngHomeWater')).toContainText('1 / 8');
+  await page.reload();await expect(page.locator('#ngHomeWater')).toContainText('1 / 8');
  });
  test('steps are stored and shown after refresh',async({page})=>{
   await completeProfile(page);await page.locator('[data-ng-home-action="steps"]').click();
