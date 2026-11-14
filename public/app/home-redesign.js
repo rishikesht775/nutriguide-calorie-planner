@@ -1,3 +1,4 @@
+/* Profile settings button uses a direct binding for reliable access. */
 /* NutriGuide Today/Home redesign: compact, explicit, account-aware actions. */
 (() => {
   "use strict";
