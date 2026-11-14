@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 2.7 | Reviewed 13 November 2026 | Owner Rishikesh Tiwari
+Version 2.8 | Reviewed 14 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
@@ -53,6 +53,8 @@ The user opens the email confirmation link in the same browser used for signup. 
 ### First profile and personalization
 
 After authentication, the user enters age, sex, height, weight, activity and goal. A valid profile creates shared estimated calories, protein and BMI. Home, Food Studio, Exercise, Journey and Plan and reports receive the same context. Suggestions are not converted into completed food or activity records automatically.
+
+The browser Home now has two explicit states. A first-time account sees a setup Home with a progress indicator and the profile form; Home remains the only enabled navigation item while Food Studio, Exercise, Journey and Plan and reports are visibly locked. The regular Home dashboard, side navigation and the single top-right My Profile button appear only after a valid profile is saved. My Profile opens a dedicated profile section with Overview, Personal details, Goals and targets, Preferences, Connections and Privacy and data panels. The profile form remains the source of truth for calculations and can be edited from the dedicated page.
 
 A user may override shared calorie or protein targets. Submitting Home Calculate my plan explicitly returns protein to the profile estimate, including an existing 125 g override; users may customize it again afterward. A custom meal plan and custom workout settings are kept when the profile changes. Explicit reset actions restore automatic defaults while retaining actual logs. Active training is not rewritten by a profile edit.
 
@@ -128,6 +130,8 @@ The requirements below describe current behavior and user-requested scope. Imple
 | PRO01 | Validate a profile | Implemented. Age 14 to 90, height 80 to 250 cm, weight 20 to 350 kg, supported activity, sex and goal. |
 | PRO02 | Shared targets in all tabs | Implemented. Profile estimates and shared manual targets drive each module. |
 | PRO03 | Preserve deliberate choices | Implemented. Manual meal/workout settings survive profile changes; reset actions are explicit. |
+| PRO04 | Gate first-time navigation | Implemented. Incomplete profiles see the setup Home; non-Home tabs are disabled until setup completes. |
+| PRO05 | Dedicated profile section | Implemented. The single top-right My Profile button opens the dedicated profile panels; no side-menu profile item is added. |
 
 ### Home and food
 
@@ -416,6 +420,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 | 12 November 2026 | 2.5 | Fixed the native Android account/session blocker: clear the prior encrypted cookie jar before sign-in/sign-up, verify the returned email owner, and normalize malformed legacy numeric/date values before tab persistence. Added regression cases for second-account isolation and tab-safe legacy state. |
 | 12 November 2026 | 2.4 | Documented the Kotlin/Jetpack Compose decision, the circumstances where Flutter would be appropriate, and the migration/test scope required before changing mobile frameworks. |
 | 12 November 2026 | 2.3 | Added a separate native Android mobile test strategy and case matrix covering authentication, safe areas, lifecycle, Today, Food date isolation, Move, Journey, Reports, network failures, privacy and Samsung S21 FE acceptance. Added Compose auth instrumentation expansion, JVM date/duplicate-entry policy checks, and an Android CI alignment guard requiring Android behavior changes to update both tests and mobile documentation. The native APK build/lint/emulator gate remains the release evidence; provider and physical-device cases remain explicitly pending. |\n| 11 November 2026 | 2.2 | Started the native UI architecture redesign with Jetpack Compose and Material 3: Scaffold + bottom navigation, Today/Food/Move/Journey/Reports feature surfaces, ViewModel UI state, and a repository boundary for future persistence/sync. Native UI test migrated to Compose navigation checks. Product direction follows documented nutrition-app patterns while preserving NutriGuide branding and account isolation. Full APK/emulator validation is pending for this redesign commit. |
+| 14 November 2026 | 2.8 | Added the setup-gated browser Home and dedicated My Profile view. First-time users see only the setup flow, with locked non-Home navigation and no profile button. A completed profile unlocks the regular dashboard, side navigation and one top-right My Profile button; profile panels cover overview, personal details, goals, preferences, connections and privacy. Added public/app/profile-home-gate.js and profile-home-gate.css, and verified the production build. |
 | 11 November 2026 | 2.1 | Replaced browser launcher with native Android views, offline per-owner data, profile targets, food/custom nutrition, timed workouts, recovery, reports/CSV and native email API/manual cloud sync. Session cookies use Android Keystore encryption. Removed AndroidX Browser. Seven JVM tests, APK/instrumentation compilation, Android lint and the Android 11 native Espresso flow passed in run 42913202451 (source 5e99d529). Provider/physical-device acceptance and full web parity are not claimed. See docs/ANDROID.md. |
 | 11 November 2026 | 2.0 | Added an Android browser-backed launcher using Custom Tabs, pinned SDK/build inputs and a GitHub Actions debug APK/lint workflow. The app reuses the published responsive website and browser sessions; no offline/native health integration or release signing is implied. Added Android build/install/Kiro instructions and ten physical-device acceptance cases in docs/ANDROID.md. Android workflow run 42908566596 successfully built the debug APK and passed lint for b67142f; download and verification are in docs/ANDROID.md. Physical-phone acceptance remains pending. |
 | 11 November 2026 | 1.9 | Removed automatic 1,800 kcal / 100 g dashboard targets for accounts without a completed profile. Shared target policy rejects missing/incomplete profiles and stale plans; unset dashboard/food tracker states show setup prompts, and meal generation requires personal targets. Menu and setup navigation rules explicitly preserved. Added five target-policy/hydration contracts and desktop/mobile target browser cases; expanded account-switch assertions. All 185 contracts, 22 focused browser regressions, TypeScript and production build pass. See docs/UNCONFIGURED-TARGETS.md and docs/TARGETS-VALIDATION.txt for acceptance and actual check status. |

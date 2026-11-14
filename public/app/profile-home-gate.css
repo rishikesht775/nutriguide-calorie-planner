@@ -1,0 +1,97 @@
+
+/* Setup-gated Home and dedicated My Profile styling. */
+body.ng-first-login .ng-home-redesign,
+body.ng-first-login #ngProfilePage,
+body.ng-first-login .hero,
+body.ng-first-login .grid,
+body.ng-first-login .weekly-strip,
+body.ng-first-login .guide-coach,
+body.ng-first-login .sticker-row-global,
+body.ng-first-login .mobile-tab-hint{display:none!important}
+body.ng-first-login .app-nav{display:flex!important}
+body.ng-first-login .wrap{visibility:visible!important}
+.ng-first-login-home{max-width:1120px;margin:0 auto;padding:12px 0 90px}
+.ng-first-login-hero{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:36px 38px;border:1px solid #c5e8dc;border-radius:26px;background:linear-gradient(135deg,#e7f8f0,#fff8ec);box-shadow:0 14px 34px #21605214}
+.ng-setup-kicker{display:block;color:#168c79;font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.ng-first-login-hero h1{margin:8px 0;font-size:clamp(32px,5vw,58px);color:#173f36}
+.ng-first-login-hero p{max-width:680px;margin:0;color:#55716c;line-height:1.6}
+.ng-first-login-mascot{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:150px;font-size:74px}
+.ng-first-login-mascot small{font-size:11px;color:#55716c;font-weight:800}
+.ng-setup-progress{display:grid;grid-template-columns:1fr auto;gap:8px 20px;align-items:center;margin:18px 0;padding:17px 20px;border:1px solid #d5e9e1;border-radius:18px;background:#fff}
+.ng-setup-progress span{display:block;color:#168c79;font-size:10px;font-weight:900;letter-spacing:1.4px}
+.ng-setup-progress b{font-size:13px;color:#24514c}
+.ng-setup-progress>strong{color:#168c79;font-size:18px}
+.ng-setup-progress>i{grid-column:1/-1;height:9px;border-radius:99px;background:#e8f3ef;overflow:hidden}
+.ng-setup-progress>i em{display:block;width:25%;height:100%;border-radius:99px;background:linear-gradient(90deg,#168c79,#f2b756)}
+.ng-first-login-grid{display:grid;grid-template-columns:minmax(220px,.75fr) minmax(320px,1.25fr);gap:18px;align-items:start}
+.ng-setup-card{padding:25px;border:1px solid #d5e9e1;border-radius:22px;background:#fff;box-shadow:0 10px 26px #2160520d}
+.ng-setup-card h2{margin:7px 0 13px;color:#173f36}
+.ng-setup-card ul{padding-left:20px;margin:0;color:#55716c;line-height:2}
+.ng-setup-note,.ng-profile-help{color:#6c7d76;font-size:12px;line-height:1.55}
+.ng-setup-form-card form{margin:0}
+.ng-setup-form-card form h2{font-size:22px;margin-top:0}
+.ng-setup-form-card button[type=submit]{margin-top:18px}
+.ng-setup-notice{min-height:18px;margin:10px 0 0;color:#168c79;font-size:12px;font-weight:700}
+.ng-setup-notice.show{animation:ngNoticeIn .2s ease}
+@keyframes ngNoticeIn{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+body.ng-first-login .app-nav button.ng-locked-tab{opacity:.55;cursor:not-allowed;background:#f5faf8!important;color:#78938c!important;border-color:#d5e9e1!important}
+body.ng-first-login .app-nav button[data-tab=home]{background:linear-gradient(135deg,#dff5ed,#effaf6)!important;color:#168c79!important;border-color:#c3e9dc!important}
+.ng-profile-page{max-width:1120px;margin:0 auto;padding:10px 0 90px}
+.ng-profile-header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px 28px;border:1px solid #c5e8dc;border-radius:24px;background:linear-gradient(135deg,#e7f8f0,#fff8ec);box-shadow:0 12px 28px #21605212}
+.ng-profile-person{display:flex;align-items:center;gap:14px}
+.ng-profile-avatar{display:grid;place-items:center;width:62px;height:62px;border-radius:18px;background:#fff;border:1px solid #c5e8dc;font-size:38px}
+.ng-profile-header h1{margin:4px 0;color:#173f36}
+.ng-profile-header p{margin:0;color:#55716c}
+.ng-profile-header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.ng-profile-complete,.ng-profile-tag{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:#e6f6ef;color:#168c79;font-size:11px;font-weight:800}
+.ng-profile-back,.ng-profile-primary,.ng-profile-ghost{width:auto;margin:0;padding:10px 14px;border-radius:12px;font-size:12px}
+.ng-profile-back,.ng-profile-primary{background:#168c79!important;color:#fff!important;border:1px solid #168c79!important}
+.ng-profile-ghost{background:#fff!important;color:#168c79!important;border:1px solid #b9ded1!important;box-shadow:none!important}
+.ng-profile-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.ng-profile-tabs button{width:auto;margin:0;padding:10px 13px;border-radius:999px;background:#fff!important;color:#55716c!important;border:1px solid #d5e9e1!important;box-shadow:none!important;font-size:12px}
+.ng-profile-tabs button.active{background:#168c79!important;color:#fff!important;border-color:#168c79!important}
+.ng-profile-panel{display:none}
+.ng-profile-panel.active{display:block}
+.ng-profile-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ng-profile-metrics article{padding:18px;border:1px solid #d5e9e1;border-radius:18px;background:#fff}
+.ng-profile-metrics small,.ng-profile-metrics span{display:block;color:#6c7d76;font-size:11px}
+.ng-profile-metrics strong{display:block;margin:7px 0 3px;color:#173f36;font-size:20px}
+.ng-profile-columns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.ng-profile-card{padding:22px;border:1px solid #d5e9e1;border-radius:20px;background:#fff;box-shadow:0 10px 25px #2160520d}
+.ng-profile-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+.ng-profile-card h2{margin:0;color:#173f36;font-size:20px}
+.ng-profile-row,.ng-profile-access-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #edf4f0}
+.ng-profile-row:last-child,.ng-profile-access-row:last-child{border-bottom:0}
+.ng-profile-row b{display:block;color:#24514c;font-size:14px}
+.ng-profile-row small{display:block;margin-top:4px;color:#6c7d76;font-size:12px}
+.ng-profile-help{margin:8px 0 14px}
+.ng-profile-access-row span{color:#55716c;font-size:13px}.ng-profile-access-row b{color:#168c79;font-size:12px}
+.ng-profile-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0;padding:16px 0;border-bottom:1px solid #edf4f0}
+.ng-profile-toggle span{display:grid;gap:4px}.ng-profile-toggle small{color:#6c7d76;font-size:12px}
+.ng-profile-toggle input{width:18px;height:18px}
+.ng-profile-primary{margin-top:16px!important}
+.ng-profile-page #form{margin:0}
+.ng-profile-page #form h2{color:#173f36}
+.ng-profile-page #form .hint{color:#6c7d76}
+.ng-profile-page #form input,.ng-profile-page #form select{color:#173f36;background:#fbfefc}
+.ng-profile-page #form label{color:#24514c}
+.ng-profile-page #form button[type=submit]{margin-top:18px}
+.ng-profile-button{display:inline-flex!important;align-items:center;justify-content:center;width:auto!important;min-width:126px!important;min-height:44px!important;margin:0!important;padding:11px 16px!important;border-radius:14px!important;background:#fff!important;color:#168c79!important;border:1px solid #c5e8dc!important;box-shadow:0 8px 20px #21605214!important;font-weight:800!important}
+.ng-profile-button:hover{background:#eaf8f2!important}
+body.ng-profile-open .ng-home-redesign{display:none!important}
+body.ng-profile-open .ng-profile-page{display:block!important}
+body.ng-profile-open .ng-profile-page #form{display:block!important}
+body.ng-profile-open .ng-profile-page .ng-profile-panel:not(.active){display:none!important}
+body.ng-first-login #ngHomeProfileButton{display:none!important}
+@media(max-width:760px){
+  .ng-first-login-home,.ng-profile-page{padding:8px 0 112px}
+  .ng-first-login-hero,.ng-profile-header{display:block;padding:22px}
+  .ng-first-login-mascot{align-items:flex-start;margin-top:14px;font-size:54px}
+  .ng-first-login-grid,.ng-profile-columns{grid-template-columns:1fr}
+  .ng-profile-header-actions{justify-content:flex-start;margin-top:16px}
+  .ng-profile-tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}
+  .ng-profile-tabs button{white-space:nowrap}
+  .ng-profile-metrics{grid-template-columns:repeat(2,1fr)}
+  .ng-profile-metrics strong{font-size:16px}
+  .ng-profile-row{align-items:flex-start}
+}
