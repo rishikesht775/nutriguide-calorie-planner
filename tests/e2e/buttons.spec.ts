@@ -107,7 +107,8 @@ test.describe('@buttons complete application button functionality', () => {
     await page.getByRole('button', { name: 'Clear today', exact: true }).click();
     await expect(page.locator('#proteinEntries')).toContainText(/No foods|No entries/i);
 
-    const firstFood = page.locator('.food-card').first();
+    await page.locator('#ngPremiumFoodFilters').getByRole('button', { name: 'All foods', exact: true }).click();
+    const firstFood = page.locator('.food-card:visible').first();
     await firstFood.getByRole('button', { name: /Add protein/i }).click();
     await expect(page.locator('#proteinTotal')).not.toHaveText('0 g');
     await firstFood.getByRole('button', { name: /Log nutrition/i }).click();
@@ -156,6 +157,10 @@ test.describe('@buttons complete application button functionality', () => {
     await page.getByRole('button', { name: 'Open Home', exact: true }).click();
     await expect(page.locator('.dashboard-summary:visible')).toBeVisible();
 
+    await openTab(page, /Home/i);
+    await page.getByRole('button', { name: 'Change guide', exact: true }).click();
+    await expect(page.locator('#guideChoices')).toHaveAttribute('open', '');
+
     await openTab(page, /Journey/i);
     await page.getByRole('button', { name: '🌱', exact: true }).click();
     await expect(page.locator('#moodPick')).toHaveText('🌱');
@@ -188,7 +193,7 @@ test.describe('@buttons complete application button functionality', () => {
     expect((await report).suggestedFilename()).toMatch(/report/i);
 
     await page.getByRole('button', { name: /Show me another/i }).click();
-    await expect(page.locator('#quote')).toBeVisible();
+    await expect(page.locator('#quoteText')).toBeVisible();
   });
 
   test('trainer session buttons pause, resume, advance, and finish', async ({ page }) => {
