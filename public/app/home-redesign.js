@@ -161,6 +161,21 @@
       '<section class="ng-profile-prompt" id="ngProfilePrompt"><div><span class="ng-kicker">PERSONALIZE YOUR PLAN</span><h2>Make this dashboard yours</h2><p>Complete your profile to unlock personal calorie, protein, meal, movement, and recovery guidance.</p></div><button type="button" class="ng-primary-action" id="ngProfilePromptButton">Set up profile</button></section>'
     ].join("");
     anchor.parentNode.insertBefore(section, anchor);
+
+    // Bind the profile control directly as well as through the delegated handler.
+    // This keeps the control reliable when another page listener stops bubbling.
+    const profileButton = $("#ngHomeProfileButton");
+    profileButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      showProfile();
+    });
+    const promptButton = $("#ngProfilePromptButton");
+    promptButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      showProfile();
+    });
   }
 
   function action(kind) {
@@ -188,9 +203,13 @@
   function showProfile() {
     window.setTab?.("home");
     document.body.classList.add("ng-show-profile");
+    const button = $("#ngHomeProfileButton");
+    button?.setAttribute("aria-expanded", "true");
     const form = $("#form");
-    form?.scrollIntoView({ behavior: "smooth", block: "center" });
-    form?.querySelector("input,select")?.focus();
+    if (!form) return;
+    form.setAttribute("tabindex", "-1");
+    form.scrollIntoView({ behavior: "smooth", block: "center" });
+    form.querySelector("input,select,button")?.focus({ preventScroll: true });
   }
 
   function hideLegacyHome() {
