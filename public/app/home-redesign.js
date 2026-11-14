@@ -153,13 +153,14 @@
     section.className = "ng-home-redesign";
     section.dataset.ngTab = "home";
     section.innerHTML = [
-      '<header class="ng-home-header"><div class="ng-home-person"><div class="ng-home-avatar" id="ngHomeAvatar">🐼</div><div><span class="ng-kicker" id="ngHomeGreeting"></span><h1 id="ngHomeName"></h1><p id="ngHomeGuide"></p></div></div><div class="ng-home-tools"><button type="button" class="ng-icon-button" id="ngThemeButton" aria-label="Toggle dark mode">☼</button><button type="button" class="ng-icon-button" id="ngDensityButton" aria-label="Toggle comfortable spacing">↕</button><button type="button" class="ng-icon-button" id="ngHomeProfileButton" aria-label="Open profile settings">⚙</button></div></header>',
+      '<header class="ng-home-header"><div class="ng-home-person"><div class="ng-home-avatar" id="ngHomeAvatar">🐼</div><div><span class="ng-kicker" id="ngHomeGreeting"></span><h1 id="ngHomeName"></h1><p id="ngHomeGuide"></p><button type="button" class="ng-inline-link" id="ngHomeGuideButton">Change guide</button></div></div><div class="ng-home-tools"><button type="button" class="ng-icon-button" id="ngHomeProfileButton" aria-label="Open profile settings">⚙</button></div></header>',
       '<section class="ng-next-action-card"><div><span class="ng-kicker">SMART DAILY BRIEF</span><h2 id="ngNextActionTitle"></h2><p id="ngNextActionText"></p></div><button type="button" class="ng-primary-action" id="ngNextActionButton">Log now</button></section>',
       '<section class="ng-progress-grid" aria-label="Today progress"><article class="ng-progress-card"><span>Calories</span><strong id="ngHomeCalories">—</strong><small>remaining</small><i></i></article><article class="ng-progress-card"><span>Protein</span><strong id="ngHomeProtein">0 g</strong><small>today</small><i></i></article><article class="ng-progress-card"><span>Steps</span><strong id="ngHomeSteps">0</strong><small>today</small><i></i></article><article class="ng-progress-card"><span>Water</span><strong id="ngHomeWater">0 / 8</strong><small>glasses</small><i></i></article></section>',
       '<section class="ng-quick-action-block"><div class="ng-section-heading"><div><span class="ng-kicker">QUICK ACTIONS</span><h2>Keep it simple</h2></div><span class="ng-muted-label">One action at a time</span></div><div class="ng-quick-actions"><button type="button" data-ng-home-action="meal"><span>🥗</span><b>Log meal</b><small>Food Studio</small></button><button type="button" data-ng-home-action="water"><span>💧</span><b>Add water</b><small>+ one glass</small></button><button type="button" data-ng-home-action="steps"><span>👟</span><b>Add steps</b><small>Manual entry</small></button><button type="button" data-ng-home-action="workout"><span>🏃</span><b>Log workout</b><small>Move</small></button></div><div class="ng-steps-quick-panel" id="ngStepsQuickPanel" hidden><label for="ngStepsQuickInput">Steps today<input id="ngStepsQuickInput" type="number" min="0" inputmode="numeric" placeholder="e.g. 4500"></label><button type="button" id="ngSaveStepsQuick">Save steps</button></div></section>',
       '<div class="ng-home-columns"><section class="ng-home-card"><div class="ng-section-heading"><div><span class="ng-kicker">NEXT UP</span><h2>Your next small win</h2></div><span class="ng-card-icon">✦</span></div><p id="ngNextActivityText"></p><div class="ng-activity-row"><span>🍽️ Next meal</span><span>🏃 Recommended exercise</span><span>🌙 Recovery reminder</span></div></section><section class="ng-home-card"><div class="ng-section-heading"><div><span class="ng-kicker">THIS WEEK</span><h2>Wellness rhythm</h2></div><span class="ng-card-icon">↗</span></div><div class="ng-week-grid"><div><strong id="ngWeekConsistency">0%</strong><small>consistency</small></div><div><strong id="ngWeekStreak">0 days</strong><small>streak</small></div><div><strong id="ngWeekProtein">0 g</strong><small>avg protein</small></div><div><strong id="ngWeekSteps">0</strong><small>avg steps</small></div></div></section></div>',
       '<details class="ng-more-today"><summary><span><span class="ng-kicker">MORE FOR TODAY</span><b>Recovery and reminders</b></span><span class="ng-summary-chevron">⌄</span></summary><div class="ng-more-grid"><button type="button" data-ng-home-action="recovery"><span>🌙</span><b id="ngSleepValue">Sleep not logged</b><small>Recovery check-in</small></button><button type="button" data-ng-home-action="recovery"><span>🧘</span><b id="ngRecoveryValue">Add a calm habit</b><small>Journey check-in</small></button><button type="button" data-ng-home-action="recovery"><span>🔔</span><b id="ngReminderValue">Review reminders</b><small>Plan & reports</small></button><button type="button" data-ng-home-action="recovery"><span>📖</span><b id="ngJourneyValue">Continue your story</b><small>Journey</small></button></div></details>',
-      '<section class="ng-profile-prompt" id="ngProfilePrompt"><div><span class="ng-kicker">PERSONALIZE YOUR PLAN</span><h2>Make this dashboard yours</h2><p>Complete your profile to unlock personal calorie, protein, meal, movement, and recovery guidance.</p></div><button type="button" class="ng-primary-action" id="ngProfilePromptButton">Set up profile</button></section>'
+      '<section class="ng-profile-prompt" id="ngProfilePrompt"><div><span class="ng-kicker">PERSONALIZE YOUR PLAN</span><h2>Make this dashboard yours</h2><p>Complete your profile to unlock personal calorie, protein, meal, movement, and recovery guidance.</p></div><button type="button" class="ng-primary-action" id="ngProfilePromptButton">Set up profile</button></section>',
+      '<section class="ng-home-quote" aria-label="Daily encouragement"><div><span class="ng-kicker">A LITTLE REMINDER</span><p id="ngHomeQuoteText">Small steps become big changes.</p></div><button type="button" id="ngHomeQuoteButton">✨ Show me another</button></section>'
     ].join("");
     anchor.parentNode.insertBefore(section, anchor);
 
@@ -171,12 +172,38 @@
       event.stopPropagation();
       showProfile();
     });
+    const guideButton = $("#ngHomeGuideButton");
+    guideButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      showGuidePicker();
+    });
+    const quoteButton = $("#ngHomeQuoteButton");
+    quoteButton?.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      window.newQuote?.();
+      setText("ngHomeQuoteText", valueOf("quoteText", "Small steps become big changes."));
+    });
     const promptButton = $("#ngProfilePromptButton");
     promptButton?.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
       showProfile();
     });
+  }
+
+  function showGuidePicker() {
+    window.setTab?.("home");
+    document.body.classList.add("ng-show-guide");
+    document.body.classList.remove("ng-home-mode");
+    const choices = $("#guideChoices");
+    if (choices) choices.open = true;
+    const grid = document.querySelector(".grid");
+    grid?.style.setProperty("display", "grid", "important");
+    const picker = document.querySelector(".guide-picker");
+    picker?.style.setProperty("display", "block", "important");
+    picker?.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   function action(kind) {
@@ -233,6 +260,7 @@
     setText("ngHomeName", accountName());
     setText("ngHomeGuide", coachText?.textContent || (coachName?.textContent ? coachName.textContent + " is ready to guide you." : "One small action is enough for today."));
     if (coachAvatar?.textContent) setText("ngHomeAvatar", coachAvatar.textContent.trim());
+    setText("ngHomeQuoteText", valueOf("quoteText", "Small steps become big changes."));
     setText("ngHomeCalories", valueOf("ngTodayCal", "-"));
     setText("ngHomeProtein", valueOf("ngTodayProtein", "0 g"));
     setText("ngHomeSteps", valueOf("ngTodaySteps", "0"));
@@ -252,6 +280,7 @@
     if (prompt) prompt.hidden = profileReady();
     renderWeekly();
     document.body.classList.toggle("ng-home-mode", activeTab === "home");
+    if (activeTab !== "home") document.body.classList.remove("ng-show-guide");
     document.body.classList.toggle("ng-profile-ready", profileReady());
   }
 

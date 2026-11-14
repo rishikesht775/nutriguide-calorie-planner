@@ -74,9 +74,22 @@ export async function openTab(page: Page, label: RegExp | string) {
 }
 
 export async function chooseGuide(page: Page, guide: RegExp = /Panda trainer Martial arts Calm strength/) {
-  const choices=page.locator('#guideChoices');
-  if(await choices.getAttribute('open')===null)await choices.locator('summary').click();
-  const card = page.getByRole('button', { name: guide }).first();
+  const choices = page.locator('#guideChoices');
+  const guideButton = page.locator("#ngHomeGuideButton");
+  if (await guideButton.count()) {
+    await openTab(page, /Home/i);
+    await expect(guideButton).toBeVisible();
+    await guideButton.click();
+  } else if (!(await choices.isVisible())) {
+    await openTab(page, /Home/i);
+  }
+  await expect(choices).toBeVisible({ timeout: 10000 });
+  if (await choices.getAttribute('open') === null) {
+    await choices.locator('summary').click();
+  }
+  const guidePattern = guide instanceof RegExp ? new RegExp(guide.source.replace(/\s+/g, "\\s*"), guide.flags) : guide;
+  const card = choices.locator(".guide-card").filter({ hasText: guidePattern }).first();
+  await expect(card).toBeVisible();
   await card.click();
   await expect(page.locator('#coachName')).toContainText(/Panda trainer|Fresh-start kid|hydration cat|Workout duo|Adventure explorer|Star fitness hero/i);
 }

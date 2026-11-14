@@ -189,6 +189,7 @@
 
 
   function hideLegacyCalculator() {
+    if (document.body.classList.contains("ng-show-guide")) return;
     const grid = document.querySelector(".grid");
     if (grid) grid.style.setProperty("display", "none", "important");
   }

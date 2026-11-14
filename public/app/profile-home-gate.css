@@ -99,3 +99,10 @@ body.ng-first-login #ngHomeProfileButton{display:none!important}
 /* Keep the legacy calculator/results column inside My Profile only. */
 body.ng-home-mode:not(.ng-first-login) .grid,
 body.ng-profile-open .grid{display:none!important}
+
+body.ng-show-guide .grid{display:grid!important}
+body.ng-show-guide .guide-picker{display:block!important}
+.ng-inline-link{display:inline-flex;width:auto;margin:6px 0 0;padding:0;border:0;background:transparent;color:var(--ng-green);box-shadow:none;font-size:12px;font-weight:800}
+.ng-home-quote{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:16px;padding:18px 22px;border:1px solid var(--ng-line);border-radius:18px;background:#fff}
+.ng-home-quote p{margin:6px 0 0;color:var(--ng-ink);font-size:18px;font-weight:800}
+.ng-home-quote button{width:auto;margin:0;padding:10px 14px}

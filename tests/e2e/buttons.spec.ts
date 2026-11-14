@@ -194,7 +194,7 @@ test.describe('@buttons complete application button functionality', () => {
 
     await openTab(page, /Home/i);
     await page.getByRole('button', { name: /Show me another/i }).click();
-    await expect(page.locator('#quoteText')).toBeVisible();
+    await expect(page.locator('#ngHomeQuoteText')).toBeVisible();
   });
 
   test('trainer session buttons pause, resume, advance, and finish', async ({ page }) => {
