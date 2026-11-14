@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { completeProfile, openTab, startFresh } from './helpers';
+import { chooseGuide, completeProfile, openTab, startFresh } from './helpers';
 
 test.describe('@buttons complete application button functionality', () => {
   test('authentication buttons switch between sign-in, sign-up, and reset modes', async ({ page }) => {
@@ -159,8 +159,7 @@ test.describe('@buttons complete application button functionality', () => {
     await expect(page.locator('.dashboard-summary:visible')).toBeVisible();
 
     await openTab(page, /Home/i);
-    await page.locator('#guideChoices summary').click();
-    await expect(page.locator('#guideChoices')).toHaveJSProperty('open', true);
+    await chooseGuide(page);
 
     await openTab(page, /Journey/i);
     await page.getByRole('button', { name: '🌱', exact: true }).click();
