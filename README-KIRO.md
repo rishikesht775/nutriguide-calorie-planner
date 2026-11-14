@@ -176,7 +176,7 @@ After pulling this release, use `npm.cmd run test:release`. The new meal-plan/re
 
 ## Shared profile defaults and journey guide
 
-The latest release automatically fills every tab from the saved profile while preserving explicit edits. Use `npm.cmd run test:personalization` for the focused Playwright suite. See `docs/PROFILE-DEFAULTS-AND-GUIDE.md` for default-versus-custom behavior, guide actions and implementation boundaries.
+The latest release adds setup-gated Home and dedicated My Profile coverage. Use npm.cmd run test:profile-home for the focused first-login, unlock, isolation and profile-tab checks. The latest release automatically fills every tab from the saved profile while preserving explicit edits. Use `npm.cmd run test:personalization` for the focused Playwright suite. See `docs/PROFILE-DEFAULTS-AND-GUIDE.md` for default-versus-custom behavior, guide actions and implementation boundaries.
 
 ## Maintained application document
 

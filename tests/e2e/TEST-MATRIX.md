@@ -17,7 +17,7 @@ Current counts are generated in `docs/GENERATED-INVENTORY.md`; use `npm.cmd run 
 | E2E | complete-flow.spec.ts | Profile → guide → food → workout → journal → reminder → report download → reload |
 | UAT | uat, journey specs | Beginner mobility; story onboarding, navigation and change |
 | Regression | regression, diwali specs | Repeat tab clicks; guide persistence; modal layering/close; removed festival script and decorations do not return |
-| UI | ui, mobile specs | 320/360/390/768/1024/1440 layouts; every tab overflow; banner bounds; navigation collision; login bounds; screenshots; label contrast |
+| Home/Profile gate | home-profile-gate.spec.ts | First-login setup Home; locked non-Home navigation; unlock transition; one My Profile button; isolated profile panels; return to Home |\r\n| UI | ui, mobile specs | 320/360/390/768/1024/1440 layouts; every tab overflow; banner bounds; navigation collision; login bounds; screenshots; label contrast |
 | Frontend | frontend.spec.ts | Page errors; selected content visible; unrelated sections hidden |
 | Accessibility | accessibility.spec.ts | Programmatic profile labels; navigation names; keyboard activation; trainer labels; dialog semantics/Escape; image alt attributes |
 | Security | auth, security specs | Gate; sign-up intent; platform auth handoff; no credential leakage; persisted XSS probes in journal/planner/groceries |

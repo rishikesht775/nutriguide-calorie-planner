@@ -62,7 +62,7 @@ export async function completeProfile(page: Page, values: ProfileValues = {}) {
     await page.locator('#activity').selectOption(values.activity ?? '1.375');
     await page.locator('#goal').selectOption(values.goal ?? 'loss');
   }
-  await page.getByRole('button', { name: 'Calculate my plan', exact: true }).click();
+  await page.getByRole('button', { name: /^(Complete setup|Calculate my plan|Save profile details)$/i }).click();
   await expect(page.locator('body')).toHaveClass(/post-profile/);
   await expect(page.locator('.app-nav button[data-tab=food]')).toBeVisible();
 }
@@ -87,13 +87,16 @@ export async function openProfileEditor(page: Page) {
     const trigger = page.locator('#ngHomeProfileButton:visible, #ngProfilePromptButton:visible').first();
     if (await trigger.count()) await trigger.click();
   }
+  const detailsTab = page.locator('[data-ng-profile-tab="details"]:visible');
+  if (await detailsTab.count()) await detailsTab.click();
   await expect(form).toBeVisible();
   const weight = page.locator('#weight');
-  const back = page.locator('.ng-profile-back');
   while (!(await weight.isVisible())) {
-    await expect(back).toBeEnabled();
-    await back.click();
+    const next = form.locator('.ng-profile-next:visible');
+    if (!(await next.count())) break;
+    await next.click();
   }
+  await expect(weight).toBeVisible();
 }
 
 export async function visibleTabSection(page: Page, tab: string) {

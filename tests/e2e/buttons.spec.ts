@@ -38,7 +38,7 @@ test.describe('@buttons complete application button functionality', () => {
     await page.locator('#activity').selectOption('1.375');
     await next.click();
     await page.locator('#goal').selectOption('loss');
-    await page.getByRole('button', { name: 'Calculate my plan', exact: true }).click();
+    await page.getByRole('button', { name: /^(Complete setup|Calculate my plan|Save profile details)$/i }).click();
     await expect(page.locator('body')).toHaveClass(/post-profile/);
   });
 
@@ -214,17 +214,18 @@ test.describe('@buttons complete application button functionality', () => {
     await expect(page.locator('#ngTrainerStatus')).toHaveText('Session complete ✓');
   });
 
-  test('Home header buttons open profile settings and toggle display preferences', async ({ page }) => {
+  test('Home header exposes only the dedicated My Profile button', async ({ page }) => {
     await completeProfile(page);
+    await expect(page.locator('#ngHomeProfileButton')).toBeVisible();
+    await expect(page.locator('#ngThemeButton')).toBeHidden();
+    await expect(page.locator('#ngDensityButton')).toBeHidden();
+
     await page.locator('#ngHomeProfileButton').click();
-    await expect(page.locator('body')).toHaveClass(/ng-show-profile/);
-    await expect(page.locator('#form')).toBeVisible();
-
-    await page.locator('#ngThemeButton').click();
-    await expect(page.locator('body')).toHaveClass(/ng-dark-mode/);
-
-    await page.locator('#ngDensityButton').click();
-    await expect(page.locator('body')).toHaveClass(/ng-comfortable/);
+    await expect(page.locator('body')).toHaveClass(/ng-profile-open/);
+    await expect(page.locator('#ngProfilePage')).toBeVisible();
+    await expect(page.locator('#ngHomeRedesign')).toBeHidden();
+    await page.locator('#ngProfileBack').click();
+    await expect(page.locator('#ngHomeRedesign')).toBeVisible();
   });
 
   test('every visible button exposes an accessible name and button semantics', async ({ page }) => {
