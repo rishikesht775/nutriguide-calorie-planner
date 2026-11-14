@@ -45,7 +45,8 @@
     "test:personalization": "playwright test tests/e2e/personal-plan.spec.ts",
     "docs:update": "node scripts/update-docs.mjs",
     "docs:check": "node scripts/update-docs.mjs --check",
-    "docs:export": "node scripts/export-docs.mjs"
+    "docs:export": "node scripts/export-docs.mjs",
+    "test:thali": "playwright test tests/e2e/thali-builder.spec.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
