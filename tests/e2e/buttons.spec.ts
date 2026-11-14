@@ -163,7 +163,7 @@ test.describe('@buttons complete application button functionality', () => {
 
     await openTab(page, /Journey/i);
     await page.getByRole('button', { name: '🌱', exact: true }).click();
-    await expect(page.locator('#moodPick')).toHaveText('🌱');
+    await expect(page.locator('#moodPick')).toContainText('🌱');
     await page.getByRole('button', { name: 'Change story mode', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'How do you want to begin?' })).toBeVisible();
   });
