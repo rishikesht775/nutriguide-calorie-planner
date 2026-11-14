@@ -70,6 +70,7 @@ test.describe('@buttons complete application button functionality', () => {
 
     await page.locator('[data-ng-home-action="meal"]').click();
     await expect(page.locator('.food-nutrition:visible')).toBeVisible();
+    await openTab(page, /Home/i);
     await page.locator('[data-ng-home-action="workout"]').click();
     await expect(page.locator('.exercise-library:visible')).toBeVisible();
   });
@@ -136,7 +137,7 @@ test.describe('@buttons complete application button functionality', () => {
     await expect(page.locator('#exerciseStepCount')).toHaveText('1/4 steps');
     await page.getByRole('button', { name: 'Start 60 sec timer', exact: true }).click();
     await expect(page.locator('#exerciseTimer')).toContainText('60s remaining');
-    await page.getByRole('button', { name: 'Mark workout done', exact: true }).click();
+    await page.getByRole('button', { name: /Mark workout done/i }).click();
     await expect(page.getByRole('button', { name: /Added to this week/i })).toBeVisible();
 
     await page.locator('#exerciseModal .close').click();
@@ -157,8 +158,8 @@ test.describe('@buttons complete application button functionality', () => {
     await page.getByRole('button', { name: 'Open Home', exact: true }).click();
     await expect(page.locator('.dashboard-summary:visible')).toBeVisible();
 
-    await openTab(page, /Home/i);
-    await page.getByRole('button', { name: 'Change guide', exact: true }).click();
+    await openTab(page, /Food studio/i);
+    await page.locator('#guideChoices summary').click();
     await expect(page.locator('#guideChoices')).toHaveAttribute('open', '');
 
     await openTab(page, /Journey/i);
@@ -181,12 +182,12 @@ test.describe('@buttons complete application button functionality', () => {
     await page.locator('#reminderText').fill('Button suite reminder');
     await page.getByRole('button', { name: 'Add reminder', exact: true }).click();
     await expect(page.locator('#reminderList')).toContainText('Button suite reminder');
-    await page.locator('#reminderList').getByRole('button', { name: 'Done', exact: true }).click();
-    await expect(page.locator('#reminderList')).toContainText(/No reminders|open/i);
-
     const calendar = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Download calendar plan', exact: true }).click();
     expect((await calendar).suggestedFilename()).toMatch(/\.ics$/);
+
+    await page.locator('#reminderList').getByRole('button', { name: 'Done', exact: true }).click();
+    await expect(page.locator('#reminderList')).toContainText(/No reminders|open/i);
 
     const report = page.waitForEvent('download');
     await page.getByRole('button', { name: 'Download weekly report', exact: true }).click();
