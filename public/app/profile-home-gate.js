@@ -145,8 +145,8 @@
     }
     profileOpen = true;
     document.body.classList.add("ng-profile-open");
-    if (profilePage) profilePage.hidden = false;
-    if (home) home.hidden = true;
+    if (profilePage) { profilePage.hidden = false; profilePage.style.setProperty("display", "block", "important"); }
+    if (home) { home.hidden = true; home.style.setProperty("display", "none", "important"); }
     moveForm(profileFormSlot);
     setProfileTab("overview");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -155,8 +155,8 @@
   function closeProfile() {
     profileOpen = false;
     document.body.classList.remove("ng-profile-open");
-    if (profilePage) profilePage.hidden = true;
-    if (home) home.hidden = false;
+    if (profilePage) { profilePage.hidden = true; profilePage.style.setProperty("display", "none", "important"); }
+    if (home) { home.hidden = false; home.style.setProperty("display", "block", "important"); }
     if (ready) moveForm(profileFormSlot);
   }
 
@@ -210,9 +210,11 @@
     document.body.classList.toggle("ng-first-login", !ready);
     document.body.classList.toggle("ng-regular-user", ready);
     document.body.classList.toggle("post-profile", ready);
-    if (firstHome) firstHome.hidden = ready;
-    if (home) home.hidden = !ready || profileOpen;
-    if (profilePage) profilePage.hidden = !profileOpen;
+    if (firstHome) { firstHome.hidden = ready; firstHome.style.setProperty("display", ready ? "none" : "block", "important"); }
+    if (home) { home.hidden = !ready || profileOpen; home.style.setProperty("display", (!ready || profileOpen) ? "none" : "block", "important"); }
+    if (profilePage) { profilePage.hidden = !profileOpen; profilePage.style.setProperty("display", profileOpen ? "block" : "none", "important"); }
+    const prompt = document.querySelector("#ngProfilePrompt");
+    if (prompt) prompt.style.setProperty("display", ready ? "none" : "flex", "important");
     setupNav(ready);
     if (!ready) {
       moveForm(setupSlot);
