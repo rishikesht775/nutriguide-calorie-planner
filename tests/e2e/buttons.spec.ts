@@ -158,7 +158,7 @@ test.describe('@buttons complete application button functionality', () => {
     await page.getByRole('button', { name: 'Open Home', exact: true }).click();
     await expect(page.locator('.dashboard-summary:visible')).toBeVisible();
 
-    await openTab(page, /Food studio/i);
+    await openTab(page, /Home/i);
     await page.locator('#guideChoices summary').click();
     await expect(page.locator('#guideChoices')).toHaveAttribute('open', '');
 
@@ -193,6 +193,7 @@ test.describe('@buttons complete application button functionality', () => {
     await page.getByRole('button', { name: 'Download weekly report', exact: true }).click();
     expect((await report).suggestedFilename()).toMatch(/report/i);
 
+    await openTab(page, /Home/i);
     await page.getByRole('button', { name: /Show me another/i }).click();
     await expect(page.locator('#quoteText')).toBeVisible();
   });
