@@ -214,6 +214,19 @@ test.describe('@buttons complete application button functionality', () => {
     await expect(page.locator('#ngTrainerStatus')).toHaveText('Session complete ✓');
   });
 
+  test('Home header buttons open profile settings and toggle display preferences', async ({ page }) => {
+    await completeProfile(page);
+    await page.locator('#ngHomeProfileButton').click();
+    await expect(page.locator('body')).toHaveClass(/ng-show-profile/);
+    await expect(page.locator('#form')).toBeVisible();
+
+    await page.locator('#ngThemeButton').click();
+    await expect(page.locator('body')).toHaveClass(/ng-dark-mode/);
+
+    await page.locator('#ngDensityButton').click();
+    await expect(page.locator('body')).toHaveClass(/ng-comfortable/);
+  });
+
   test('every visible button exposes an accessible name and button semantics', async ({ page }) => {
     await completeProfile(page);
     const buttons = await page.locator('button:visible').evaluateAll(elements => elements.map(button => ({
