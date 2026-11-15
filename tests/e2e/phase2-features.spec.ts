@@ -33,8 +33,8 @@ test.describe('@phase2 Phase 2 integrated features',()=>{
  });
  test('My Profile includes connections and privacy',async({page})=>{
   await completeProfile(page);await page.locator('#ng-demo-profile').click();
-  await expect(page.locator('#ngPhase2Connections')).toBeVisible();
-  await expect(page.locator('#ngPhase2Connections')).toContainText('Connections and privacy');
+  await expect(page.locator('[data-ng-profile-panel=connections]')).toBeVisible();
+  await expect(page.locator('[data-ng-profile-panel=connections]')).toContainText('Connected data');
  });
 });
 
