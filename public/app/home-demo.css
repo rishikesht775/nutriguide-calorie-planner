@@ -19,4 +19,9 @@ body.ng-home-demo #ngHomeRedesign> :not(#ng-phase2-demo){display:none!important}
 body.ng-home-demo #ng-phase2-demo{min-height:100vh;border:0;border-radius:0;box-shadow:none}
 body.ng-home-demo .ng-main{min-height:100vh}
 @media(max-width:760px){body.ng-home-demo .wrap{padding:0 0 92px!important}body.ng-home-demo #ng-phase2-demo{min-height:calc(100vh - 92px)}}
+/* Keep the top-right account controls readable at every width. */
+#ng-phase2-demo .ng-user{min-width:0;max-width:100%;overflow:hidden}
+#ng-phase2-demo .ng-user #ng-demo-user{min-width:0;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ng-phase2-demo .ng-user #ng-demo-profile{flex:0 0 auto;white-space:nowrap}
+@media(max-width:560px){#ng-phase2-demo .ng-user{max-width:100%;width:max-content}#ng-phase2-demo .ng-user #ng-demo-user{max-width:110px}}
 
