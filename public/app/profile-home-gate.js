@@ -138,6 +138,34 @@
     renderProfile();
   }
 
+  function removeLegacyProfileArtifacts() {
+    $$("#ngPhase2Connections,[data-ng-phase2-profile],.ng-phase2-profile").forEach((node) => node.remove());
+  }
+
+  function isolateProfileView() {
+    if (!profilePage) return;
+    removeLegacyProfileArtifacts();
+    const container = profilePage.parentElement || document.querySelector(".wrap");
+    if (!container) return;
+    Array.from(container.children).forEach((node) => {
+      if (node === profilePage) return;
+      if (!node.dataset.ngProfilePreviousDisplay) node.dataset.ngProfilePreviousDisplay = node.style.display || "";
+      if (!node.dataset.ngProfilePreviousHidden) node.dataset.ngProfilePreviousHidden = String(node.hidden);
+      node.hidden = true;
+      node.style.setProperty("display", "none", "important");
+    });
+  }
+
+  function restoreProfileView() {
+    $$('[data-ng-profile-previous-display], [data-ng-profile-previous-hidden]').forEach((node) => {
+      node.hidden = node.dataset.ngProfilePreviousHidden === "true";
+      if (node.dataset.ngProfilePreviousDisplay) node.style.display = node.dataset.ngProfilePreviousDisplay;
+      else node.style.removeProperty("display");
+      delete node.dataset.ngProfilePreviousDisplay;
+      delete node.dataset.ngProfilePreviousHidden;
+    });
+  }
+
   function openProfile() {
     if (!ready) {
       notice("Complete your setup to unlock My Profile.");
@@ -146,6 +174,7 @@
     profileOpen = true;
     document.body.classList.add("ng-profile-open");
     document.body.classList.remove("ng-home-demo");
+    isolateProfileView();
     const demoHome = $("#ng-phase2-demo");
     if (demoHome) demoHome.style.setProperty("display", "none", "important");
     if (profilePage) { profilePage.hidden = false; profilePage.style.setProperty("display", "block", "important"); }
@@ -157,6 +186,7 @@
 
   function closeProfile() {
     profileOpen = false;
+    restoreProfileView();
     document.body.classList.remove("ng-profile-open");
     document.body.classList.add("ng-home-demo");
     const demoHome = $("#ng-phase2-demo");
@@ -364,6 +394,7 @@
     moveForm(setupSlot);
     attach();
     bind();
+    window.__ngOpenDedicatedProfile = openProfile;
     renderState();
   }
 
