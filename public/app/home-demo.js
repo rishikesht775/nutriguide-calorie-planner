@@ -5,6 +5,9 @@
   const boot=()=>{
     const host=document.querySelector('#ngHomeRedesign');
     if(!host||!document.body.classList.contains('post-profile')) return;
+    const frame=host.closest('.wrap');
+    if(frame){frame.style.setProperty('width','100vw','important');frame.style.setProperty('max-width','none','important');frame.style.setProperty('margin','0','important');frame.style.setProperty('padding','0','important')}
+    host.style.setProperty('width','100vw','important');host.style.setProperty('max-width','none','important');host.style.setProperty('margin','0','important');host.style.setProperty('padding','0','important');
     if(document.getElementById('ng-phase2-demo')) return;
     Array.from(host.children).forEach(node=>{node.hidden=true;node.dataset.ngDemoHidden='true'});
     const root=document.createElement('div');
