@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "414c75a3136d495294cd3f7f6010d98c4e31581d957df9154e21f6ebec300448",
+  "sourceDigest": "376b7cdd2e2cc293c31ae6f22a921232dc0c527e7e68b32773ddbdd62e617517",
   "files": {
     ".github/workflows/android.yml": "c4b45b7c40ab14f04cc489a2ab6f7d70770109768ab2cff0e9f41ac4ddc604da",
     ".github/workflows/documentation.yml": "cc493246d671e5af298a693355c493722e145733c56896c43b804285241c3652",
@@ -135,7 +135,7 @@
     "public/app/phase2-features.js": "1e10e291bc1ab794c1903372e75ed5de4ea173201cfcc77988a646479937974c",
     "public/app/premium-ui.css": "f503eff3e6f5f0287a1330ee30ae6d528ffe02e1973b3f3ed49db4dfa4fa2243",
     "public/app/premium-ui.js": "c220ce7c78a7609c2e2c0354bf7eb74e6d97891dd7158711a381064b8a4b0947",
-    "public/app/profile-home-gate.css": "c6bb822413355d502efa21bc1bceeb675ee4ac96036da8d52906248fec6cb315",
+    "public/app/profile-home-gate.css": "224975467502895e188d094f47ef9ce83a37f6c23ea89d73ecf63b1404d35ffd",
     "public/app/profile-home-gate.js": "e38f82a1ec36961c2ade4df728377dcf3e5bcca17c5c8d080a0e2985d3374257",
     "public/app/stability.js": "b0a5006096028d8fd92c0f0a7825e4ab1c3ed0fbb4905afb82fcec818905b2b7",
     "public/app/storage.js": "26393bdd32c3c0473b964f64be7b4219f639f805d5521a85def86f70510a5adf",
@@ -143,7 +143,7 @@
     "public/app/wellness.css": "7cea865c0e0fae1f1453911bc3ee28e925cdf7137528f61a09895a8eea690ae3",
     "public/app/wellness.js": "79fb086d7e89a8ccc97895be282442568a6714857b1f7d5e1915bdd12e12c798",
     "public/cloud-sync.js": "a930ce64551935d1fb91ce9284fba4fd55fc7c7ac212379c20b5adf4ad02f82b",
-    "public/legacy.html": "19165f6496715e80ed7ea153a9d44cfaafa134e0531f3195ef17932b8e26cf84",
+    "public/legacy.html": "4739096a43dd87577621ef4d68797efebcb7cc3cd0109b390a14f2a5cb456139",
     "public/signin.html": "a9651464db1ab67f76211dc2f3029979cc14dd53febf9b67ff7cd835826cb2c5",
     "scripts/check-mobile-test-alignment.mjs": "64032ab297bc666cb1de7cc0f193035812c9d21eed867fc0238ec2b9a94af150",
     "scripts/connector-preview/connector-preview-session.mjs": "88a25f0ef4397e7e765b6cb6c193544b86f6593cb2c64b6fa1efefa386e59616",
