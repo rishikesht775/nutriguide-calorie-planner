@@ -46,5 +46,17 @@ test.describe('@home-profile setup-gated Home and dedicated My Profile', () => {
     await expect(page.locator('#ngProfilePage')).toBeHidden();
     await expect(page.locator('#ngHomeRedesign')).toBeVisible();
   });
+
+  test('profile account actions stay inside My Profile and the global account bar is absent', async ({ page }) => {
+    await completeProfile(page);
+
+    await expect(page.locator('#cloud-account-bar')).toHaveCount(0);
+    await page.locator('#ng-demo-profile').click();
+    await expect(page.locator('#ngProfileSignOut')).toBeVisible();
+    await expect(page.locator('#ngProfileSignOut')).toHaveAccessibleName('Sign out');
+    await expect(page.locator('body.ng-profile-open .dashboard-summary')).toBeHidden();
+    await expect(page.locator('body.ng-profile-open .food-studio')).toBeHidden();
+    await expect(page.locator('body.ng-profile-open .exercise-library')).toBeHidden();
+  });
 });
 
