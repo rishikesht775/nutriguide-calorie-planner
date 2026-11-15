@@ -87,14 +87,21 @@
       if (queued) { queued = false; setTimeout(() => sync(false), 0); }
     }
   };
-  const injectBar = me => {
-    if (document.getElementById('cloud-account-bar')) return;
-    const bar = document.createElement('div'); bar.id = 'cloud-account-bar';
-    bar.style.cssText = 'position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;justify-content:flex-end;flex-wrap:wrap;padding:8px 14px;background:#173c31;color:#fff;font:600 12px system-ui;box-shadow:0 4px 14px #173c3130';
-    const status = document.createElement('span'); status.id = 'cloud-sync-status'; status.setAttribute('role','status'); status.setAttribute('aria-live','polite'); status.textContent = me ? 'Cloud ready' : 'Browser-only until you sign in';
-    const text = document.createElement('span'); text.textContent = me ? `Signed in as ${me.name || me.email}` : 'Sign in to save your wellness journey across devices';
-    const link = document.createElement(me?.authProvider==='email'?'button':'a'); link.target = '_top'; link.href = me ? '/signout-with-chatgpt?return_to=%2Flegacy.html' : '/account/connected'; link.textContent = me ? 'Sign out' : 'Sign in / Sign up'; link.style.cssText = 'background:#fff;color:#173c31;border-radius:999px;padding:7px 11px;text-decoration:none;font-weight:800';
-    if(me?.authProvider==='email'){link.type='button';link.style.width='auto';link.style.margin='0';link.onclick=async()=>{link.disabled=true;try{const response=await fetch('/api/account/logout',{method:'POST',headers:{'content-type':'application/json'},body:'{}'});if(!response.ok)throw Error('logout');location.href='/legacy.html'}catch{setStatus('Sign-out failed — please try again');link.disabled=false}};}bar.append(text,status,link); document.body.prepend(bar);
+  const injectBar = () => {
+    document.getElementById('cloud-account-bar')?.remove();
+  };
+  window.ngSignOut = async () => {
+    try {
+      if (user?.authProvider === 'email') {
+        const response = await fetch('/api/account/logout', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{}' });
+        if (!response.ok) throw new Error('logout');
+        location.href = '/legacy.html';
+      } else {
+        location.href = '/signout-with-chatgpt?return_to=%2Flegacy.html';
+      }
+    } catch {
+      window.dispatchEvent(new CustomEvent('ng:signout-failed'));
+    }
   };
   const hydrate = async () => {
     if (reading) return false;
