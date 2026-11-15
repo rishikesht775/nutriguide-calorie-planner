@@ -64,11 +64,11 @@ export async function completeProfile(page: Page, values: ProfileValues = {}) {
   }
   await page.getByRole('button', { name: /^(Complete setup|Calculate my plan|Save profile details)$/i }).click();
   await expect(page.locator('body')).toHaveClass(/post-profile/);
-  await expect(page.locator('.app-nav button[data-tab=food]')).toBeVisible();
+  await expect(page.locator('.app-nav button[data-tab=food]:visible, #ng-phase2-demo .ng-nav button[data-final-page=food]:visible').first()).toBeVisible();
 }
 
 export async function openTab(page: Page, label: RegExp | string) {
-  const tab = page.locator('.app-nav button').filter({ hasText: label }).first();
+  const tab = page.locator('.app-nav button:visible, #ng-phase2-demo .ng-nav button:visible').filter({ hasText: label }).first();
   await expect(tab).toBeVisible();
   await tab.click();
 }
@@ -76,8 +76,13 @@ export async function openTab(page: Page, label: RegExp | string) {
 export async function chooseGuide(page: Page, guide: RegExp = /Panda trainer Martial arts Calm strength/) {
   const choices = page.locator('#guideChoices');
   const guideButton = page.locator("#ngHomeGuideButton");
+  let legacyHomeVisible = false;
+  if (await page.locator('#ng-phase2-demo').count() && await guideButton.count()) {
+    await page.evaluate(() => (window as typeof window & { __ngDemoShowOriginal?: (key: string) => void }).__ngDemoShowOriginal?.('home'));
+    legacyHomeVisible = true;
+  }
   if (await guideButton.count()) {
-    await openTab(page, /Home/i);
+    if (!legacyHomeVisible) await openTab(page, /Home/i);
     await expect(guideButton).toBeVisible();
     await guideButton.click();
   } else if (!(await choices.isVisible())) {
@@ -120,3 +125,4 @@ export async function openProfileEditor(page: Page) {
 export async function visibleTabSection(page: Page, tab: string) {
   return page.locator(({ home: '.dashboard-summary', food: '.food-nutrition', move: '.exercise-library', journey: '.journey', plan: '.weekly-report' } as Record<string, string>)[tab] + ':visible');
 }
+
