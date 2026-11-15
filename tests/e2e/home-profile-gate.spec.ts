@@ -20,7 +20,7 @@ test.describe('@home-profile setup-gated Home and dedicated My Profile', () => {
 
     await expect(page.locator('#ngFirstLoginHome')).toBeHidden();
     await expect(page.locator('#ngHomeRedesign')).toBeVisible();
-    await expect(page.locator('#ngHomeProfileButton')).toBeVisible();
+    await expect(page.locator('#ng-demo-profile')).toBeVisible();
     await expect(page.locator('#ngProfilePrompt')).toBeHidden();
     await expect(page.locator('.grid')).toBeHidden();
 
@@ -31,7 +31,7 @@ test.describe('@home-profile setup-gated Home and dedicated My Profile', () => {
 
   test('My Profile opens as an isolated page with all profile sections', async ({ page }) => {
     await completeProfile(page);
-    await page.locator('#ngHomeProfileButton').click();
+    await page.locator('#ng-demo-profile').click();
 
     await expect(page.locator('#ngProfilePage')).toBeVisible();
     await expect(page.locator('#ngHomeRedesign')).toBeHidden();
@@ -47,3 +47,4 @@ test.describe('@home-profile setup-gated Home and dedicated My Profile', () => {
     await expect(page.locator('#ngHomeRedesign')).toBeVisible();
   });
 });
+
