@@ -106,3 +106,7 @@ body.ng-show-guide .guide-picker{display:block!important}
 .ng-home-quote{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:16px;padding:18px 22px;border:1px solid var(--ng-line);border-radius:18px;background:#fff}
 .ng-home-quote p{margin:6px 0 0;color:var(--ng-ink);font-size:18px;font-weight:800}
 .ng-home-quote button{width:auto;margin:0;padding:10px 14px}
+/* Profile is an isolated view: keep Home and every dashboard section out of it. */
+body.ng-profile-open .wrap>:not(#ngProfilePage){display:none!important}
+body.ng-profile-open .wrap>#ngProfilePage{display:block!important}
+
