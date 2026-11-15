@@ -24,4 +24,5 @@ body.ng-home-demo .ng-main{min-height:100vh}
 #ng-phase2-demo .ng-user #ng-demo-user{min-width:0;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #ng-phase2-demo .ng-user #ng-demo-profile{flex:0 0 auto;white-space:nowrap}
 @media(max-width:560px){#ng-phase2-demo .ng-user{max-width:100%;width:max-content}#ng-phase2-demo .ng-user #ng-demo-user{max-width:110px}}
+#ng-phase2-demo .ng-user #ng-demo-profile{width:auto!important;min-width:112px;margin:0!important}
 
