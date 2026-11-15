@@ -6,7 +6,8 @@
     const host=document.querySelector('#ngHomeRedesign');
     if(!host||!document.body.classList.contains('post-profile')) return;
     const frame=host.closest('.wrap');
-    if(frame){frame.style.setProperty('width','100vw','important');frame.style.setProperty('max-width','none','important');frame.style.setProperty('margin','0','important');frame.style.setProperty('padding','0','important')}
+    if(frame){if(frame.dataset.ngDemoOriginalShell!=='true'){frame.dataset.ngDemoOriginalShell='true';frame.dataset.ngDemoWidth=frame.style.width||'';frame.dataset.ngDemoMaxWidth=frame.style.maxWidth||'';frame.dataset.ngDemoMargin=frame.style.margin||'';frame.dataset.ngDemoPadding=frame.style.padding||''}frame.style.setProperty('width','100vw','important');frame.style.setProperty('max-width','none','important');frame.style.setProperty('margin','0','important');frame.style.setProperty('padding','0','important')}
+    if(host.dataset.ngDemoOriginalShell!=='true'){host.dataset.ngDemoOriginalShell='true';host.dataset.ngDemoWidth=host.style.width||'';host.dataset.ngDemoMaxWidth=host.style.maxWidth||'';host.dataset.ngDemoMargin=host.style.margin||'';host.dataset.ngDemoPadding=host.style.padding||''}
     host.style.setProperty('width','100vw','important');host.style.setProperty('max-width','none','important');host.style.setProperty('margin','0','important');host.style.setProperty('padding','0','important');
     if(document.getElementById('ng-phase2-demo')) return;
     Array.from(host.children).forEach(node=>{node.hidden=true;node.dataset.ngDemoHidden='true'});
@@ -26,6 +27,9 @@
     root.querySelector('#ng-demo-user').textContent=displayName;
     (0,eval)(reviewCode);
     (0,eval)(suffixCode);
+    const restoreDemoShell=()=>{const restore=(node)=>{if(!node||node.dataset.ngDemoOriginalShell!=='true')return;for(const [prop,key] of [['width','ngDemoWidth'],['max-width','ngDemoMaxWidth'],['margin','ngDemoMargin'],['padding','ngDemoPadding']]){const value=node.dataset[key]||'';if(value)node.style.setProperty(prop,value);else node.style.removeProperty(prop)}};restore(document.querySelector('.wrap'));restore(document.querySelector('#ngHomeRedesign'));const cloud=document.querySelector('#cloud-account-bar');if(cloud)cloud.style.removeProperty('display')};
+    root.addEventListener('click',(event)=>{const button=event.target.closest('[data-final-page],[data-fh-action]');if(!button)return;const key=button.dataset.finalPage;const action=button.dataset.fhAction;if((key&&key!=='home')||action==='meal'||action==='workout')restoreDemoShell()},true);
+    if(window.__ngDemoShowOriginal&&!window.__ngDemoRestoreShellInstalled){const showOriginal=window.__ngDemoShowOriginal;window.__ngDemoShowOriginal=(key)=>{const result=showOriginal(key);restoreDemoShell();return result};window.__ngDemoRestoreShellInstalled=true}
   };
   const bootSoon=()=>window.setTimeout(boot,0);
   document.addEventListener('DOMContentLoaded',boot);
