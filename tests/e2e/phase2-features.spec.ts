@@ -2,12 +2,13 @@ import {expect,test} from '@playwright/test';
 import {completeProfile,openTab} from './helpers';
 
 test.describe('@phase2 Phase 2 integrated features',()=>{
- test('Home shows Smart Coach with existing progress context',async({page})=>{
+ test('Home shows Wellness Compass with the complete demo layout',async({page})=>{
   await completeProfile(page);await openTab(page,/Home/i);
-  await expect(page.locator('#ngPhase2Coach')).toBeVisible();
-  await expect(page.locator('#ngPhase2Coach')).toContainText(/Smart Coach|Your next useful step/);
-  await page.locator('[data-ng-phase2-action="checkin"]').click();
-  await expect(page.locator('#ngPhase2CheckinState')).toHaveText('Saved today');
+  await expect(page.locator('#ng-phase2-demo')).toBeVisible();
+  await expect(page.locator('#ng-home-final')).toContainText('Your Wellness Compass');
+  await page.locator('#fh-companion-button').click();
+  await page.locator('[data-fh-companion="Mithai fox"]').click();
+  await expect(page.locator('#fh-companion')).toHaveText('Mithai fox');
  });
  test('Food Studio shows adaptive plan and grocery handoff',async({page})=>{
   await completeProfile(page);await openTab(page,/Food studio/i);
@@ -31,7 +32,7 @@ test.describe('@phase2 Phase 2 integrated features',()=>{
   await expect(page.locator('#ngPhase2Insights')).toContainText('Why your target changed');
  });
  test('My Profile includes connections and privacy',async({page})=>{
-  await completeProfile(page);await page.locator('#ngHomeProfileButton').click();
+  await completeProfile(page);await page.locator('#ng-demo-profile').click();
   await expect(page.locator('#ngPhase2Connections')).toBeVisible();
   await expect(page.locator('#ngPhase2Connections')).toContainText('Connections and privacy');
  });
