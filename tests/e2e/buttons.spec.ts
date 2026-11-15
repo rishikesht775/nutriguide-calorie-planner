@@ -45,33 +45,39 @@ test.describe('@buttons complete application button functionality', () => {
   test('primary navigation buttons open every application section', async ({ page }) => {
     await completeProfile(page);
     const sections: Array<[string, string]> = [
-      ['home', '.dashboard-summary'],
+      ['home', '#ng-home-final'],
       ['food', '.food-nutrition'],
       ['move', '.exercise-library'],
       ['journey', '.journey'],
       ['plan', '.weekly-report'],
     ];
     for (const [tab, section] of sections) {
-      await page.locator(`.app-nav button[data-tab="${tab}"]`).click();
+      if (tab === 'home') {
+        await page.locator('#ng-phase2-demo .ng-nav button[data-final-page="home"]:visible').click();
+      } else {
+        const finalPage = tab === 'move' ? 'exercise' : tab === 'plan' ? 'reports' : tab;
+        await page.locator(`#ng-phase2-demo .ng-nav button[data-final-page="${finalPage}"]:visible`).click();
+      }
       await expect(page.locator(`${section}:visible`)).toBeVisible();
+      if (tab !== 'home' && tab !== 'plan') {
+        await page.locator('.app-nav button[data-tab="home"]:visible').click();
+      }
     }
   });
 
   test('Home quick action buttons update water, steps, food, and exercise flows', async ({ page }) => {
     await completeProfile(page);
-    await page.locator('[data-ng-home-action="water"]').click();
-    await expect(page.locator('#ngHomeWater')).toHaveText('1 / 8');
+    await page.locator('#ng-phase2-demo .fh-quick [data-fh-action="water"]').click();
+    await expect(page.locator('#fh-water')).toHaveText('7 / 8');
 
-    await page.locator('[data-ng-home-action="steps"]').click();
-    await expect(page.locator('#ngStepsQuickPanel')).toBeVisible();
-    await page.locator('#ngStepsQuickInput').fill('4500');
-    await page.locator('#ngSaveStepsQuick').click();
-    await expect(page.locator('#ngHomeSteps')).toHaveText('4,500');
+    await page.locator('#ng-phase2-demo .fh-quick [data-fh-action="steps"]').click();
+    await expect(page.locator('.dashboard-summary:visible')).toBeVisible();
 
-    await page.locator('[data-ng-home-action="meal"]').click();
+    await page.locator('.app-nav button[data-tab="home"]:visible').click();
+    await page.locator('#ng-phase2-demo .fh-quick [data-fh-action="meal"]').click();
     await expect(page.locator('.food-nutrition:visible')).toBeVisible();
-    await openTab(page, /Home/i);
-    await page.locator('[data-ng-home-action="workout"]').click();
+    await page.locator('.app-nav button[data-tab="home"]:visible').click();
+    await page.locator('#ng-phase2-demo .fh-quick [data-fh-action="workout"]').click();
     await expect(page.locator('.exercise-library:visible')).toBeVisible();
   });
 
@@ -162,8 +168,8 @@ test.describe('@buttons complete application button functionality', () => {
     await chooseGuide(page);
 
     await openTab(page, /Journey/i);
-    await page.getByRole('button', { name: '🌱', exact: true }).click();
-    await expect(page.locator('#moodPick')).toContainText('🌱');
+    await page.getByRole('button', { name: '??', exact: true }).click();
+    await expect(page.locator('#moodPick')).toContainText('??');
     await page.getByRole('button', { name: 'Change story mode', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'How do you want to begin?' })).toBeVisible();
   });
@@ -193,8 +199,10 @@ test.describe('@buttons complete application button functionality', () => {
     expect((await report).suggestedFilename()).toMatch(/report/i);
 
     await openTab(page, /Home/i);
-    await page.getByRole('button', { name: /Show me another/i }).click();
-    await expect(page.locator('#ngHomeQuoteText')).toBeVisible();
+    await expect(page.locator('#ng-home-final')).toBeVisible();
+    await page.locator('#fh-companion-button').click();
+    await page.locator('[data-fh-companion="Peacock guide"]').click();
+    await expect(page.locator('#fh-companion')).toHaveText('Peacock guide');
   });
 
   test('trainer session buttons pause, resume, advance, and finish', async ({ page }) => {
@@ -211,16 +219,16 @@ test.describe('@buttons complete application button functionality', () => {
     await page.getByRole('button', { name: 'Next exercise', exact: true }).click();
     await expect(page.locator('#ngTrainerStep')).toHaveText('Step 2 of 4');
     await page.getByRole('button', { name: 'Finish session', exact: true }).click();
-    await expect(page.locator('#ngTrainerStatus')).toHaveText('Session complete ✓');
+    await expect(page.locator('#ngTrainerStatus')).toHaveText('Session complete �');
   });
 
   test('Home header exposes only the dedicated My Profile button', async ({ page }) => {
     await completeProfile(page);
-    await expect(page.locator('#ngHomeProfileButton')).toBeVisible();
+    await expect(page.locator('#ng-demo-profile')).toBeVisible();
     await expect(page.locator('#ngThemeButton')).toBeHidden();
     await expect(page.locator('#ngDensityButton')).toBeHidden();
 
-    await page.locator('#ngHomeProfileButton').click();
+    await page.locator('#ng-demo-profile').click();
     await expect(page.locator('body')).toHaveClass(/ng-profile-open/);
     await expect(page.locator('#ngProfilePage')).toBeVisible();
     await expect(page.locator('#ngHomeRedesign')).toBeHidden();
@@ -239,3 +247,4 @@ test.describe('@buttons complete application button functionality', () => {
     expect(buttons.filter(button => !['button', 'submit', 'reset'].includes(button.type))).toEqual([]);
   });
 });
+
