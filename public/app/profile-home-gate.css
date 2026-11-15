@@ -132,3 +132,7 @@ body.ng-profile-open .weekly-strip,
 body.ng-profile-open #ngHomeRedesign,
 body.ng-profile-open #ng-phase2-demo{display:none!important}
 
+
+/* Current profile action language and vibrant palette. */
+.ng-profile-page{color:#123f39}.ng-profile-header{background:linear-gradient(135deg,#e7fbf2,#fff1df)!important;border-color:#bde4d6!important}.ng-profile-header-actions{align-items:center}.ng-profile-back{background:linear-gradient(135deg,#078a72,#16a98c)!important;border-color:#078a72!important}.ng-profile-signout{width:auto;margin:0;padding:10px 14px;border-radius:12px;font-size:12px;font-weight:800;background:#ffe4e0!important;color:#b23f35!important;border:1px solid #f2bdb7!important;box-shadow:none!important}.ng-profile-tabs button.active{background:linear-gradient(135deg,#078a72,#20aa8d)!important;border-color:#078a72!important}.ng-profile-primary{background:linear-gradient(135deg,#078a72,#16a98c)!important;border-color:#078a72!important}.ng-profile-ghost{color:#087563!important;border-color:#9cddc8!important}.ng-profile-tag,.ng-profile-complete{background:#dcf8e8!important;color:#147646!important}
+@media(max-width:760px){.ng-profile-signout{margin-left:0}.ng-profile-header-actions{gap:8px}}
