@@ -33,7 +33,9 @@
     node.innerHTML = `<div class="ng-phase2-heading"><div><div class="eyebrow">${kicker}</div><h2>${title}</h2></div></div>${content}`;
     return node;
   };
-  const appendOnce = (parent, node) => { if (parent && !document.getElementById(node.id)) parent.appendChild(node); };
+  // Keep Phase 2 visible at the top of each existing section so users see the
+  // new layer immediately instead of needing to scroll past the legacy cards.
+  const appendOnce = (parent, node) => { if (parent && !document.getElementById(node.id)) parent.prepend(node); };
 
   function homeCoach() {
     const home = $("#ngHomeRedesign");
