@@ -109,4 +109,26 @@ body.ng-show-guide .guide-picker{display:block!important}
 /* Profile is an isolated view: keep Home and every dashboard section out of it. */
 body.ng-profile-open .wrap>:not(#ngProfilePage){display:none!important}
 body.ng-profile-open .wrap>#ngProfilePage{display:block!important}
+/* Keep every legacy Home surface out of the dedicated Profile view, including nested mounts. */
+body.ng-profile-open .app-nav,
+body.ng-profile-open .mobile-tab-hint,
+body.ng-profile-open .guide-coach,
+body.ng-profile-open .dashboard-summary,
+body.ng-profile-open .weekly-report,
+body.ng-profile-open .food-studio,
+body.ng-profile-open .food-library,
+body.ng-profile-open .market-banner,
+body.ng-profile-open .stories,
+body.ng-profile-open .all-foods,
+body.ng-profile-open .inspiration,
+body.ng-profile-open .exercise-library,
+body.ng-profile-open .journey,
+body.ng-profile-open .reminders,
+body.ng-profile-open .motivation,
+body.ng-profile-open .mascot-gallery,
+body.ng-profile-open .protein-tracker,
+body.ng-profile-open .food-nutrition,
+body.ng-profile-open .weekly-strip,
+body.ng-profile-open #ngHomeRedesign,
+body.ng-profile-open #ng-phase2-demo{display:none!important}
 
