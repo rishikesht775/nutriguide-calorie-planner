@@ -14,11 +14,12 @@ Current counts are generated in `docs/GENERATED-INVENTORY.md`; use `npm.cmd run 
 | Trainer | trainer.spec.ts | Four goals; home/gym; duration-correct 10/20/30 min; pause/resume; expiry; next; completion; repeated finish; restart timer; invalid stored history |
 | Integration | integration, cloud-sync specs | Profile persistence; story routing; totals after tab changes; payload; hydration; failed save and retry; new storage keys |
 | System | system.spec.ts | Offline interaction; saved food read after network recovery and reload |
-| E2E | complete-flow.spec.ts | Profile → guide → food → workout → journal → reminder → report download → reload |
+| E2E | complete-flow.spec.ts | Profile  guide  food  workout  journal  reminder  report download  reload |
 | UAT | uat, journey specs | Beginner mobility; story onboarding, navigation and change |
 | Regression | regression, diwali specs | Repeat tab clicks; guide persistence; modal layering/close; removed festival script and decorations do not return |
 | Indian Plate Intelligence | thali-builder.spec.ts | Build an Indian thali; protein-aware swaps; estimate calories, protein, fibre and budget; handoff to food log |
-| Home/Profile gate | home-profile-gate.spec.ts | First-login setup Home; locked non-Home navigation; unlock transition; one My Profile button; isolated profile panels; return to Home |\r\n| UI | ui, mobile specs | 320/360/390/768/1024/1440 layouts; every tab overflow; banner bounds; navigation collision; login bounds; screenshots; label contrast |
+| Home/Profile gate | home-profile-gate.spec.ts | First-login setup Home; locked non-Home navigation; unlock transition; one My Profile button; isolated profile panels; profile-only sign out; no global account bar; return to Home |
+| UI | ui, mobile specs | 320/360/390/768/1024/1440 layouts; every tab overflow; banner bounds; navigation collision; login bounds; screenshots; label contrast |
 | Frontend | frontend.spec.ts | Page errors; selected content visible; unrelated sections hidden |
 | Accessibility | accessibility.spec.ts | Programmatic profile labels; navigation names; keyboard activation; trainer labels; dialog semantics/Escape; image alt attributes |
 | Security | auth, security specs | Gate; sign-up intent; platform auth handoff; no credential leakage; persisted XSS probes in journal/planner/groceries |
@@ -51,3 +52,4 @@ Current feature additions: `wellness-features.spec.ts` covers weekly plans, hous
 Shared-profile release: `personal-plan.spec.ts` adds seven cases (14 desktop/mobile executions): automatic shared defaults, cross-tab target edits, reload persistence, manual plan/workout preservation, reset, readiness and real-log guide progression. Node `personal-plan.test.mjs` and `personal-plan-ui.test.mjs` cover pure policy and the actual controller using an explicitly stubbed DOM (not layout tests).
 
 Account flow now includes real Supabase email signup, verified sign-in, recovery and native logout alongside connected-account login. Registration success shows the prominent Check your email panel; rejected requests keep the form visible. Account contracts mock provider responses and frontend tests use HTTP fixtures. Full provider confirmation, login, reset and cross-device acceptance remain separate manual checks.
+
