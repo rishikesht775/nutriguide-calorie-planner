@@ -73,7 +73,7 @@
     section.id = "ngFirstLoginHome";
     section.className = "ng-first-login-home";
     section.innerHTML =
-      "<div class='ng-first-login-hero'><div><span class='ng-setup-kicker'>FIRST TIME HERE</span><h1>Welcome to NutriGuide</h1><p>Let’s set up your personal plan. Your Home dashboard and guidance will unlock after these details are saved.</p></div><div class='ng-first-login-mascot'>🐼<small>Your trainer is ready</small></div></div>" +
+      "<div class='ng-first-login-hero'><div><span class='ng-setup-kicker'>FIRST TIME HERE</span><h1>Welcome to NutriGuide</h1><p>Let's set up your personal plan. Your Home dashboard and guidance will unlock after these details are saved.</p></div><div class='ng-first-login-mascot'>??<small>Your trainer is ready</small></div></div>" +
       "<div class='ng-setup-progress'><div><span>SETUP PROGRESS</span><b id='ngSetupStep'>Step 1 of 1</b></div><strong id='ngSetupProgressValue'>25%</strong><i><em id='ngSetupProgressBar'></em></i></div>" +
       "<div class='ng-first-login-grid'><article class='ng-setup-card'><span class='ng-setup-kicker'>WHY THIS IS NEEDED</span><h2>Your plan uses your details</h2><ul><li>Calorie and protein targets</li><li>Meal and exercise suggestions</li><li>Progress and recovery guidance</li></ul><p class='ng-setup-note'>You can edit these details anytime from My Profile after setup.</p></article><article class='ng-setup-card ng-setup-form-card'><div id='ngSetupFormSlot'></div><p id='ngSetupNotice' class='ng-setup-notice' role='status' aria-live='polite'></p></article></div>";
     const anchor = home || document.querySelector(".wrap");
@@ -89,7 +89,7 @@
     section.className = "ng-profile-page";
     section.hidden = true;
     section.innerHTML =
-      "<header class='ng-profile-header'><div class='ng-profile-person'><div class='ng-profile-avatar'>🐼</div><div><span class='ng-setup-kicker'>DEDICATED PROFILE SECTION</span><h1>My Profile</h1><p>Personal details, goals, preferences, connections, and privacy.</p></div></div><div class='ng-profile-header-actions'><span class='ng-profile-complete' id='ngProfileComplete'>Complete</span><button type='button' class='ng-profile-back' id='ngProfileBack'>Back to Home</button></div></header>" +
+      "<header class='ng-profile-header'><div class='ng-profile-person'><div class='ng-profile-avatar'>??</div><div><span class='ng-setup-kicker'>DEDICATED PROFILE SECTION</span><h1>My Profile</h1><p>Personal details, goals, preferences, connections, and privacy.</p></div></div><div class='ng-profile-header-actions'><span class='ng-profile-complete' id='ngProfileComplete'>Complete</span><button type='button' class='ng-profile-back' id='ngProfileBack'>Back to Home</button></div></header>" +
       "<nav class='ng-profile-tabs' aria-label='Profile sections'>" +
         "<button type='button' class='active' data-ng-profile-tab='overview'>Overview</button>" +
         "<button type='button' data-ng-profile-tab='details'>Personal details</button>" +
@@ -98,9 +98,9 @@
         "<button type='button' data-ng-profile-tab='connections'>Connections</button>" +
         "<button type='button' data-ng-profile-tab='privacy'>Privacy & data</button>" +
       "</nav>" +
-      "<section class='ng-profile-panel active' data-ng-profile-panel='overview'><div class='ng-profile-metrics'><article><small>Profile</small><strong id='ngProfileMetricName'>—</strong><span>Account details</span></article><article><small>Goal</small><strong id='ngProfileMetricGoal'>—</strong><span id='ngProfileMetricTarget'>Adaptive plan</span></article><article><small>Daily plan</small><strong id='ngProfileMetricCalories'>—</strong><span id='ngProfileMetricProtein'>Protein target</span></article><article><small>Account</small><strong>Private</strong><span>Cloud synced</span></article></div><div class='ng-profile-columns'><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Personal snapshot</h2><span class='ng-profile-tag'>Saved</span></div><div class='ng-profile-row'><div><b id='ngProfileSnapshotName'>—</b><small id='ngProfileSnapshotAge'>—</small></div><button type='button' class='ng-profile-ghost' data-ng-profile-edit='details'>Edit</button></div><div class='ng-profile-row'><div><b id='ngProfileSnapshotBody'>—</b><small id='ngProfileSnapshotActivity'>—</small></div><span class='ng-profile-tag'>Updated</span></div><div class='ng-profile-row'><div><b>Plan preferences</b><small>Food, movement, and recovery guidance</small></div><button type='button' class='ng-profile-ghost' data-ng-profile-edit='preferences'>Change</button></div></article><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Profile access</h2><span class='ng-profile-tag'>Top-right</span></div><p class='ng-profile-help'>My Profile is available from the single button in the Home header. All profile sections stay inside this dedicated page.</p><div class='ng-profile-access-row'><span>My Profile button</span><b>Primary</b></div><div class='ng-profile-access-row'><span>Side menu</span><b>Home tabs</b></div></article></div></section>" +
+      "<section class='ng-profile-panel active' data-ng-profile-panel='overview'><div class='ng-profile-metrics'><article><small>Profile</small><strong id='ngProfileMetricName'>-</strong><span>Account details</span></article><article><small>Goal</small><strong id='ngProfileMetricGoal'>-</strong><span id='ngProfileMetricTarget'>Adaptive plan</span></article><article><small>Daily plan</small><strong id='ngProfileMetricCalories'>-</strong><span id='ngProfileMetricProtein'>Protein target</span></article><article><small>Account</small><strong>Private</strong><span>Cloud synced</span></article></div><div class='ng-profile-columns'><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Personal snapshot</h2><span class='ng-profile-tag'>Saved</span></div><div class='ng-profile-row'><div><b id='ngProfileSnapshotName'>-</b><small id='ngProfileSnapshotAge'>-</small></div><button type='button' class='ng-profile-ghost' data-ng-profile-edit='details'>Edit</button></div><div class='ng-profile-row'><div><b id='ngProfileSnapshotBody'>-</b><small id='ngProfileSnapshotActivity'>-</small></div><span class='ng-profile-tag'>Updated</span></div><div class='ng-profile-row'><div><b>Plan preferences</b><small>Food, movement, and recovery guidance</small></div><button type='button' class='ng-profile-ghost' data-ng-profile-edit='preferences'>Change</button></div></article><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Profile access</h2><span class='ng-profile-tag'>Top-right</span></div><p class='ng-profile-help'>My Profile is available from the single button in the Home header. All profile sections stay inside this dedicated page.</p><div class='ng-profile-access-row'><span>My Profile button</span><b>Primary</b></div><div class='ng-profile-access-row'><span>Side menu</span><b>Home tabs</b></div></article></div></section>" +
       "<section class='ng-profile-panel' data-ng-profile-panel='details'><article class='ng-profile-card'><div class='ng-profile-card-head'><div><h2>Personal details</h2><p class='ng-profile-help'>These values are used for plan calculations.</p></div><span class='ng-profile-tag'>Editable</span></div><div id='ngProfileFormSlot'></div></article></section>" +
-      "<section class='ng-profile-panel' data-ng-profile-panel='goals'><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Goals & targets</h2><span class='ng-profile-tag'>Adaptive</span></div><p class='ng-profile-help'>Targets can adapt to your weight trend, steps, exercise, sleep, and logged meals.</p><div class='ng-profile-row'><div><b id='ngGoalPrimary'>—</b><small>Primary goal</small></div><button type='button' class='ng-profile-ghost' data-ng-profile-edit='details'>Change</button></div><div class='ng-profile-row'><div><b id='ngGoalWeight'>—</b><small>Current weight</small></div><span class='ng-profile-tag'>Saved</span></div><div class='ng-profile-row'><div><b id='ngGoalProtein'>—</b><small>Daily protein target</small></div><span class='ng-profile-tag'>Calculated</span></div></article></section>" +
+      "<section class='ng-profile-panel' data-ng-profile-panel='goals'><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Goals & targets</h2><span class='ng-profile-tag'>Adaptive</span></div><p class='ng-profile-help'>Targets can adapt to your weight trend, steps, exercise, sleep, and logged meals.</p><div class='ng-profile-row'><div><b id='ngGoalPrimary'>-</b><small>Primary goal</small></div><button type='button' class='ng-profile-ghost' data-ng-profile-edit='details'>Change</button></div><div class='ng-profile-row'><div><b id='ngGoalWeight'>-</b><small>Current weight</small></div><span class='ng-profile-tag'>Saved</span></div><div class='ng-profile-row'><div><b id='ngGoalProtein'>-</b><small>Daily protein target</small></div><span class='ng-profile-tag'>Calculated</span></div></article></section>" +
       "<section class='ng-profile-panel' data-ng-profile-panel='preferences'><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Dashboard preferences</h2><span class='ng-profile-tag'>Home view</span></div><label class='ng-profile-toggle'><span><b>Calories and protein</b><small>Show on Home progress cards</small></span><input type='checkbox' checked></label><label class='ng-profile-toggle'><span><b>Steps and water</b><small>Keep movement and hydration visible</small></span><input type='checkbox' checked></label><label class='ng-profile-toggle'><span><b>Gentle reminders</b><small>Meal, water, walk, and sleep prompts</small></span><input type='checkbox'></label><button type='button' class='ng-profile-primary' id='ngSavePreferences'>Save preferences</button></article></section>" +
       "<section class='ng-profile-panel' data-ng-profile-panel='connections'><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Connected data</h2><span class='ng-profile-tag'>User controlled</span></div><div class='ng-profile-row'><div><b>Google Fit / Health Connect</b><small>Steps, activity, and sleep summaries</small></div><button type='button' class='ng-profile-primary ng-connect'>Connect</button></div><div class='ng-profile-row'><div><b>Fitbit</b><small>Steps, workouts, heart rate, and sleep</small></div><button type='button' class='ng-profile-ghost ng-connect'>Connect</button></div><div class='ng-profile-row'><div><b>Manual logging</b><small>Steps, water, meals, and workouts</small></div><span class='ng-profile-tag'>Enabled</span></div></article></section>" +
       "<section class='ng-profile-panel' data-ng-profile-panel='privacy'><article class='ng-profile-card'><div class='ng-profile-card-head'><h2>Privacy & data</h2><span class='ng-profile-tag'>Private by default</span></div><div class='ng-profile-row'><div><b>Export wellness data</b><small>Profile, logs, goals, and reports</small></div><button type='button' class='ng-profile-ghost' id='ngExportProfile'>Export</button></div><div class='ng-profile-row'><div><b>Sign-in and security</b><small>Password and active sessions</small></div><span class='ng-profile-tag'>Protected</span></div></article></section>";
@@ -119,12 +119,12 @@
     if (!nav) return;
     $$(".app-nav button").forEach((button) => {
       const isHome = button.dataset.tab === "home";
-      const base = button.dataset.ngBaseLabel || button.textContent.replace(/\s*🔒\s*$/, "").trim();
+      const base = button.dataset.ngBaseLabel || button.textContent.replace(/\s*??\s*$/, "").trim();
       button.dataset.ngBaseLabel = base;
       button.disabled = !isReady && !isHome;
       button.setAttribute("aria-disabled", String(button.disabled));
       button.classList.toggle("ng-locked-tab", button.disabled);
-      button.textContent = button.disabled ? base + " 🔒" : base;
+      button.textContent = button.disabled ? base + " ??" : base;
     });
   }
 
@@ -145,6 +145,9 @@
     }
     profileOpen = true;
     document.body.classList.add("ng-profile-open");
+    document.body.classList.remove("ng-home-demo");
+    const demoHome = $("#ng-phase2-demo");
+    if (demoHome) demoHome.style.setProperty("display", "none", "important");
     if (profilePage) { profilePage.hidden = false; profilePage.style.setProperty("display", "block", "important"); }
     if (home) { home.hidden = true; home.style.setProperty("display", "none", "important"); }
     moveForm(profileFormSlot);
@@ -155,6 +158,9 @@
   function closeProfile() {
     profileOpen = false;
     document.body.classList.remove("ng-profile-open");
+    document.body.classList.add("ng-home-demo");
+    const demoHome = $("#ng-phase2-demo");
+    if (demoHome) { demoHome.style.setProperty("display", "block", "important"); $("#ng-home-final", demoHome)?.style.setProperty("display", "grid", "important"); }
     if (profilePage) { profilePage.hidden = true; profilePage.style.setProperty("display", "none", "important"); }
     if (home) { home.hidden = false; home.style.setProperty("display", "block", "important"); }
     if (ready) moveForm(profileFormSlot);
@@ -164,13 +170,13 @@
     const p = profile();
     if (!profilePage) return;
     const name = accountName();
-    const sex = String(p.sex || "—");
+    const sex = String(p.sex || "-");
     const age = p.age ? String(p.age) + " years" : "Age not set";
     const height = p.height ? String(p.height) + " cm" : "Height not set";
     const weight = p.weight ? String(p.weight) + " kg" : "Weight not set";
-    const activity = p.activity === "1.2" ? "Mostly sitting / little exercise" : p.activity === "1.375" ? "Light exercise 1–3 days/week" : p.activity === "1.55" ? "Moderate exercise 3–5 days/week" : p.activity === "1.725" ? "Hard exercise 6–7 days/week" : "Activity not set";
-    const calorie = $("#cal")?.textContent.trim() || "—";
-    const protein = $("#protein")?.textContent.trim() || "—";
+    const activity = p.activity === "1.2" ? "Mostly sitting / little exercise" : p.activity === "1.375" ? "Light exercise 1-3 days/week" : p.activity === "1.55" ? "Moderate exercise 3-5 days/week" : p.activity === "1.725" ? "Hard exercise 6-7 days/week" : "Activity not set";
+    const calorie = $("#cal")?.textContent.trim() || "-";
+    const protein = $("#protein")?.textContent.trim() || "-";
     const profileMetricName = $("#ngProfileMetricName");
     if (profileMetricName) profileMetricName.textContent = name;
     if ($("#ngProfileMetricGoal")) $("#ngProfileMetricGoal").textContent = goalLabel(p.goal);
@@ -178,8 +184,8 @@
     if ($("#ngProfileMetricCalories")) $("#ngProfileMetricCalories").textContent = calorie;
     if ($("#ngProfileMetricProtein")) $("#ngProfileMetricProtein").textContent = protein + " target";
     if ($("#ngProfileSnapshotName")) $("#ngProfileSnapshotName").textContent = name;
-    if ($("#ngProfileSnapshotAge")) $("#ngProfileSnapshotAge").textContent = age + " · " + (sex === "male" ? "Male" : sex === "female" ? "Female" : sex);
-    if ($("#ngProfileSnapshotBody")) $("#ngProfileSnapshotBody").textContent = height + " · " + weight;
+    if ($("#ngProfileSnapshotAge")) $("#ngProfileSnapshotAge").textContent = age + " � " + (sex === "male" ? "Male" : sex === "female" ? "Female" : sex);
+    if ($("#ngProfileSnapshotBody")) $("#ngProfileSnapshotBody").textContent = height + " � " + weight;
     if ($("#ngProfileSnapshotActivity")) $("#ngProfileSnapshotActivity").textContent = activity;
     if ($("#ngGoalPrimary")) $("#ngGoalPrimary").textContent = goalLabel(p.goal);
     if ($("#ngGoalWeight")) $("#ngGoalWeight").textContent = weight;
@@ -366,3 +372,4 @@
   window.setTimeout(boot, 900);
   window.setInterval(hideLegacyCalculator, 250);
 })();
+
