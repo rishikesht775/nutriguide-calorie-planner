@@ -89,7 +89,7 @@
     section.className = "ng-profile-page";
     section.hidden = true;
     section.innerHTML =
-      "<header class='ng-profile-header'><div class='ng-profile-person'><div class='ng-profile-avatar'>??</div><div><span class='ng-setup-kicker'>DEDICATED PROFILE SECTION</span><h1>My Profile</h1><p>Personal details, goals, preferences, connections, and privacy.</p></div></div><div class='ng-profile-header-actions'><span class='ng-profile-complete' id='ngProfileComplete'>Complete</span><button type='button' class='ng-profile-back' id='ngProfileBack'>Back to Home</button></div></header>" +
+      "<header class='ng-profile-header'><div class='ng-profile-person'><div class='ng-profile-avatar'>??</div><div><span class='ng-setup-kicker'>DEDICATED PROFILE SECTION</span><h1>My Profile</h1><p>Personal details, goals, preferences, connections, and privacy.</p></div></div><div class='ng-profile-header-actions'><span class='ng-profile-complete' id='ngProfileComplete'>Complete</span><button type='button' class='ng-profile-back' id='ngProfileBack'>Back to Home</button><button type='button' class='ng-profile-signout' id='ngProfileSignOut'>Sign out</button></div></header>" +
       "<nav class='ng-profile-tabs' aria-label='Profile sections'>" +
         "<button type='button' class='active' data-ng-profile-tab='overview'>Overview</button>" +
         "<button type='button' data-ng-profile-tab='details'>Personal details</button>" +
@@ -304,6 +304,11 @@
       }, true);
     }
     document.addEventListener("click", (event) => {
+      if (event.target.closest("#ngProfileSignOut")) {
+        event.preventDefault();
+        window.ngSignOut?.();
+        return;
+      }
       const profileButtonTarget = event.target.closest("#ngHomeProfileButton");
       if (profileButtonTarget) {
         event.preventDefault();
