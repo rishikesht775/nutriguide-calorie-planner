@@ -25,4 +25,8 @@ body.ng-home-demo .ng-main{min-height:100vh}
 #ng-phase2-demo .ng-user #ng-demo-profile{flex:0 0 auto;white-space:nowrap}
 @media(max-width:560px){#ng-phase2-demo .ng-user{max-width:100%;width:max-content}#ng-phase2-demo .ng-user #ng-demo-user{max-width:110px}}
 #ng-phase2-demo .ng-user #ng-demo-profile{width:auto!important;min-width:112px;margin:0!important}
+/* Use the full viewport so the demo sidebar stays at the left edge. */
+body.ng-home-demo .wrap{width:100vw!important;max-width:none!important;margin:0!important;padding:0!important}
+body.ng-home-demo #ngHomeRedesign{width:100vw!important;max-width:none!important;margin:0!important}
+body.ng-home-demo #ng-phase2-demo{width:100vw!important;max-width:none!important}
 
