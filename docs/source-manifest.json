@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "sourceDigest": "2f386d96c7d471c1d8431d46e7831a689d7e6f7f0a3bd8dd8c652c135899f850",
+  "sourceDigest": "87d562ac649d018af5ec2f542c2a57df4d7c9c0eea107aad4ef3167fe8f4090e",
   "files": {
     ".github/workflows/android.yml": "c4b45b7c40ab14f04cc489a2ab6f7d70770109768ab2cff0e9f41ac4ddc604da",
     ".github/workflows/documentation.yml": "cc493246d671e5af298a693355c493722e145733c56896c43b804285241c3652",
@@ -122,8 +122,8 @@
     "public/app/account-reset.js": "5a80c830a69aabda2181f42dddd3d8692c62c990b96e52c14eb4627efb17b84d",
     "public/app/auth-layout-fix.css": "ee8b394af783261fd6096abe0b7107ef48f5a5aef51a5326483b46c9c5b19622",
     "public/app/backup.js": "fdfc32e838b5722ba9332093f58d1266e2164d029efc23ba57182253ab283546",
-    "public/app/home-demo.css": "25c1c83835a5b5fa1bed4d7143b8fd26d2ce3ad8b4c86ad15b9f71eb43e00a29",
-    "public/app/home-demo.js": "d27d74f6ab79680739dcbc1b2440942dbb65d79dbac530383ab3dfc1f81767a4",
+    "public/app/home-demo.css": "70d44eb4370a8c2e1339c493e9a45bbeb48cba512657be8a328a62a377c10fa4",
+    "public/app/home-demo.js": "85003090c341b8a0e4168490555cb5c70d1aede0775f012ab4fef6595e992d48",
     "public/app/home-redesign.css": "c72c53c42bbb6a3b7697fbbbdb3ec3b3080fe5e341f3d4ad23a9c38f0a2833d2",
     "public/app/home-redesign.js": "8068cc6900466f349958d6f0ada7bba70cf3ba69877f49b81033c1d127046809",
     "public/app/in-app-navigation.css": "05bb49429549c385073b36f60a030568cd19ccfd2e7b7f25a01c87aaf451c730",
@@ -143,7 +143,7 @@
     "public/app/wellness.css": "7cea865c0e0fae1f1453911bc3ee28e925cdf7137528f61a09895a8eea690ae3",
     "public/app/wellness.js": "79fb086d7e89a8ccc97895be282442568a6714857b1f7d5e1915bdd12e12c798",
     "public/cloud-sync.js": "a930ce64551935d1fb91ce9284fba4fd55fc7c7ac212379c20b5adf4ad02f82b",
-    "public/legacy.html": "744dd496e194981be2c565bde9edeb80b8fa9fda8949b5958eb63fdb31e9450d",
+    "public/legacy.html": "c9806cda12dc774cf230fa6baf171d272fd6fef0bc919e4c1636f0e68a16930f",
     "public/signin.html": "a9651464db1ab67f76211dc2f3029979cc14dd53febf9b67ff7cd835826cb2c5",
     "scripts/check-mobile-test-alignment.mjs": "64032ab297bc666cb1de7cc0f193035812c9d21eed867fc0238ec2b9a94af150",
     "scripts/connector-preview/connector-preview-session.mjs": "88a25f0ef4397e7e765b6cb6c193544b86f6593cb2c64b6fa1efefa386e59616",
