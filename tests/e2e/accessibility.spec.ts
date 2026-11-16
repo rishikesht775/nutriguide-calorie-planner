@@ -16,8 +16,12 @@ test.describe('@accessibility keyboard and semantic checks',()=>{
  });
  test('navigation exposes meaningful names and receives keyboard focus',async({page})=>{
   await completeProfile(page);
-  for(const name of ['Home','Food studio','Exercise','Journey','Plan & reports'])await expect(page.locator('.app-nav').getByRole('button',{name:new RegExp(name,'i')})).toBeVisible();
-  await page.locator('.app-nav button').first().focus();await expect(page.locator('.app-nav button').first()).toBeFocused();await page.keyboard.press('Tab');await expect(page.locator('.app-nav button').nth(1)).toBeFocused();await page.keyboard.press('Enter');await expect(page.locator('.food-nutrition')).toBeVisible();
+  const tabs=page.locator('#ng-phase2-demo .ng-nav [role="tab"]:visible, .app-nav button:visible');
+  for(const name of ['Home','Food studio','Exercise','Journey','Plan & reports'])await expect(tabs.filter({hasText:new RegExp(name,'i')}).first()).toBeVisible();
+  const home=tabs.filter({hasText:/Home/i}).first(),food=tabs.filter({hasText:/Food studio/i}).first();
+  await expect(home).toHaveAccessibleName(/Home/i);await expect(food).toHaveAccessibleName(/Food studio/i);
+  await home.focus();await expect(home).toBeFocused();await page.keyboard.press('ArrowRight');await expect(food).toBeFocused();
+  await page.keyboard.press('Enter');await expect(page.locator('.app-nav button[data-tab="food"]')).toHaveAttribute('aria-current','page');await expect(page.locator('.food-nutrition')).toBeVisible();
  });
  test('trainer selects are labelled and keyboard-operable',async({page})=>{
   await completeProfile(page);await openTab(page,/Exercise/i);
