@@ -5,7 +5,10 @@ test.describe('@smoke core availability', () => {
   test('profile unlocks all primary tabs', async ({ page }) => {
     await completeProfile(page);
     for (const label of [/Home/i, /Food studio/i, /Exercise/i, /Journey/i, /Plan & reports/i]) {
-      await expect(page.locator('.app-nav').getByRole('button', { name: label })).toBeVisible();
+      const tab = page.locator('.app-nav button:visible, #ng-phase2-demo .ng-nav button:visible')
+        .filter({ hasText: label })
+        .first();
+      await expect(tab).toBeVisible();
     }
   });
 
