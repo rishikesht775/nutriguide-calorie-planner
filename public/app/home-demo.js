@@ -16,6 +16,24 @@
     root.innerHTML=`<div class="ng-shell"><aside class="ng-side"><div class="ng-brand"><span class="ng-brand-mark">?</span><span>NutriGuide</span></div><nav class="ng-nav" role="tablist" aria-label="Main navigation"></nav><div class="ng-side-note"><b>One calm place for your day</b><br>Meals, movement, recovery and progress stay together.</div></aside><main class="ng-main"><header class="ng-top"><div><span class="ng-kicker">Good morning</span><h1 id="ng-demo-greeting">Rishikesh</h1><p>Your day is ready. Pick one useful step and let the rest stay simple.</p></div><div class="ng-user"><span class="ng-avatar">R</span><span id="ng-demo-user">Rishikesh</span><span aria-hidden="true">?</span><button class="ng-btn soft" type="button" id="ng-demo-profile">My Profile</button></div></header></main></div><div class="ng-toast" id="ng-phase2-toast" role="status" aria-live="polite"></div>`;
     host.appendChild(root);
     root.querySelector('.ng-nav').innerHTML='<button type="button" role="tab" aria-selected="true" data-final-page="home"> Home</button><button type="button" role="tab" aria-selected="false" data-final-page="food">?? Food Studio</button><button type="button" role="tab" aria-selected="false" data-final-page="exercise">?? Exercise</button><button type="button" role="tab" aria-selected="false" data-final-page="journey">? Journey</button><button type="button" role="tab" aria-selected="false" data-final-page="reports">? Plan & Reports</button>';
+    const demoNav=root.querySelector('.ng-nav');
+    const demoTabs=Array.from(demoNav.querySelectorAll('[role="tab"]'));
+    const demoTabNames={home:'Home',food:'Food Studio',exercise:'Exercise',journey:'Journey',reports:'Plan and reports'};
+    demoTabs.forEach((tab,index)=>{tab.setAttribute('aria-label',demoTabNames[tab.dataset.finalPage]||tab.textContent.trim());tab.tabIndex=index===0?0:-1;});
+    demoNav.addEventListener('keydown',event=>{
+      if(!['ArrowRight','ArrowLeft','Home','End'].includes(event.key))return;
+      const current=demoTabs.indexOf(document.activeElement);
+      if(current<0)return;
+      event.preventDefault();
+      const next=event.key==='Home'?0:event.key==='End'?demoTabs.length-1:(current+(event.key==='ArrowRight'?1:-1)+demoTabs.length)%demoTabs.length;
+      demoTabs.forEach((tab,index)=>{tab.tabIndex=index===next?0:-1;});
+      demoTabs[next].focus();
+    });
+    demoNav.addEventListener('click',event=>{
+      const selected=event.target.closest('[role="tab"]');
+      if(!selected)return;
+      demoTabs.forEach(tab=>{const active=tab===selected;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});
+    });
     document.body.classList.add('ng-home-demo');
     const oldNav=document.querySelector('.app-nav');
     if(oldNav) oldNav.style.setProperty('display','none','important');
