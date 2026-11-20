@@ -193,3 +193,7 @@ npm.cmd run test:all
 ```
 
 No separate dev terminal is needed. Allow up to 180 seconds for startup. If the dedicated port is occupied, stop that specific earlier app/test run or set PLAYWRIGHT_BASE_URL to another local HTTP port; Playwright launches the app there automatically. Do not terminate unrelated processes. A test discovery command does not run browser assertions.
+
+## Jenkins regression pipeline
+
+Jenkins runs `npm run test:reporter`, `npm run test:contracts`, the test TypeScript check, `npm run docs:check`, and the full `npm run test:all` suite when a push to `main` is delivered through the GitHub webhook. Setup instructions and the required webhook URL are in `docs/JENKINS.md`. Jenkins archives the reports and does not deploy the live Sites source.
