@@ -145,7 +145,7 @@ npm.cmd run test:report
 npx.cmd tsc -p tests/tsconfig.json
 ```
 
-Failure evidence: `playwright-report/`, `test-results/results.json`, failure screenshots, traces and retained videos. UI tests attach full-page screenshots but do not claim approved pixel baselines. Use `npx.cmd playwright show-trace <trace.zip>` to inspect a failure.
+Failure evidence: `playwright-report/`, `test-results/results.json`, failure screenshots, traces and retained videos. UI tests attach full-page screenshots but do not claim approved pixel baselines. The UI command includes breakpoint-edge widths, resize transitions, first-login/profile views, profile-tab active-state checks and desktop sidebar-clearance checks. Physical phones, screen readers, 200% zoom and slow-network review remain manual. Use `npx.cmd playwright show-trace <trace.zip>` to inspect a failure.
 
 The GitHub Actions workflow runs contracts plus desktop/mobile tests on pushes and pull requests. Reports upload even on failure. External identity login and actual cloud cross-device testing are manual release checks; UI tests stub auth/state to avoid touching real accounts.
 

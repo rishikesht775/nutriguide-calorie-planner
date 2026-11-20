@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 import {completeProfile,openTab} from './helpers';
 
 test.describe('@ui @regression responsive geometry',()=>{
- for(const width of [320,360,390,768,1024,1440]){
+ for(const width of [320,360,390,430,760,761,768,769,1024,1440]){
   test(`${width}px: banner, navigation and every tab fit`,async({page},testInfo)=>{
    await page.setViewportSize({width,height:900});await completeProfile(page);
    for(const tab of [/Home/i,/Food studio/i,/Exercise/i,/Journey/i,/Plan & reports/i]){
@@ -11,11 +11,17 @@ test.describe('@ui @regression responsive geometry',()=>{
     expect(overflow,`horizontal overflow in ${tab}`).toBeLessThanOrEqual(1);
    }
    await openTab(page,/Home/i);
-   const hero=page.locator('#ngToday');const heading=hero.locator('h2');
+   const hero=page.locator('#ng-phase2-demo .ng-home-final .fh-hero');const heading=hero.locator('h2');
+   await expect(hero).toBeVisible();await expect(heading).toBeVisible();
    const h=await hero.boundingBox(),t=await heading.boundingBox();expect(h).not.toBeNull();expect(t).not.toBeNull();
    expect(t!.x).toBeGreaterThanOrEqual(h!.x);expect(t!.y+t!.height).toBeLessThanOrEqual(h!.y+h!.height);
-   const nav=await page.locator('.app-nav').boundingBox();expect(nav).not.toBeNull();
-   expect(nav!.x+nav!.width<=t!.x || nav!.y>=t!.y+t!.height || nav!.y+nav!.height<=t!.y).toBeTruthy();
+   const shell=await page.evaluate(()=>{
+    const side=document.querySelector('#ng-phase2-demo .ng-side')!.getBoundingClientRect();
+    const hero=document.querySelector('#ng-phase2-demo .ng-home-final .fh-hero')!.getBoundingClientRect();
+    return {side:{left:side.left,right:side.right,top:side.top,bottom:side.bottom},hero:{left:hero.left,right:hero.right,top:hero.top,bottom:hero.bottom}};
+   });
+   const rectanglesOverlap=shell.side.left<shell.hero.right&&shell.side.right>shell.hero.left&&shell.side.top<shell.hero.bottom&&shell.side.bottom>shell.hero.top;
+   expect(rectanglesOverlap,`Home content clears the side menu at ${width}px`).toBeFalsy();
    await testInfo.attach(`home-${width}`,{body:await page.screenshot({fullPage:true}),contentType:'image/png'});
   });
  }

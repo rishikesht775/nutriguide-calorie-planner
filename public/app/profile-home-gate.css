@@ -48,7 +48,7 @@ body.ng-first-login .app-nav button[data-tab=home]{background:linear-gradient(13
 .ng-profile-back,.ng-profile-primary{background:#168c79!important;color:#fff!important;border:1px solid #168c79!important}
 .ng-profile-ghost{background:#fff!important;color:#168c79!important;border:1px solid #b9ded1!important;box-shadow:none!important}
 .ng-profile-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
-.ng-profile-tabs button{width:auto;margin:0;padding:10px 13px;border-radius:999px;background:#fff!important;color:#55716c!important;border:1px solid #d5e9e1!important;box-shadow:none!important;font-size:12px}
+.ng-profile-tabs button{flex:0 0 auto;width:auto;margin:0;padding:10px 13px;border-radius:999px;background:#fff!important;color:#55716c!important;border:1px solid #d5e9e1!important;box-shadow:none!important;font-size:12px}
 .ng-profile-tabs button.active{background:#168c79!important;color:#fff!important;border-color:#168c79!important}
 .ng-profile-panel{display:none}
 .ng-profile-panel.active{display:block}
@@ -89,7 +89,7 @@ body.ng-first-login #ngHomeProfileButton{display:none!important}
   .ng-first-login-mascot{align-items:flex-start;margin-top:14px;font-size:54px}
   .ng-first-login-grid,.ng-profile-columns{grid-template-columns:1fr}
   .ng-profile-header-actions{justify-content:flex-start;margin-top:16px}
-  .ng-profile-tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}
+  .ng-profile-tabs{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;padding-bottom:3px}
   .ng-profile-tabs button{white-space:nowrap}
   .ng-profile-metrics{grid-template-columns:repeat(2,1fr)}
   .ng-profile-metrics strong{font-size:16px}

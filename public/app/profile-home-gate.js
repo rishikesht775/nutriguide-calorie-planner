@@ -119,7 +119,7 @@
     if (!nav) return;
     $$(".app-nav button").forEach((button) => {
       const isHome = button.dataset.tab === "home";
-      const base = button.dataset.ngBaseLabel || button.textContent.replace(/\s*??\s*$/, "").trim();
+      const base = button.dataset.ngBaseLabel || button.textContent.trim();
       button.dataset.ngBaseLabel = base;
       button.disabled = !isReady && !isHome;
       button.setAttribute("aria-disabled", String(button.disabled));

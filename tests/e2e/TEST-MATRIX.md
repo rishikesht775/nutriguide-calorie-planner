@@ -19,7 +19,7 @@ Current counts are generated in `docs/GENERATED-INVENTORY.md`; use `npm.cmd run 
 | Regression | regression, diwali specs | Repeat tab clicks; guide persistence; modal layering/close; removed festival script and decorations do not return |
 | Indian Plate Intelligence | thali-builder.spec.ts | Build an Indian thali; protein-aware swaps; estimate calories, protein, fibre and budget; handoff to food log |
 | Home/Profile gate | home-profile-gate.spec.ts | First-login setup Home; locked non-Home navigation; unlock transition; one My Profile button; isolated profile panels; profile-only sign out; no global account bar; return to Home |
-| UI | ui, mobile specs | 320/360/390/768/1024/1440 layouts; every tab overflow; banner bounds; navigation collision; login bounds; screenshots; label contrast |
+| UI | ui, ui-edge-cases, mobile, home-profile-gate specs | 320/360/390/430/760/761/768/769/1024/1440 layout widths; every tab overflow; responsive breakpoint resize; first-login, completed Home and profile-panel geometry; profile-tab non-overlap and active-panel selection; desktop side-menu clearance at top/middle/bottom scroll; login and banner bounds; screenshots; label contrast |
 | Frontend | frontend.spec.ts | Page errors; selected content visible; unrelated sections hidden |
 | Accessibility | accessibility.spec.ts | Programmatic profile labels; navigation names; keyboard activation; trainer labels; dialog semantics/Escape; image alt attributes |
 | Security | auth, security specs | Gate; sign-up intent; platform auth handoff; no credential leakage; persisted XSS probes in journal/planner/groceries |

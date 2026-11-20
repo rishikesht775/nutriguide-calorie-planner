@@ -64,11 +64,16 @@ export async function completeProfile(page: Page, values: ProfileValues = {}) {
   }
   await page.getByRole('button', { name: /^(Complete setup|Calculate my plan|Save profile details)$/i }).click();
   await expect(page.locator('body')).toHaveClass(/post-profile/);
-  await expect(page.locator('.app-nav button[data-tab=food]:visible, #ng-phase2-demo .ng-nav button[data-final-page=food]:visible').first()).toBeVisible();
+  // The final Home shell mounts asynchronously after setup; wait for its own
+  // navigation so a fast test cannot click the legacy menu before it replaces it.
+  await expect(page.locator('#ng-phase2-demo .ng-nav button[data-final-page="home"]')).toBeVisible({ timeout: 10000 });
 }
 
 export async function openTab(page: Page, label: RegExp | string) {
-  const tab = page.locator('.app-nav button:visible, #ng-phase2-demo .ng-nav button:visible').filter({ hasText: label }).first();
+  const demoTab = page.locator('#ng-phase2-demo .ng-nav button:visible').filter({ hasText: label }).first();
+  const tab = await demoTab.count()
+    ? demoTab
+    : page.locator('.app-nav button:visible').filter({ hasText: label }).first();
   await expect(tab).toBeVisible();
   await tab.click();
 }
