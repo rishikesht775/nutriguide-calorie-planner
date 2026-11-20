@@ -59,7 +59,7 @@ body.ng-comfortable .ng-progress-grid{gap:16px}body.ng-comfortable .ng-progress-
 @media(max-width:430px){.ng-home-header{gap:10px}.ng-home-avatar{width:46px;height:46px;font-size:25px}.ng-home-tools{gap:4px}.ng-icon-button{width:34px!important;height:34px!important}.ng-home-person p{max-width:175px}.ng-progress-card{min-height:112px;padding:14px}.ng-progress-card strong{font-size:23px}.ng-steps-quick-panel{display:block}.ng-steps-quick-panel button{margin-top:8px;width:100%}.ng-activity-row{display:grid;grid-template-columns:1fr}.ng-more-today{padding:0 14px}}
 
 /* Shared page shell: use the available desktop width and keep tabs consistent. */
-body.ng-redesign.post-profile .wrap{
+body.ng-redesign .wrap{
   max-width:none!important;
   width:auto!important;
   margin-left:244px!important;
@@ -99,7 +99,7 @@ body.ng-redesign.post-profile.ng-home-mode .grid{display:none!important}
 body.ng-redesign.post-profile.ng-home-mode .ng-home-redesign{max-width:1440px!important;margin-top:0!important}
 
 @media(max-width:760px){
-  body.ng-redesign.post-profile .wrap{margin:0!important;padding:14px 12px 112px!important}
+  body.ng-redesign .wrap{margin:0!important;padding:14px 12px 112px!important}
   body.ng-redesign.post-profile .ng-home-redesign,
   body.ng-redesign.post-profile .ng-section,
   body.ng-redesign.post-profile .ng-smart-panel,
