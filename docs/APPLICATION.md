@@ -1,6 +1,6 @@
 # NutriGuide Application Architecture and Requirements
 
-Version 3.4 | Reviewed 14 November 2026 | Owner Rishikesh Tiwari
+Version 3.5 | Reviewed 20 November 2026 | Owner Rishikesh Tiwari
 
 ## 1 Purpose and application status
 
