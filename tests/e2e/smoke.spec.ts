@@ -2,6 +2,19 @@ import { test, expect } from '@playwright/test';
 import { completeProfile, openTab } from './helpers';
 
 test.describe('@smoke core availability', () => {
+  test('desktop sidebar stays clear of lower Home content after profile gate changes', async ({ page }) => {
+    test.skip((page.viewportSize()?.width ?? 0) <= 760, 'desktop sidebar layout only');
+    await completeProfile(page);
+    const geometry = await page.evaluate(() => {
+      document.body.classList.remove('post-profile');
+      window.scrollTo(0, document.documentElement.scrollHeight);
+      const sidebar = document.querySelector('.app-nav')!.getBoundingClientRect();
+      const home = document.querySelector('#ngHomeRedesign')!.getBoundingClientRect();
+      return { sidebarRight: sidebar.right, homeLeft: home.left };
+    });
+    expect(geometry.homeLeft).toBeGreaterThanOrEqual(geometry.sidebarRight);
+  });
+
   test('profile unlocks all primary tabs', async ({ page }) => {
     await completeProfile(page);
     for (const label of [/Home/i, /Food studio/i, /Exercise/i, /Journey/i, /Plan & reports/i]) {
