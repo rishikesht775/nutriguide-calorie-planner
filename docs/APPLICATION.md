@@ -387,6 +387,8 @@ The repository instruction file AGENTS.md requires future development work to up
 
 The documentation CI workflow runs the freshness check, builds the Word export from Markdown and uploads it as an artifact. Every passing change therefore produces a current export without manually editing Word. A downloaded Word file does not update itself; fetch the new CI artifact or regenerate it. Export creation needs Python and python-docx; normal application usage and Playwright tests do not depend on Python.
 
+The Jenkins pipeline in `Jenkinsfile` adds a push-triggered regression runner for `main`. It checks reporter and contract tests, test TypeScript, documentation freshness and the complete Playwright desktop/mobile suite, then archives reports even on failure. It uses a dedicated Windows or Linux agent labelled `nutriguide-ci` with Node 24 and Chromium dependencies. This is an additional runner alongside GitHub Actions; neither pipeline deploys the live Sites source. Activation requires a public HTTPS Jenkins endpoint and a GitHub repository webhook. See `docs/JENKINS.md`.
+
 ### Required change workflow
 
 1. Implement and review the change, including failure and edge behavior.
@@ -416,6 +418,7 @@ The documentation CI workflow runs the freshness check, builds the Word export f
 
 | Date | Version | Change and evidence |
 | --- | --- | --- |
+| 20 November 2026 | 3.5 | Added a Jenkins push-triggered regression pipeline for `main`. It runs reporter, contract, TypeScript, documentation freshness and full Playwright desktop/mobile checks, and archives reports. Requires a public HTTPS endpoint, repository webhook and Node 24/Chromium agent; it does not deploy the Sites source. |
 | 13 November 2026 | 2.7 | Duplicate email signup attempts now return an explicit HTTP 409 validation error from the account API. The browser marks the email field invalid and disables Create account until the email changes or the user switches modes; no privileged client-side account lookup was added. Live provider acceptance remains required. |\n| 12 November 2026 | 2.6 | Updated native Android instrumentation dependencies to AndroidX Test Runner 1.7.0, JUnit extension 1.3.0 and Espresso 3.7.0 after the local Android 17/API 37 emulator exposed Espresso 3.6.1 reflection on removed `InputManager.getInstance`; the app build, install and launch passed, while instrumentation rerun is required to verify the dependency fix; the reset-mode instrumentation assertion now explicitly checks that the password field is absent. |
 | 12 November 2026 | 2.5 | Fixed the native Android account/session blocker: clear the prior encrypted cookie jar before sign-in/sign-up, verify the returned email owner, and normalize malformed legacy numeric/date values before tab persistence. Added regression cases for second-account isolation and tab-safe legacy state. |
 | 12 November 2026 | 2.4 | Documented the Kotlin/Jetpack Compose decision, the circumstances where Flutter would be appropriate, and the migration/test scope required before changing mobile frameworks. |
