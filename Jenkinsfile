@@ -1,6 +1,10 @@
 pipeline {
   agent { label 'nutriguide-ci' }
 
+  tools {
+    nodejs 'NodeJS 24'
+  }
+
   options {
     skipDefaultCheckout(true)
     timestamps()
